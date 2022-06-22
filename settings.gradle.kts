@@ -14,9 +14,15 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "fcl"
-// Pulbic modules
-include("fcl-base")
+// Public modules
+include(
+    "fcl-base",
+//    "fcl-compose",
+)
 // Private modules
-include("fcl-sample")
+include(
+    "fcl-sample",
+//    "fcl-sample-compose",
+)
 
 enableFeaturePreview("VERSION_CATALOGS")
