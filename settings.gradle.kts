@@ -8,12 +8,15 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        gradlePluginPortal()
         google()
         mavenCentral()
     }
 }
 rootProject.name = "fcl"
-include ("fcl-sample")
+// Pulbic modules
+include("fcl-base")
+// Private modules
+include("fcl-sample")
 
 enableFeaturePreview("VERSION_CATALOGS")
-include(":fcl")
