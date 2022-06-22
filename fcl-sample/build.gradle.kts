@@ -1,13 +1,13 @@
 plugins {
     id("com.android.application")
-    id("org.jetbrains.kotlin.android")
+    kotlin("android")
 }
 
 android {
     compileSdk = 32
 
     defaultConfig {
-        applicationId = "com.portto.fcl"
+        applicationId = "com.portto.fcl.sample"
         minSdk = 21
         targetSdk = 32
         versionCode = 1
