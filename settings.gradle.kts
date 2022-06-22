@@ -14,3 +14,6 @@ dependencyResolutionManagement {
 }
 rootProject.name = "fcl"
 include ("fcl-sample")
+
+enableFeaturePreview("VERSION_CATALOGS")
+include(":fcl")
