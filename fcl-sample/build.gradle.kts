@@ -5,7 +5,7 @@ plugins {
 
 setupAppModule {
     defaultConfig {
-        applicationId = "fcl.sample"
+        applicationId = "com.portto.fcl.sample"
     }
     buildTypes {
         release {

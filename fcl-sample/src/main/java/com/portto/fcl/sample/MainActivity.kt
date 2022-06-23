@@ -1,8 +1,9 @@
-package com.portto.fcl
+package com.portto.fcl.sample
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.portto.fcl.databinding.ActivityMainBinding
+import com.portto.fcl.FCL
+import com.portto.fcl.sample.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
