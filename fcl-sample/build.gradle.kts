@@ -23,7 +23,7 @@ setupAppModule {
 }
 
 dependencies {
-    implementation(projects.fclBase)
+    implementation(projects.fcl)
 
     implementation(libs.androidx.core)
     implementation(libs.androidx.constraintlayout)
