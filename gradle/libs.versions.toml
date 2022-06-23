@@ -10,8 +10,8 @@ coroutines = "1.6.3"
 okhttp = "4.10.0"
 
 [libraries]
-gradlePlugin-android = "com.android.tools.build:gradle:7.2.1"
-gradlePlugin-kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
+gradlePlugin-android = { module = "com.android.tools.build:gradle", version.ref = "gradle-plugin"}
+gradlePlugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin"}
 gradlePlugin-mavenPublish = "com.vanniktech:gradle-maven-publish-plugin:0.20.0"
 
 androidx-activity = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }

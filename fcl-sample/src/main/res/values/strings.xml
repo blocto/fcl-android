@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">fcl</string>
+
+    <!-- Authentication / Wallet Discovery -->
+    <string name="btn_connect_wallet">Connect Wallet</string>
+    <string name="btn_display_wallet_providers">Display Wallet Providers</string>
+    <string name="btn_log_out">Log Out</string>
+
+    <!-- Query -->
+    <string name="btn_query">Query</string>
+    <string name="btn_mutate">Mutate</string>
 </resources>
