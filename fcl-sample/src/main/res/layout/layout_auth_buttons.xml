@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:paddingHorizontal="@dimen/spacing_large"
     android:layout_marginTop="@dimen/spacing_medium" >
 
@@ -17,6 +17,6 @@
         android:id="@+id/btn_display_wallet_providers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_small"
+        android:layout_marginTop="@dimen/spacing_small"
         android:text="@string/btn_display_wallet_providers" />
 </LinearLayout>

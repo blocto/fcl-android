@@ -12,5 +12,19 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.apply {
+            txCard.tvScript.text = SCRIPT
+        }
+    }
+
+    companion object {
+        const val SCRIPT = """
+transaction {
+    execute {
+        log("A transaction happened")
+    }
+}
+        """
     }
 }

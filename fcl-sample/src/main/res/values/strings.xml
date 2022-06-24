@@ -6,7 +6,6 @@
     <string name="btn_display_wallet_providers">Display Wallet Providers</string>
     <string name="btn_log_out">Log Out</string>
 
-    <!-- Query -->
-    <string name="btn_query">Query</string>
-    <string name="btn_mutate">Mutate</string>
+    <!-- Mutate -->
+    <string name="btn_send_tx">Send Transaction</string>
 </resources>
