@@ -1,10 +1,9 @@
 package com.portto.fcl.sample
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.portto.fcl.FCL
-import com.portto.fcl.config.Config
+import com.portto.fcl.config.Config.Companion.Key.WALLETS
 import com.portto.fcl.sample.databinding.ActivityMainBinding
 import timber.log.Timber
 
@@ -18,10 +17,23 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.setUpUi()
+
+        setUpConfig()
     }
-    
+
     private fun ActivityMainBinding.setUpUi() {
         txCard.tvScript.text = SCRIPT
+    }
+
+    private fun setUpConfig() {
+        FCL.config(
+            appName = "FCL sample",
+            appIconUrl = "https://i.imgur.com/972JZGj.png",
+            accessNode = "https://rest-testnet.onflow.org"
+        ).put(WALLETS, "https://fcl-discovery.onflow.org/testnet/authn")
+
+        Timber.d("FCL - config: ${FCL.config}")
+        Timber.d("FCL - config: ${FCL.config.put("woo", "A")}")
     }
 
     companion object {
