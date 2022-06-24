@@ -1,8 +1,12 @@
 package com.portto.fcl.sample
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.portto.fcl.FCL
+import com.portto.fcl.config.Config
 import com.portto.fcl.sample.databinding.ActivityMainBinding
+import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
@@ -13,9 +17,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.apply {
-            txCard.tvScript.text = SCRIPT
-        }
+        binding.setUpUi()
+    }
+    
+    private fun ActivityMainBinding.setUpUi() {
+        txCard.tvScript.text = SCRIPT
     }
 
     companion object {

@@ -28,4 +28,5 @@ dependencies {
     implementation(libs.androidx.core)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.material)
+    implementation(libs.timber)
 }
