@@ -2,7 +2,7 @@ package com.portto.fcl.config
 
 /**
  */
-class Config() {
+class Config {
 
     private val configs: MutableMap<String, String> = mutableMapOf()
 
@@ -37,7 +37,8 @@ class Config() {
             ACCESS_NODE_KEY("accessNode.key"),
             APP_TITLE("app.detail.title"),
             APP_ICON("app.detail.icon"),
-//            WALLETS("discovery.wallet"),
+
+            // WALLETS("discovery.wallet"),
             LIMIT("fcl.limit"),
             NETWORK("flow.network"),
             OPEN_ID_SCOPE("service.OpenID.scopes"),
