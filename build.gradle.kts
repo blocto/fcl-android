@@ -22,6 +22,7 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        maven("https://jitpack.io")
     }
 
     group = project.groupId

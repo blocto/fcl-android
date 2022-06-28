@@ -3,7 +3,6 @@ package com.portto.fcl.sample
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.portto.fcl.FCL
-import com.portto.fcl.config.Config.Companion.Key.WALLETS
 import com.portto.fcl.sample.databinding.ActivityMainBinding
 import timber.log.Timber
 
@@ -30,7 +29,7 @@ class MainActivity : AppCompatActivity() {
             appName = "FCL sample",
             appIconUrl = "https://i.imgur.com/972JZGj.png",
             accessNode = "https://rest-testnet.onflow.org"
-        ).put(WALLETS, "https://fcl-discovery.onflow.org/testnet/authn")
+        )
 
         Timber.d("FCL - config: ${FCL.config}")
         Timber.d("FCL - config: ${FCL.config.put("woo", "A")}")
