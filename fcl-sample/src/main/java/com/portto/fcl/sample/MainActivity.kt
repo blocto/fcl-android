@@ -2,8 +2,10 @@ package com.portto.fcl.sample
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.portto.fcl.FCL
 import com.portto.fcl.sample.databinding.ActivityMainBinding
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
@@ -21,6 +23,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun ActivityMainBinding.setUpUi() {
+        authBtnGroup.apply {
+            btnDisplayWalletProviders.setOnClickListener {
+                lifecycleScope.launch {
+                    FCL.discoverWallets()
+                }
+            }
+        }
         txCard.tvScript.text = SCRIPT
     }
 
