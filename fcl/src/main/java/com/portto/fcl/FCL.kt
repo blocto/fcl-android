@@ -16,7 +16,6 @@ object FCL {
         appName: String? = null,
         appIconUrl: String? = null,
         accessNode: String? = null,
-        authn: String? = null,
     ): Config = config.apply {
         appName?.let { put(APP_TITLE, it) }
         appIconUrl?.let { put(APP_ICON, it) }

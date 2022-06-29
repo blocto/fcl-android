@@ -7,6 +7,7 @@ setupLibraryModule()
 
 dependencies {
     implementation(libs.androidx.core)
+    implementation(libs.bundles.network)
     implementation(libs.coroutines.android)
     implementation(libs.flow.sdk)
     implementation(libs.material)
