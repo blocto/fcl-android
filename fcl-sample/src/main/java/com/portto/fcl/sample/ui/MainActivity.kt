@@ -1,13 +1,11 @@
 package com.portto.fcl.sample.ui
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.portto.fcl.FCL
 import com.portto.fcl.sample.MainViewModel
 import com.portto.fcl.sample.databinding.ActivityMainBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,14 +31,10 @@ class MainActivity : AppCompatActivity() {
             btnGetWalletProviders.setOnClickListener { viewModel.getWalletProviders() }
         }
 
+        with(authCard) {}
+
         with(txCard) {
             tvScript.text = SCRIPT
-        }
-
-
-        with(viewModel) {
-            fclWallets.observe(this@MainActivity) {
-            }
         }
     }
 
@@ -51,6 +45,7 @@ class MainActivity : AppCompatActivity() {
             accessNode = "https://rest-testnet.onflow.org"
         )
     }
+
 
     companion object {
         const val SCRIPT = """

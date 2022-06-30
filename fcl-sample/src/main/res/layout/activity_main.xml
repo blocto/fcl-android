@@ -19,13 +19,13 @@
             android:orientation="vertical">
 
             <include
-                android:id="@+id/auth_btn_group"
-                layout="@layout/layout_auth_buttons" />
-
-            <include
                 android:id="@+id/wallet_discovery_card"
                 layout="@layout/layout_wallet_discovery"
                 app:viewmodel="@{mainViewModel}" />
+
+            <include
+                android:id="@+id/auth_card"
+                layout="@layout/layout_auth_buttons" />
 
             <include
                 android:id="@+id/account_card"
