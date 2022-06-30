@@ -2,9 +2,11 @@ package com.portto.fcl.config
 
 /**
  */
-class Config {
+object Config {
 
     private val configs: MutableMap<String, String> = mutableMapOf()
+
+    fun init(): Config = apply { configs }
 
     fun put(key: Key, value: String): Config = apply { configs[key.value] = value }
 
@@ -24,32 +26,27 @@ class Config {
 
     fun clear(): Config = apply { configs.clear() }
 
-    override fun toString(): String {
-        return configs.toString()
+    override fun toString(): String = configs.toString()
+    /**
+     * Common Configuration Keys
+     */
+    enum class Key(val value: String) {
+        ACCESS_NODE_API("accessNode.api"),
+        ACCESS_NODE_KEY("accessNode.key"),
+        APP_TITLE("app.detail.title"),
+        APP_ICON("app.detail.icon"),
+
+        // WALLETS("discovery.wallet"),
+        LIMIT("fcl.limit"),
+        NETWORK("flow.network"),
+        OPEN_ID_SCOPE("service.OpenID.scopes"),
     }
 
-    companion object {
-        /**
-         * Common Configuration Keys
-         */
-        enum class Key(val value: String) {
-            ACCESS_NODE_API("accessNode.api"),
-            ACCESS_NODE_KEY("accessNode.key"),
-            APP_TITLE("app.detail.title"),
-            APP_ICON("app.detail.icon"),
 
-            // WALLETS("discovery.wallet"),
-            LIMIT("fcl.limit"),
-            NETWORK("flow.network"),
-            OPEN_ID_SCOPE("service.OpenID.scopes"),
-        }
-
-
-        enum class Network(val type: String) {
-            LOCAL("local"),
-            CANARYNET("canarynet"),
-            TESTNET("testnet"),
-            MAINNET("mainnet"),
-        }
+    enum class Network(val type: String) {
+        LOCAL("local"),
+        CANARYNET("canarynet"),
+        TESTNET("testnet"),
+        MAINNET("mainnet"),
     }
 }

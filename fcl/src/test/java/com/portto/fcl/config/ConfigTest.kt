@@ -1,8 +1,6 @@
 package com.portto.fcl.config
 
 import com.portto.fcl.FCL
-import com.portto.fcl.config.Config.Companion.Key.*
-import com.portto.fcl.config.Config.Companion.Network.TESTNET
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -16,33 +14,33 @@ class ConfigTest {
     @Before
     fun setUp(){
         config.clear()
-        config.put(APP_TITLE, "Test Title")
+        config.put(Config.Key.APP_TITLE, "Test Title")
     }
 
     @Test
     fun get() {
-        config.put(NETWORK, TESTNET.type)
+        config.put(Config.Key.NETWORK, Config.Network.TESTNET.type)
         config.put("config.test.t", "t")
 
-        assertEquals("Test Title", config.get(APP_TITLE))
-        assertEquals("testnet", config.get(NETWORK))
+        assertEquals("Test Title", config.get(Config.Key.APP_TITLE))
+        assertEquals("testnet", config.get(Config.Key.NETWORK))
         assertEquals("t", config.get("config.test.t"))
     }
 
     @Test
     fun getNotExisted() {
-        assertEquals(null, config.get(APP_ICON))
+        assertEquals(null, config.get(Config.Key.APP_ICON))
     }
 
     @Test
     fun update() {
-        config.update(APP_TITLE, "New Title")
-        assertEquals("New Title", config.get(APP_TITLE))
+        config.update(Config.Key.APP_TITLE, "New Title")
+        assertEquals("New Title", config.get(Config.Key.APP_TITLE))
     }
 
     @Test
     fun delete() {
-        config.delete(APP_TITLE)
-        assertEquals(null, config.get(APP_TITLE))
+        config.delete(Config.Key.APP_TITLE)
+        assertEquals(null, config.get(Config.Key.APP_TITLE))
     }
 }
