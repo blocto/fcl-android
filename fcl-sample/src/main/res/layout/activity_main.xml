@@ -18,22 +18,21 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <!-- Wallet Discovery -->
             <include
                 android:id="@+id/wallet_discovery_card"
-                layout="@layout/layout_wallet_discovery"
+                layout="@layout/layout_wallet_discovery_card"
                 app:viewmodel="@{mainViewModel}" />
 
+            <!-- Authentication -->
             <include
                 android:id="@+id/auth_card"
-                layout="@layout/layout_auth_buttons" />
+                layout="@layout/layout_authentication_card" />
 
-            <include
-                android:id="@+id/account_card"
-                layout="@layout/layout_account_card" />
-
+            <!-- Transactions -->
             <include
                 android:id="@+id/tx_card"
-                layout="@layout/layout_tx_card" />
+                layout="@layout/layout_transaction_card" />
         </LinearLayout>
     </ScrollView>
 </layout>

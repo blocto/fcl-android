@@ -31,8 +31,6 @@ class MainActivity : AppCompatActivity() {
             btnGetWalletProviders.setOnClickListener { viewModel.getWalletProviders() }
         }
 
-        with(authCard) {}
-
         with(txCard) {
             tvScript.text = SCRIPT
         }
