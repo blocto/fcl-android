@@ -3,9 +3,11 @@
 
     <!-- Authentication / Wallet Discovery -->
     <string name="btn_connect_wallet">Connect Wallet</string>
-    <string name="btn_display_wallet_providers">Display Wallet Providers</string>
+    <string name="btn_get_wallet_providers">Get Wallet Providers</string>
     <string name="btn_log_out">Log Out</string>
 
     <!-- Mutate -->
     <string name="btn_send_tx">Send Transaction</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

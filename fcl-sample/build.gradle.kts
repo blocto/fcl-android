@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     kotlin("android")
+    kotlin("kapt")
 }
 
 setupAppModule {
@@ -19,15 +20,19 @@ setupAppModule {
     }
     buildFeatures {
         viewBinding = true
+        dataBinding = true
     }
 }
 
 dependencies {
     implementation(projects.fcl)
-
     implementation(libs.androidx.core)
+    implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    implementation(libs.bundles.lifecycle)
+    implementation(libs.koin)
     implementation(libs.material)
     implementation(libs.timber)
+
+    // Lifecycle
+    implementation(libs.bundles.lifecycle)
 }

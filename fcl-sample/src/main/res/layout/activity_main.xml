@@ -1,23 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
+    <data>
+
+        <variable
+            name="mainViewModel"
+            type="com.portto.fcl.sample.MainViewModel" />
+    </data>
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <include
-            android:id="@+id/auth_btn_group"
-            layout="@layout/layout_auth_buttons" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        <include
-            android:id="@+id/account_card"
-            layout="@layout/layout_account_card" />
+            <include
+                android:id="@+id/auth_btn_group"
+                layout="@layout/layout_auth_buttons" />
 
-        <include
-            android:id="@+id/tx_card"
-            layout="@layout/layout_tx_card" />
-    </LinearLayout>
-</ScrollView>
+            <include
+                android:id="@+id/wallet_discovery_card"
+                layout="@layout/layout_wallet_discovery"
+                app:viewmodel="@{mainViewModel}" />
+
+            <include
+                android:id="@+id/account_card"
+                layout="@layout/layout_account_card" />
+
+            <include
+                android:id="@+id/tx_card"
+                layout="@layout/layout_tx_card" />
+        </LinearLayout>
+    </ScrollView>
+</layout>

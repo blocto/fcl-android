@@ -29,6 +29,7 @@ object FclApi {
             .build()
     }
 
+    // Wallet discovery
     val discoveryService: DiscoveryService by lazy {
         retrofit(DiscoveryService.BASE_URL).create(DiscoveryService::class.java)
     }
