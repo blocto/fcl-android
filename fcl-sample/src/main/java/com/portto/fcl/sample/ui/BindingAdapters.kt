@@ -11,6 +11,7 @@ import com.portto.fcl.model.discovery.Service
 
 @BindingAdapter("walletProviders")
 fun ChipGroup.bindWalletProviders(services: List<Service>?) {
+    removeAllViews()
     services?.forEach {
         val chip = Chip(context).apply {
             val bgColor = Color.parseColor(it.provider?.color)
