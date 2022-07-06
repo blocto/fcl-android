@@ -1,34 +1,46 @@
 package com.portto.fcl
 
-import androidx.annotation.WorkerThread
-import com.nftco.flow.sdk.FlowAddress
+import com.portto.fcl.config.AppInfo
 import com.portto.fcl.config.Config
+import com.portto.fcl.config.ConfigOption
+import com.portto.fcl.config.NetworkEnv
 import com.portto.fcl.model.User
-import com.portto.fcl.model.discovery.Service
-import com.portto.fcl.network.FclApi
+import com.portto.fcl.provider.Blocto
+import com.portto.fcl.provider.Provider
 
 object FCL {
-    val config = Config.init()
+    val config: Config = Config()
 
     var currentUser: User? = null
         private set
 
-    fun config(
-        appName: String? = null,
-        appIconUrl: String? = null,
-        accessNode: String? = null,
-    ): Config = config.apply {
-        appName?.let { put(Config.Key.APP_TITLE, it) }
-        appIconUrl?.let { put(Config.Key.APP_ICON, it) }
-        accessNode?.let { put(Config.Key.ACCESS_NODE_API, it) }
+    val isMainnet: Boolean = config.env == NetworkEnv.MAINNET
+
+    fun init(env: NetworkEnv, appInfo: AppInfo, supportedWallets: List<Provider>? = null): Config =
+        config.apply {
+            put(ConfigOption.Env(env))
+            put(ConfigOption.App(appInfo))
+            put(ConfigOption.WalletProvider(supportedWallets ?: listOf(Blocto)))
+        }
+
+    suspend fun authenticate() {
+        val selectedProvider = config.selectedWalletProvider
+        if (selectedProvider != null) selectedProvider.authn()
+        else {
+            TODO("Show ${config.supportedWallets} to the user")
+        }
     }
 
-    suspend fun discoverWallets(): List<Service> = FclApi.discoveryService.getWalletProviders()
-
-    @WorkerThread
-    fun authenticate() {
-        currentUser = User(address = FlowAddress(""))
+    suspend fun unauthenticate() {
+        currentUser = null
+        TODO("Not yet implemented")
     }
 
-    fun isMainnet(): Boolean = config.get(Config.Key.NETWORK) == "mainnet"
+    fun query() {
+        TODO("Not yet implemented")
+    }
+
+    fun sendTx() {
+        TODO("Not yet implemented")
+    }
 }

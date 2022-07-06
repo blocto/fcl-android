@@ -1,52 +1,38 @@
 package com.portto.fcl.config
 
+import com.portto.fcl.provider.Blocto
+import com.portto.fcl.provider.Provider
+
 /**
+ * Copyright 2022 Portto, Inc.
+ *
  */
-object Config {
+class Config {
+    var env: NetworkEnv? = null
+        private set
 
-    private val configs: MutableMap<String, String> = mutableMapOf()
+    var appInfo: AppInfo? = null
+        private set
 
-    fun init(): Config = apply { configs }
+    var supportedWallets: List<Provider>? = null
+        private set
 
-    fun put(key: Key, value: String): Config = apply { configs[key.value] = value }
+    var selectedWalletProvider: Provider? = null
+        private set
 
-    fun put(key: String, value: String): Config = apply { configs[key] = value }
-
-    fun get(key: Key): String? = configs[key.value]
-
-    fun get(key: String): String? = configs[key]
-
-    fun delete(key: Key): Config = apply { configs.remove(key.value) }
-
-    fun delete(key: String): Config = apply { configs.remove(key) }
-
-    fun update(key: Key, newValue: String): Config = apply { configs[key.value] = newValue }
-
-    fun update(key: String, newValue: String): Config = apply { configs[key] = newValue }
-
-    fun clear(): Config = apply { configs.clear() }
-
-    override fun toString(): String = configs.toString()
-    /**
-     * Common Configuration Keys
-     */
-    enum class Key(val value: String) {
-        ACCESS_NODE_API("accessNode.api"),
-        ACCESS_NODE_KEY("accessNode.key"),
-        APP_TITLE("app.detail.title"),
-        APP_ICON("app.detail.icon"),
-
-        // WALLETS("discovery.wallet"),
-        LIMIT("fcl.limit"),
-        NETWORK("flow.network"),
-        OPEN_ID_SCOPE("service.OpenID.scopes"),
+    fun put(option: ConfigOption): Config = apply {
+        when (option) {
+            is ConfigOption.Env -> env = option.value
+            is ConfigOption.App -> appInfo = option.value
+            is ConfigOption.WalletProvider -> {
+                option.value.let {
+                    supportedWallets = it
+                    if (it.isEmpty()) selectedWalletProvider = Blocto
+                    else if (it.size == 1) selectedWalletProvider = it.first()
+                }
+            }
+        }
     }
 
 
-    enum class Network(val type: String) {
-        LOCAL("local"),
-        CANARYNET("canarynet"),
-        TESTNET("testnet"),
-        MAINNET("mainnet"),
-    }
 }

@@ -2,16 +2,21 @@ package com.portto.fcl.sample.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.portto.fcl.FCL
-import com.portto.fcl.sample.MainViewModel
+import com.portto.fcl.config.AppInfo
+import com.portto.fcl.config.ConfigOption
+import com.portto.fcl.config.NetworkEnv
+import com.portto.fcl.provider.Blocto
+import com.portto.fcl.provider.Dapper
 import com.portto.fcl.sample.databinding.ActivityMainBinding
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-
-    private val viewModel: MainViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,11 +29,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun ActivityMainBinding.setUpUi() {
-        mainViewModel = viewModel
         lifecycleOwner = this@MainActivity
 
-        with(walletDiscoveryCard) {
-            btnGetWalletProviders.setOnClickListener { viewModel.getWalletProviders() }
+        with(authCard) {
+            btnConnectWallet.setOnClickListener {
+                lifecycleScope.launch {
+                    FCL.authenticate()
+                }
+            }
         }
 
         with(txCard) {
@@ -37,11 +45,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpConfig() {
-        FCL.config(
-            appName = "FCL sample",
-            appIconUrl = "https://i.imgur.com/972JZGj.png",
-            accessNode = "https://rest-testnet.onflow.org"
+        FCL.init(
+            env = NetworkEnv.TESTNET,
+            appInfo = AppInfo(),
+            supportedWallets = listOf(Blocto, Dapper)
         )
+        Timber.d("env: ${FCL.config.env}")
+        Timber.d("app: ${FCL.config.appInfo}")
+        Timber.d("wallets: ${FCL.config.supportedWallets}")
+        with(FCL.config) {
+            put(ConfigOption.Env(NetworkEnv.LOCAL))
+            put(ConfigOption.App(AppInfo(title = "hello")))
+            put(ConfigOption.WalletProvider(listOf(Blocto)))
+        }
+        Timber.d("env: ${FCL.config.env}")
+        Timber.d("app: ${FCL.config.appInfo}")
+        Timber.d("wallets: ${FCL.config.supportedWallets}")
     }
 
 

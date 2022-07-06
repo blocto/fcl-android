@@ -1,7 +1,6 @@
 package com.portto.fcl.sample
 
 import android.app.Application
-import com.portto.fcl.sample.repository.FclRepository
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -11,8 +10,6 @@ import timber.log.Timber
 
 class SampleApp : Application() {
     private val appModule = module {
-        single { FclRepository() }
-        viewModel { MainViewModel(get()) }
     }
 
     override fun onCreate() {

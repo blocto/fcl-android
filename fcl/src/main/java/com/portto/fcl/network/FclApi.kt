@@ -1,7 +1,6 @@
 package com.portto.fcl.network
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import com.portto.fcl.network.service.DiscoveryService
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -27,10 +26,5 @@ object FclApi {
             .baseUrl(url)
             .client(okHttpClient)
             .build()
-    }
-
-    // Wallet discovery
-    val discoveryService: DiscoveryService by lazy {
-        retrofit(DiscoveryService.BASE_URL).create(DiscoveryService::class.java)
     }
 }

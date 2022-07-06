@@ -1,4 +1,4 @@
-package com.portto.fcl.model.discovery
+package com.portto.fcl.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -21,8 +21,6 @@ data class Service(
     val optIn: Boolean? = null,
     @SerialName("id")
     val id: String? = null,
-    @SerialName("provider")
-    val provider: Provider? = null,
     @SerialName("params")
     val params: Map<String, String>? = null,
 )

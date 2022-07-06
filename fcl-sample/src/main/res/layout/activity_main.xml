@@ -2,13 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
-
-        <variable
-            name="mainViewModel"
-            type="com.portto.fcl.sample.MainViewModel" />
-    </data>
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -17,12 +10,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
-            <!-- Wallet Discovery -->
-            <include
-                android:id="@+id/wallet_discovery_card"
-                layout="@layout/layout_wallet_discovery_card"
-                app:viewmodel="@{mainViewModel}" />
 
             <!-- Authentication -->
             <include
