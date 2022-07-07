@@ -15,6 +15,6 @@ interface Provider {
     data class ProviderInfo(
         val title: String,
         val description: String,
-        val icon: URL?,
+        val icon: String?,
     )
 }

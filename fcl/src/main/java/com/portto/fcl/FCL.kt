@@ -1,5 +1,6 @@
 package com.portto.fcl
 
+import android.app.Activity
 import com.portto.fcl.config.AppInfo
 import com.portto.fcl.config.Config
 import com.portto.fcl.config.ConfigOption
@@ -7,6 +8,10 @@ import com.portto.fcl.config.NetworkEnv
 import com.portto.fcl.model.User
 import com.portto.fcl.provider.Blocto
 import com.portto.fcl.provider.Provider
+import com.portto.fcl.ui.discovery.showConnectWalletDialog
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 object FCL {
     val config: Config = Config()
@@ -23,11 +28,15 @@ object FCL {
             put(ConfigOption.WalletProvider(supportedWallets ?: listOf(Blocto)))
         }
 
-    suspend fun authenticate() {
+    /**
+     *
+     */
+    suspend fun authenticate(activity: Activity) {
         val selectedProvider = config.selectedWalletProvider
         if (selectedProvider != null) selectedProvider.authn()
-        else {
-            TODO("Show ${config.supportedWallets} to the user")
+        else activity.showConnectWalletDialog(config.supportedWallets) {
+            config.put(ConfigOption.SelectedWalletProvider(it))
+            CoroutineScope((Dispatchers.IO)).launch { it.authn() }
         }
     }
 

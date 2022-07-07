@@ -14,7 +14,7 @@ class Config {
     var appInfo: AppInfo? = null
         private set
 
-    var supportedWallets: List<Provider>? = null
+    var supportedWallets: List<Provider> = listOf(Blocto)
         private set
 
     var selectedWalletProvider: Provider? = null
@@ -31,6 +31,7 @@ class Config {
                     else if (it.size == 1) selectedWalletProvider = it.first()
                 }
             }
+            is ConfigOption.SelectedWalletProvider -> selectedWalletProvider = option.value
         }
     }
 }
