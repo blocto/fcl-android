@@ -3,4 +3,11 @@
     package="com.portto.fcl">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <application>
+        <activity
+            android:name=".webview.WebViewActivity"
+            android:launchMode="singleTop"/>
+    </application>
+
 </manifest>

@@ -23,6 +23,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:authorities="com.portto.fcl.context"
+            android:name="com.portto.fcl.lifecycle.FCLContentProvider"
+            android:exported="false"/>
+
     </application>
 
 </manifest>
