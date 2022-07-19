@@ -1,6 +1,6 @@
 [versions]
 gradle-plugin = "7.2.1"
-kotlin = "1.7.0"
+kotlin = "1.7.10"
 
 androidx-activity = "1.4.0"
 androidx-compose = "1.1.1"

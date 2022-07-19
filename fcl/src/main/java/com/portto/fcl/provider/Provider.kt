@@ -1,7 +1,6 @@
 package com.portto.fcl.provider
 
 import com.portto.fcl.model.User
-import java.net.URL
 
 interface Provider {
     var user: User?

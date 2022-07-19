@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.portto.fcl.FCL
 import com.portto.fcl.config.AppInfo
+import com.portto.fcl.config.ConfigOption
 import com.portto.fcl.config.NetworkEnv
 import com.portto.fcl.provider.Blocto
 import com.portto.fcl.provider.Dapper
 import com.portto.fcl.sample.databinding.ActivityMainBinding
+import com.portto.fcl.ui.discovery.showConnectWalletDialog
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -31,10 +33,18 @@ class MainActivity : AppCompatActivity() {
 
         with(authCard) {
             btnConnectWallet.setOnClickListener {
-                lifecycleScope.launch {
-                    FCL.authenticate(this@MainActivity)
+                showConnectWalletDialog(FCL.config.supportedWallets) {
+                    lifecycleScope.launch {
+                        FCL.config.put(ConfigOption.SelectedWalletProvider(it))
+                        FCL.authenticate()
+                        tvAddress.text = FCL.currentUser?.address.orEmpty()
+                    }
                 }
             }
+        }
+
+        with(authCard) {
+//            btnConnectWallet.setOnClickListener { FCL.authenticate() }
         }
 
         with(txCard) {
