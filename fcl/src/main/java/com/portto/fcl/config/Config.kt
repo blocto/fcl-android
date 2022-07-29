@@ -1,6 +1,5 @@
 package com.portto.fcl.config
 
-import com.portto.fcl.provider.Blocto
 import com.portto.fcl.provider.Provider
 
 /**
@@ -14,7 +13,7 @@ class Config {
     var appInfo: AppInfo? = null
         private set
 
-    var supportedWallets: List<Provider> = listOf(Blocto)
+    var supportedWallets: List<Provider> = listOf()
         private set
 
     var selectedWalletProvider: Provider? = null
@@ -24,11 +23,10 @@ class Config {
         when (option) {
             is ConfigOption.Env -> env = option.value
             is ConfigOption.App -> appInfo = option.value
-            is ConfigOption.WalletProvider -> {
+            is ConfigOption.WalletProviders -> {
                 option.value.let {
                     supportedWallets = it
-                    if (it.isEmpty()) selectedWalletProvider = Blocto
-                    else if (it.size == 1) selectedWalletProvider = it.first()
+                    if (it.size == 1) selectedWalletProvider = it.first()
                 }
             }
             is ConfigOption.SelectedWalletProvider -> selectedWalletProvider = option.value

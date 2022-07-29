@@ -1,11 +1,5 @@
 package com.portto.fcl.config
 
-import com.portto.fcl.FCL
-import org.junit.Test
-
-import org.junit.Assert.*
-import org.junit.Before
-
 /**
  */
 class ConfigTest {

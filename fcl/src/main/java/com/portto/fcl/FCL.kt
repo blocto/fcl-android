@@ -4,33 +4,41 @@ import com.portto.fcl.config.AppInfo
 import com.portto.fcl.config.Config
 import com.portto.fcl.config.ConfigOption
 import com.portto.fcl.config.NetworkEnv
+import com.portto.fcl.error.UnspecifiedWalletProviderException
+import com.portto.fcl.model.Result
 import com.portto.fcl.model.User
-import com.portto.fcl.provider.Blocto
+import com.portto.fcl.model.authn.AccountProofResolvedData
 import com.portto.fcl.provider.Provider
 
-object FCL {
+object Fcl {
     val config: Config = Config()
-
-    var currentUser: User? = null
-        private set
 
     val isMainnet: Boolean = config.env == NetworkEnv.MAINNET
 
-    fun init(env: NetworkEnv, appInfo: AppInfo, supportedWallets: List<Provider>? = null): Config =
+    var currentUser: User? = null
+
+    fun init(env: NetworkEnv, appInfo: AppInfo, supportedWallets: List<Provider>): Config =
         config.apply {
             put(ConfigOption.Env(env))
             put(ConfigOption.App(appInfo))
-            put(ConfigOption.WalletProvider(supportedWallets ?: listOf(Blocto)))
+            put(ConfigOption.WalletProviders(supportedWallets))
         }
 
-    suspend fun authenticate() {
+    suspend fun authenticate(accountProofData: AccountProofResolvedData?): Result<String> {
         val selectedProvider = config.selectedWalletProvider
-        if (selectedProvider != null) currentUser = selectedProvider.authn()
+            ?: throw UnspecifiedWalletProviderException()
+        return try {
+            selectedProvider.authn(accountProofData)
+            val address = currentUser?.address
+                ?: throw Exception("Error while authenticating")
+            Result.Success(address)
+        } catch (e: Exception) {
+            Result.Failure(e)
+        }
     }
 
-    suspend fun unauthenticate() {
+    fun unauthenticate() {
         currentUser = null
-        TODO("Not yet implemented")
     }
 
     fun query() {
@@ -38,6 +46,11 @@ object FCL {
     }
 
     fun sendTx() {
+        TODO("Not yet implemented")
+    }
+
+    fun signUserMessage() {
+//        val user = currentUser ?: throw NotAuthenticatedException("User not found")
         TODO("Not yet implemented")
     }
 }

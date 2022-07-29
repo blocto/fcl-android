@@ -1,5 +1,6 @@
 package com.portto.fcl.model
 
+import com.portto.fcl.model.authn.AuthnResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

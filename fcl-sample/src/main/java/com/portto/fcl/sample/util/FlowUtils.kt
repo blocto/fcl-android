@@ -1,6 +1,7 @@
 package com.portto.fcl.sample.util
 
-import com.portto.sdk.wallet.flow.CompositeSignature
+import com.portto.fcl.model.CompositeSignature
+
 
 /**
  * Map Flow [CompositeSignature] to string for display

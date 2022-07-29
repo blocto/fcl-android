@@ -6,12 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.portto.fcl.Fcl
 import com.portto.fcl.config.ConfigOption
+import com.portto.fcl.model.CompositeSignature
 import com.portto.fcl.model.Result
 import com.portto.fcl.model.authn.AccountProofResolvedData
 import com.portto.fcl.provider.Provider
 import com.portto.fcl.sample.util.FLOW_APP_IDENTIFIER
 import com.portto.fcl.sample.util.FLOW_NONCE
-import com.portto.sdk.wallet.flow.CompositeSignature
 import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {
