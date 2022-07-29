@@ -4,7 +4,9 @@ import com.portto.fcl.config.AppInfo
 import com.portto.fcl.config.Config
 import com.portto.fcl.config.ConfigOption
 import com.portto.fcl.config.NetworkEnv
+import com.portto.fcl.error.AuthenticationException
 import com.portto.fcl.error.UnspecifiedWalletProviderException
+import com.portto.fcl.model.CompositeSignature
 import com.portto.fcl.model.Result
 import com.portto.fcl.model.User
 import com.portto.fcl.model.authn.AccountProofResolvedData
@@ -49,8 +51,14 @@ object Fcl {
         TODO("Not yet implemented")
     }
 
-    fun signUserMessage() {
-//        val user = currentUser ?: throw NotAuthenticatedException("User not found")
-        TODO("Not yet implemented")
+    suspend fun signUserMessage(message: String): Result<List<CompositeSignature>> {
+        return try {
+            currentUser ?: throw AuthenticationException()
+            val selectedProvider = config.selectedWalletProvider
+                ?: throw UnspecifiedWalletProviderException()
+            Result.Success(selectedProvider.getUserSignature(message))
+        } catch (e: Exception) {
+            Result.Failure(e)
+        }
     }
 }

@@ -1,6 +1,9 @@
 package com.portto.fcl.utils
 
+import androidx.annotation.WorkerThread
+import com.nftco.flow.sdk.DomainTag
 import com.nftco.flow.sdk.Flow
+import com.nftco.flow.sdk.bytesToHex
 import com.nftco.flow.sdk.cadence.AddressField
 import com.nftco.flow.sdk.cadence.ArrayField
 import com.nftco.flow.sdk.cadence.IntNumberField
@@ -10,12 +13,14 @@ import com.portto.fcl.Fcl
 import com.portto.fcl.config.NetworkEnv
 import com.portto.fcl.error.UnspecifiedNetworkException
 import com.portto.fcl.error.UnsupportedNetworkException
+import com.portto.fcl.model.CompositeSignature
 import com.portto.fcl.model.authn.AccountProofData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 
 object AppUtils {
+
     suspend fun verifyAccountProof(
         appIdentifier: String,
         accountProofData: AccountProofData
@@ -45,12 +50,31 @@ object AppUtils {
         }
     }
 
-//    fun verifyUserSignatures(message: String, signatures: List<CompositeSignature>) {
-//        val contract =
-//            getAccountProofContactAddress(Fcl.config.env ?: throw UnspecifiedNetworkException())
-//        val script = getVerifySignaturesScript(isAccountProof = false, contract = contract)
-//
-//    }
+    suspend fun verifyUserSignatures(
+        message: String,
+        signatures: List<CompositeSignature>
+    ): Boolean = withContext(Dispatchers.IO) {
+        try {
+            val contract = getAccountProofContactAddress(
+                Fcl.config.env ?: throw UnspecifiedNetworkException()
+            )
+            val script = getVerifySignaturesScript(isAccountProof = false, contract = contract)
+
+            val verifyMessage = message.toByteArray(Charsets.UTF_8).bytesToHex()
+
+            val result = getFlowApi(Fcl.isMainnet).simpleFlowScript {
+                script(script)
+                arg(AddressField(signatures.first().address))
+                arg(StringField(verifyMessage))
+                arg(ArrayField(signatures.map { IntNumberField(it.keyId) }))
+                arg(ArrayField(signatures.map { StringField(it.signature) }))
+            }
+
+            result.jsonCadence.value as Boolean
+        } catch (exception: Exception) {
+            throw exception
+        }
+    }
 
     private const val FLOW_MAINNET_ENDPOINT = "access.mainnet.nodes.onflow.org"
     private const val FLOW_TESTNET_ENDPOINT = "access.devnet.nodes.onflow.org"

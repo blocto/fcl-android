@@ -1,13 +1,10 @@
 package com.portto.fcl.provider.blocto
 
-import androidx.annotation.WorkerThread
 import com.portto.fcl.Fcl
-import com.portto.fcl.error.NullPointerException
+import com.portto.fcl.error.AuthenticationException
 import com.portto.fcl.lifecycle.LifecycleObserver
 import com.portto.fcl.model.User
-import com.portto.fcl.model.authn.AccountProofData as FclAccountProofData
 import com.portto.fcl.model.authn.AccountProofResolvedData
-import com.portto.fcl.model.CompositeSignature as FclCompositeSignature
 import com.portto.fcl.provider.Provider
 import com.portto.fcl.provider.Provider.ProviderInfo
 import com.portto.fcl.provider.blocto.Blocto.Companion.getInstance
@@ -18,13 +15,13 @@ import com.portto.fcl.utils.PROVIDER_BLOCTO_TITLE
 import com.portto.sdk.core.BloctoSDK
 import com.portto.sdk.flow.flow
 import com.portto.sdk.wallet.BloctoSDKError
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import com.portto.sdk.wallet.flow.AccountProofData as BloctoAccountProofData
+import com.portto.sdk.wallet.flow.CompositeSignature as BloctoCompositeSignature
 import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.coroutines.withContext
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
+import com.portto.fcl.model.CompositeSignature as FclCompositeSignature
+import com.portto.sdk.wallet.flow.AccountProofData as BloctoAccountProofData
 
 /**
  * Blocto Wallet Provider
@@ -60,7 +57,7 @@ class Blocto(bloctoAppId: String, isDebug: Boolean) : Provider {
                     if (accountProofResolvedData != null) it.mapToFclAccountProofData()
                     else null
                 )
-                cont.resume(it)
+                cont.resume(Fcl.currentUser)
             }
             val failureCallback: (BloctoSDKError) -> Unit = {
                 cont.resumeWithException(Exception(it.parseErrorMessage()))
@@ -77,7 +74,25 @@ class Blocto(bloctoAppId: String, isDebug: Boolean) : Provider {
     }
 
     override suspend fun getUserSignature(message: String): List<FclCompositeSignature> {
-        TODO("Not yet implemented")
+        val context = LifecycleObserver.context() ?: throw Exception("Context is required")
+        val user = Fcl.currentUser ?: throw AuthenticationException()
+
+        return suspendCancellableCoroutine { cont ->
+            val successCallback: (List<BloctoCompositeSignature>) -> Unit = {
+                cont.resume(it.map { signature -> signature.mapToFclCompositeSignature() })
+            }
+            val failureCallback: (BloctoSDKError) -> Unit = {
+                cont.resumeWithException(Exception(it.parseErrorMessage()))
+            }
+
+            BloctoSDK.flow.signUserMessage(
+                context = context,
+                address = user.address,
+                message = message.trim(),
+                onSuccess = successCallback,
+                onError = failureCallback,
+            )
+        }
     }
 
     override suspend fun authz(): String {

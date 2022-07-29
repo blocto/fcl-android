@@ -29,6 +29,12 @@
                     layout="@layout/layout_authentication_card"
                     app:address="@{viewModel.address}" />
 
+                <!-- User Signatures -->
+                <include
+                    android:id="@+id/sign_message_card"
+                    layout="@layout/layout_user_signature_card"
+                    app:viewModel="@{viewModel}"/>
+
                 <!-- Transactions -->
                 <include
                     android:id="@+id/tx_card"

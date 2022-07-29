@@ -7,7 +7,13 @@
     <string name="menu_authn_with_account_proof">Authn with Account Proof</string>
     <string name="menu_authn_without_account_proof">Authn without Account Proof</string>
 
+    <!-- User Signature -->
+    <string name="input_hint_message_to_sign">Message to sign</string>
+    <string name="btn_sign">Sign</string>
+    <string name="btn_verify">Verify</string>
+
     <!-- Mutate -->
     <string name="btn_send_tx">Send Transaction</string>
     <string name="btn_verify_account_proof">Verify Account Proof</string>
+
 </resources>

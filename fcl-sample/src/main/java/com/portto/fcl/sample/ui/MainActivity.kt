@@ -4,6 +4,9 @@ import android.content.DialogInterface
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import com.portto.fcl.Fcl
 import com.portto.fcl.config.AppInfo
 import com.portto.fcl.config.NetworkEnv
@@ -13,6 +16,8 @@ import com.portto.fcl.sample.R
 import com.portto.fcl.sample.databinding.ActivityMainBinding
 import com.portto.fcl.sample.util.*
 import com.portto.fcl.ui.discovery.showConnectWalletDialog
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
@@ -38,6 +43,8 @@ class MainActivity : AppCompatActivity() {
         )
 
         binding.setUpUi()
+
+        mainViewModel.bindUi()
     }
 
     private fun ActivityMainBinding.setUpUi() {
@@ -52,7 +59,7 @@ class MainActivity : AppCompatActivity() {
                 showDialog(title = "Account Proof Signatures",
                     message = accountProofData.signatures.mapToString(),
                     action = "Verify" to DialogInterface.OnClickListener { dialog, _ ->
-                        mainViewModel.verifyAccountProof()
+                        mainViewModel.verifySignature(true)
                         dialog.dismiss()
                     }
                 )
@@ -65,42 +72,46 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        with(txCard) {
+        txCard.apply {
             tvScript.text = SCRIPT
         }
+    }
 
-        mainViewModel.address.observe(this@MainActivity) { address ->
-            authCard.btnConnectWallet.setOnClickListener {
-                if (address == null) {
-                    it.showMenu(R.menu.menu_connect) { item ->
-                        return@showMenu when (item.itemId) {
-                            R.id.menu_item_authn_with_account_proof -> {
-                                showConnectWalletDialog(Fcl.config.supportedWallets) { provider ->
-                                    mainViewModel.connect(provider, true)
-                                }
-                                true
+    private fun MainViewModel.bindUi() {
+        address.observe(this@MainActivity) { address ->
+            binding.authCard.btnConnectWallet.setOnClickListener {
+                if (address == null) it.showMenu(R.menu.menu_connect) { item ->
+                    return@showMenu when (item.itemId) {
+                        R.id.menu_item_authn_with_account_proof -> {
+                            showConnectWalletDialog(Fcl.config.supportedWallets) { provider ->
+                                mainViewModel.connect(provider, true)
                             }
-                            R.id.menu_item_authn_without_account_proof -> {
-                                showConnectWalletDialog(Fcl.config.supportedWallets) { provider ->
-                                    mainViewModel.connect(provider, false)
-                                }
-                                true
+                            true
+                        }
+                        R.id.menu_item_authn_without_account_proof -> {
+                            showConnectWalletDialog(Fcl.config.supportedWallets) { provider ->
+                                mainViewModel.connect(provider, false)
                             }
-                            else -> false
+                            true
+                        }
+                        else -> false
+                    }
+                }
+                else mainViewModel.disconnect()
+            }
+
+            accountProofSignatures.observe(this@MainActivity) {
+                binding.authCard.btnShowAccountProofData.isVisible = it != null
+            }
+
+            lifecycleScope.launch {
+                mainViewModel.message.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+                    .collect {
+                        it?.let {
+                            binding.coordinator.showSnackbar(it)
+                            mainViewModel.resetMessage()
                         }
                     }
-                } else mainViewModel.disconnect()
-            }
-
-            mainViewModel.accountProofSignatures.observe(this@MainActivity) {
-                authCard.btnShowAccountProofData.isVisible = it != null
-            }
-
-            mainViewModel.message.observe(this@MainActivity) {
-                it?.let {
-                    binding.coordinator.showSnackbar(it)
-                    mainViewModel.resetMessage()
-                }
             }
         }
     }
