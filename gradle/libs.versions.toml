@@ -45,6 +45,8 @@ coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", ve
 
 flow-sdk = "com.nftco:flow-jvm-sdk:0.7.1"
 
+grpc-okhttp = "io.grpc:grpc-okhttp:1.47.0"
+
 koin = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 
 junit = "junit:junit:4.13.2"

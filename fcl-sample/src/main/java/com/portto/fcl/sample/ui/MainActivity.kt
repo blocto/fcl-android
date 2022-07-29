@@ -1,5 +1,6 @@
 package com.portto.fcl.sample.ui
 
+import android.content.DialogInterface
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -45,9 +46,16 @@ class MainActivity : AppCompatActivity() {
 
         authCard.apply {
             btnShowAccountProofData.setOnClickListener {
-                val signatures = Fcl.currentUser?.accountProofSignatures
-                    ?: throw Exception("Failed to get signatures")
-                showDialog(title = "Account Proof Signatures", signatures.mapToString())
+                val accountProofData = Fcl.currentUser?.accountProofData
+                    ?: throw Exception("Failed to get account proof data")
+
+                showDialog(title = "Account Proof Signatures",
+                    message = accountProofData.signatures.mapToString(),
+                    action = "Verify" to DialogInterface.OnClickListener { dialog, _ ->
+                        mainViewModel.verifyAccountProof()
+                        dialog.dismiss()
+                    }
+                )
             }
             btnCopy.setOnClickListener {
                 copyToClipboard("Address", requireAddress(), binding.coordinator)
@@ -88,8 +96,11 @@ class MainActivity : AppCompatActivity() {
                 authCard.btnShowAccountProofData.isVisible = it != null
             }
 
-            mainViewModel.errorMessage.observe(this@MainActivity) {
-                binding.coordinator.showSnackbar(it)
+            mainViewModel.message.observe(this@MainActivity) {
+                it?.let {
+                    binding.coordinator.showSnackbar(it)
+                    mainViewModel.resetMessage()
+                }
             }
         }
     }

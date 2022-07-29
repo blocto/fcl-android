@@ -1,9 +1,6 @@
 package com.portto.fcl.sample.util
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import android.content.Intent
+import android.content.*
 import android.net.Uri
 import android.view.View
 import androidx.annotation.MenuRes
@@ -24,11 +21,23 @@ fun View.showSnackbar(message: String) {
     Snackbar.make(this, message, Snackbar.LENGTH_SHORT).show()
 }
 
-fun Context.showDialog(title: String? = null, msg: String) {
+/**
+ * Show a alert dialog
+ *
+ * @param title Optional; Title to be shown
+ * @param message Body of the alert dialog
+ * @param action pair of action title and [DialogInterface.OnClickListener]
+ */
+fun Context.showDialog(
+    title: String? = null,
+    message: String,
+    action: Pair<String, DialogInterface.OnClickListener>
+) {
     MaterialAlertDialogBuilder(this).apply {
         setTitle(title)
-        setMessage(msg)
-        setPositiveButton("Ok") { dialog, _ -> dialog.cancel() }
+        setMessage(message)
+        setPositiveButton(action.first, action.second)
+        setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
     }.show()
 }
 

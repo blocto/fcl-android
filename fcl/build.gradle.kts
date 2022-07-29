@@ -20,6 +20,7 @@ dependencies {
     implementation(libs.coil)
     implementation(libs.coroutines.android)
     implementation(libs.flow.sdk)
+    implementation(libs.grpc.okhttp)
     implementation(libs.material)
     testImplementation(libs.junit)
 }

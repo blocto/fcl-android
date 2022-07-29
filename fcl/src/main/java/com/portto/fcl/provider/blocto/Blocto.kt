@@ -1,8 +1,11 @@
 package com.portto.fcl.provider.blocto
 
+import androidx.annotation.WorkerThread
 import com.portto.fcl.Fcl
+import com.portto.fcl.error.NullPointerException
 import com.portto.fcl.lifecycle.LifecycleObserver
 import com.portto.fcl.model.User
+import com.portto.fcl.model.authn.AccountProofData as FclAccountProofData
 import com.portto.fcl.model.authn.AccountProofResolvedData
 import com.portto.fcl.model.CompositeSignature as FclCompositeSignature
 import com.portto.fcl.provider.Provider
@@ -15,8 +18,11 @@ import com.portto.fcl.utils.PROVIDER_BLOCTO_TITLE
 import com.portto.sdk.core.BloctoSDK
 import com.portto.sdk.flow.flow
 import com.portto.sdk.wallet.BloctoSDKError
-import com.portto.sdk.wallet.flow.AccountProofData
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import com.portto.sdk.wallet.flow.AccountProofData as BloctoAccountProofData
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
@@ -44,19 +50,16 @@ class Blocto(bloctoAppId: String, isDebug: Boolean) : Provider {
     }
 
     override suspend fun authn(accountProofResolvedData: AccountProofResolvedData?) {
-        val context = LifecycleObserver.context() ?: throw Exception("Context not found")
+        val context = LifecycleObserver.context() ?: throw Exception("Context is required")
 
         suspendCancellableCoroutine { cont ->
-            val successCallback: (AccountProofData) -> Unit = {
-                Fcl.currentUser =
-                    User(address = it.address,
-                        accountProofSignatures = it.signatures?.map { sig ->
-                            FclCompositeSignature(
-                                address = sig.address,
-                                keyId = sig.keyId,
-                                signature = sig.signature
-                            )
-                        })
+            val successCallback: (BloctoAccountProofData) -> Unit = {
+                Fcl.currentUser = User(
+                    address = it.address,
+                    accountProofData =
+                    if (accountProofResolvedData != null) it.mapToFclAccountProofData()
+                    else null
+                )
                 cont.resume(it)
             }
             val failureCallback: (BloctoSDKError) -> Unit = {

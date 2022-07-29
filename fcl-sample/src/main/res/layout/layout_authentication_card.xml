@@ -40,7 +40,7 @@
             android:id="@+id/tv_address"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/spacing_small"
+            android:layout_marginTop="@dimen/spacing_large"
             android:ellipsize="middle"
             android:singleLine="true"
             android:text="@{address}"
