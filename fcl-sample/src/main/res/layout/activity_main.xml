@@ -2,24 +2,38 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ScrollView
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.portto.fcl.sample.ui.MainViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinator"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <!-- Authentication -->
-            <include
-                android:id="@+id/auth_card"
-                layout="@layout/layout_authentication_card" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-            <!-- Transactions -->
-            <include
-                android:id="@+id/tx_card"
-                layout="@layout/layout_transaction_card" />
-        </LinearLayout>
-    </ScrollView>
+                <!-- Authentication -->
+                <include
+                    android:id="@+id/auth_card"
+                    layout="@layout/layout_authentication_card"
+                    app:address="@{viewModel.address}" />
+
+                <!-- Transactions -->
+                <include
+                    android:id="@+id/tx_card"
+                    layout="@layout/layout_transaction_card" />
+            </LinearLayout>
+        </ScrollView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

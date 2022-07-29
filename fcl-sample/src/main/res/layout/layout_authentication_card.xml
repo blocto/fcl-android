@@ -1,52 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_connect_wallet"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/spacing_large"
-        android:layout_marginTop="@dimen/spacing_large"
-        android:text="@string/btn_connect_wallet"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
 
-    <com.google.android.material.card.MaterialCardView
-        style="?attr/materialCardViewFilledStyle"
+        <variable
+            name="address"
+            type="String" />
+
+        <import type="android.view.View" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/spacing_large"
-        android:layout_marginTop="@dimen/spacing_medium">
+        android:layout_marginTop="@dimen/spacing_large"
+        android:paddingHorizontal="@dimen/spacing_large">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_connect_wallet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{address == null ? @string/btn_connect_wallet : @string/btn_disconnect_wallet}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/btn_connect_wallet" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/address_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{address == null ? View.GONE : View.VISIBLE}"
+            app:constraint_referenced_ids="tv_address, btn_copy, btn_open_in_flowscan" />
+
+        <TextView
+            android:id="@+id/tv_address"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:padding="@dimen/spacing_large">
+            android:layout_marginTop="@dimen/spacing_small"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:text="@{address}"
+            app:layout_constraintEnd_toStartOf="@id/btn_show_account_proof_data"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_connect_wallet"
+            tools:text="0x28de65b3b5e8324528de65b3b5e83228de65b3b5e8324545" />
 
-            <TextView
-                android:id="@+id/tv_address"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="0x28de65b3b5e83245" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_show_account_proof_data"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_small"
+            app:backgroundTint="?android:attr/colorButtonNormal"
+            app:icon="@drawable/ic_verified"
+            app:layout_constraintBottom_toBottomOf="@id/tv_address"
+            app:layout_constraintEnd_toStartOf="@id/btn_copy"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@id/tv_address"
+            app:layout_constraintTop_toTopOf="@id/tv_address" />
 
-            <com.google.android.material.button.MaterialButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_medium"
-                android:text="@string/btn_log_out"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_address" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.card.MaterialCardView>
-</LinearLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_copy"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_small"
+            app:backgroundTint="?android:attr/colorButtonNormal"
+            app:icon="@drawable/ic_copy"
+            app:layout_constraintBottom_toBottomOf="@id/tv_address"
+            app:layout_constraintEnd_toStartOf="@id/btn_open_in_flowscan"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@id/btn_show_account_proof_data"
+            app:layout_constraintTop_toTopOf="@id/tv_address" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_open_in_flowscan"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_small"
+            app:backgroundTint="?android:attr/colorButtonNormal"
+            app:icon="@drawable/ic_open_in_new"
+            app:layout_constraintBottom_toBottomOf="@id/tv_address"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btn_copy"
+            app:layout_constraintTop_toTopOf="@id/tv_address" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

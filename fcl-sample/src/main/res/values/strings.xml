@@ -3,8 +3,11 @@
 
     <!-- Authentication / Wallet Discovery -->
     <string name="btn_connect_wallet">Connect Wallet</string>
-    <string name="btn_log_out">Log Out</string>
+    <string name="btn_disconnect_wallet">Disconnect Wallet</string>
+    <string name="menu_authn_with_account_proof">Authn with Account Proof</string>
+    <string name="menu_authn_without_account_proof">Authn without Account Proof</string>
 
     <!-- Mutate -->
     <string name="btn_send_tx">Send Transaction</string>
+    <string name="btn_verify_account_proof">Verify Account Proof</string>
 </resources>
