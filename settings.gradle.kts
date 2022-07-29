@@ -1,5 +1,3 @@
-rootProject.name = "fcl"
-
 // Public modules
 include(
     "fcl",

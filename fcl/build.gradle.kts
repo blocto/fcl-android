@@ -4,13 +4,16 @@ plugins {
     kotlin("plugin.serialization")
 }
 
-setupLibraryModule{
+setupLibraryModule {
     buildFeatures {
         viewBinding = true
     }
 }
 
 dependencies {
+    api(files("libs/core-debug.aar"))
+    api(files("libs/wallet-debug.aar"))
+    api(files("libs/flow-debug.aar"))
     implementation(libs.androidx.core)
     implementation(libs.androidx.recyclerview)
     implementation(libs.bundles.network)
