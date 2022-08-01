@@ -10,8 +10,6 @@
             type="com.portto.fcl.sample.ui.MainViewModel" />
 
         <import type="android.text.TextUtils" />
-
-        <import type="android.view.View" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -48,7 +46,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_large"
-                android:visibility="@{viewModel.userSignatures == null ? View.GONE : View.VISIBLE}"
                 app:composite_signatures="@{viewModel.userSignatures}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

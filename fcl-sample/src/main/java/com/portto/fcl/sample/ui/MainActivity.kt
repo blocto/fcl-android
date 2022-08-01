@@ -8,15 +8,14 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.portto.fcl.Fcl
-import com.portto.fcl.config.AppInfo
-import com.portto.fcl.config.NetworkEnv
+import com.portto.fcl.config.AppDetail
+import com.portto.fcl.config.Network
 import com.portto.fcl.provider.blocto.Blocto
 import com.portto.fcl.provider.dapper.Dapper
 import com.portto.fcl.sample.R
 import com.portto.fcl.sample.databinding.ActivityMainBinding
 import com.portto.fcl.sample.util.*
 import com.portto.fcl.ui.discovery.showConnectWalletDialog
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -34,8 +33,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         Fcl.init(
-            env = NetworkEnv.TESTNET,
-            appInfo = AppInfo(),
+            env = Network.TESTNET,
+            appDetail = AppDetail(),
             supportedWallets = listOf(
                 Blocto.getInstance(bloctoAppId = BLOCTO_APP_ID, isDebug = true),
                 Dapper,

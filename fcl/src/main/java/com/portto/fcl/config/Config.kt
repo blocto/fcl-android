@@ -6,11 +6,11 @@ import com.portto.fcl.provider.Provider
  * Copyright 2022 Portto, Inc.
  *
  */
-class Config {
-    var env: NetworkEnv? = null
+object Config {
+    var env: Network? = null
         private set
 
-    var appInfo: AppInfo? = null
+    var appDetail: AppDetail? = null
         private set
 
     var supportedWallets: List<Provider> = listOf()
@@ -19,17 +19,24 @@ class Config {
     var selectedWalletProvider: Provider? = null
         private set
 
-    fun put(option: ConfigOption): Config = apply {
+    fun put(option: Option): Config = apply {
         when (option) {
-            is ConfigOption.Env -> env = option.value
-            is ConfigOption.App -> appInfo = option.value
-            is ConfigOption.WalletProviders -> {
+            is Option.Env -> env = option.value
+            is Option.App -> appDetail = option.value
+            is Option.WalletProviders -> {
                 option.value.let {
                     supportedWallets = it
                     if (it.size == 1) selectedWalletProvider = it.first()
                 }
             }
-            is ConfigOption.SelectedWalletProvider -> selectedWalletProvider = option.value
+            is Option.SelectedWalletProvider -> selectedWalletProvider = option.value
         }
+    }
+
+    sealed class Option {
+        class Env(val value: Network) : Option()
+        class App(val value: AppDetail?) : Option()
+        class WalletProviders(val value: List<Provider>) : Option()
+        class SelectedWalletProvider(val value: Provider) : Option()
     }
 }

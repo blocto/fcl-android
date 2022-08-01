@@ -1,6 +1,6 @@
 package com.portto.fcl.config
 
-enum class NetworkEnv(val value: String) {
+enum class Network(val value: String) {
     LOCAL("local"),
     CANARYNET("canarynet"),
     TESTNET("testnet"),

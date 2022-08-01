@@ -1,9 +1,9 @@
 package com.portto.fcl
 
-import com.portto.fcl.config.AppInfo
+import com.portto.fcl.config.AppDetail
 import com.portto.fcl.config.Config
-import com.portto.fcl.config.ConfigOption
-import com.portto.fcl.config.NetworkEnv
+import com.portto.fcl.config.Config.Option.*
+import com.portto.fcl.config.Network
 import com.portto.fcl.error.AuthenticationException
 import com.portto.fcl.error.UnspecifiedWalletProviderException
 import com.portto.fcl.model.CompositeSignature
@@ -13,17 +13,17 @@ import com.portto.fcl.model.authn.AccountProofResolvedData
 import com.portto.fcl.provider.Provider
 
 object Fcl {
-    val config: Config = Config()
+    val config: Config = Config
 
-    val isMainnet: Boolean = config.env == NetworkEnv.MAINNET
+    val isMainnet: Boolean = config.env == Network.MAINNET
 
     var currentUser: User? = null
 
-    fun init(env: NetworkEnv, appInfo: AppInfo, supportedWallets: List<Provider>): Config =
+    fun init(env: Network, appDetail: AppDetail, supportedWallets: List<Provider>): Config =
         config.apply {
-            put(ConfigOption.Env(env))
-            put(ConfigOption.App(appInfo))
-            put(ConfigOption.WalletProviders(supportedWallets))
+            put(Env(env))
+            put(App(appDetail))
+            put(WalletProviders(supportedWallets))
         }
 
     suspend fun authenticate(accountProofData: AccountProofResolvedData?): Result<String> {

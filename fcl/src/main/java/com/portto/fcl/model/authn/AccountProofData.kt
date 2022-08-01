@@ -4,7 +4,7 @@ import com.portto.fcl.model.CompositeSignature
 
 
 /**
- * The data is used to verify
+ * The data to prove the ownership of a Flow account
  *
  * @property address address of the user authenticating
  * @property nonce minimum 32-byte random nonce as hex string

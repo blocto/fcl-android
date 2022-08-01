@@ -1,9 +1,16 @@
 package com.portto.fcl.utils
 
+import androidx.annotation.WorkerThread
 import com.nftco.flow.sdk.bytesToHex
 import com.nftco.flow.sdk.hexToBytes
 import org.tdf.rlp.RLPCodec
 
+/**
+ * rlp-encode account proof data
+ *
+ * @param includeDomainTag true for encoding sign data; false for encoding verify data
+ */
+@WorkerThread
 fun encodeAccountProof(
     appIdentifier: String,
     address: String,

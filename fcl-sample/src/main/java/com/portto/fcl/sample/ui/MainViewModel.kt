@@ -2,7 +2,7 @@ package com.portto.fcl.sample.ui
 
 import androidx.lifecycle.*
 import com.portto.fcl.Fcl
-import com.portto.fcl.config.ConfigOption
+import com.portto.fcl.config.Config
 import com.portto.fcl.model.CompositeSignature
 import com.portto.fcl.model.Result
 import com.portto.fcl.model.authn.AccountProofResolvedData
@@ -10,8 +10,6 @@ import com.portto.fcl.provider.Provider
 import com.portto.fcl.sample.util.FLOW_APP_IDENTIFIER
 import com.portto.fcl.sample.util.FLOW_NONCE
 import com.portto.fcl.utils.AppUtils
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -37,7 +35,7 @@ class MainViewModel : ViewModel() {
     val message get() = _message.asStateFlow()
 
     fun connect(walletProvider: Provider, withAccountPoof: Boolean) = viewModelScope.launch {
-        Fcl.config.put(ConfigOption.SelectedWalletProvider(walletProvider))
+        Fcl.config.put(Config.Option.SelectedWalletProvider(walletProvider))
         val accountProofResolvedData =
             if (withAccountPoof) AccountProofResolvedData(FLOW_APP_IDENTIFIER, FLOW_NONCE)
             else null

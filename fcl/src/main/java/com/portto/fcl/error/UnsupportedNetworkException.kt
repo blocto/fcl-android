@@ -1,9 +1,9 @@
 package com.portto.fcl.error
 
-import com.portto.fcl.config.NetworkEnv
+import com.portto.fcl.config.Network
 
 /**
- * Exception thrown when the provided [NetworkEnv] is not supported
+ * Exception thrown when the provided [Network] is not supported
  */
-class UnsupportedNetworkException(networkEnv: NetworkEnv) :
-    Exception("${networkEnv.value} is not supported by FCL")
+class UnsupportedNetworkException(network: Network) :
+    Exception("${network.value} is not supported by FCL")

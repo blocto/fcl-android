@@ -1,7 +1,5 @@
 package com.portto.fcl.utils
 
-import androidx.annotation.WorkerThread
-import com.nftco.flow.sdk.DomainTag
 import com.nftco.flow.sdk.Flow
 import com.nftco.flow.sdk.bytesToHex
 import com.nftco.flow.sdk.cadence.AddressField
@@ -10,7 +8,7 @@ import com.nftco.flow.sdk.cadence.IntNumberField
 import com.nftco.flow.sdk.cadence.StringField
 import com.nftco.flow.sdk.simpleFlowScript
 import com.portto.fcl.Fcl
-import com.portto.fcl.config.NetworkEnv
+import com.portto.fcl.config.Network
 import com.portto.fcl.error.UnspecifiedNetworkException
 import com.portto.fcl.error.UnsupportedNetworkException
 import com.portto.fcl.model.CompositeSignature
@@ -84,10 +82,10 @@ object AppUtils {
         port = 9000
     )
 
-    private fun getAccountProofContactAddress(network: NetworkEnv): String = when (network) {
-        NetworkEnv.TESTNET -> "0x74daa6f9c7ef24b1"
-        NetworkEnv.MAINNET -> "0xb4b82a1c9d21d284"
-        NetworkEnv.LOCAL, NetworkEnv.CANARYNET -> throw UnsupportedNetworkException(network)
+    private fun getAccountProofContactAddress(network: Network): String = when (network) {
+        Network.TESTNET -> "0x74daa6f9c7ef24b1"
+        Network.MAINNET -> "0xb4b82a1c9d21d284"
+        Network.LOCAL, Network.CANARYNET -> throw UnsupportedNetworkException(network)
     }
 
     private fun getVerifySignaturesScript(isAccountProof: Boolean, contract: String): String {
