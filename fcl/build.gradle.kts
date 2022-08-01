@@ -1,12 +1,26 @@
 plugins {
     id("com.android.library")
     kotlin("android")
+    kotlin("plugin.serialization")
 }
 
-setupLibraryModule()
+setupLibraryModule {
+    buildFeatures {
+        viewBinding = true
+    }
+}
 
 dependencies {
+    api(files("libs/core-debug.aar"))
+    api(files("libs/wallet-debug.aar"))
+    api(files("libs/flow-debug.aar"))
     implementation(libs.androidx.core)
+    implementation(libs.androidx.recyclerview)
+    implementation(libs.bundles.network)
+    implementation(libs.coil)
+    implementation(libs.coroutines.android)
+    implementation(libs.flow.sdk)
+    implementation(libs.grpc.okhttp)
     implementation(libs.material)
     testImplementation(libs.junit)
 }

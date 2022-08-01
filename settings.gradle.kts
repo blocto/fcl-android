@@ -1,5 +1,3 @@
-rootProject.name = "fcl-android"
-
 // Public modules
 include(
     "fcl",

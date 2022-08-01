@@ -9,6 +9,8 @@ buildscript {
         classpath(libs.gradlePlugin.android)
         classpath(libs.gradlePlugin.kotlin)
         classpath(libs.gradlePlugin.mavenPublish)
+        classpath(libs.kotlin.serialization)
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10")
     }
 }
 
@@ -22,6 +24,7 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        maven("https://jitpack.io") // Required by flow-sdk (java-rlp)
     }
 
     group = project.groupId
