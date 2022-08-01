@@ -15,9 +15,7 @@ fun Activity.showConnectWalletDialog(
     onWalletSelected: (Provider) -> Unit
 ) {
     val dialog = MaterialAlertDialogBuilder(this).create()
-    val providerAdapter = WalletProviderAdapter(dialog, ProviderViewHolder.Listener {
-        onWalletSelected(it)
-    })
+    val providerAdapter = WalletProviderAdapter(dialog, onWalletSelected)
     val binding: WalletDiscoveryDialogBinding =
         WalletDiscoveryDialogBinding.inflate(layoutInflater).apply {
             providerList.adapter = providerAdapter
@@ -30,7 +28,7 @@ fun Activity.showConnectWalletDialog(
 
 class WalletProviderAdapter(
     private val dialog: Dialog,
-    private val listener: ProviderViewHolder.Listener
+    private val onWalletProviderClick: (Provider) -> Unit
 ) :
     ListAdapter<Provider, ProviderViewHolder>(ProviderDiffCallback) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProviderViewHolder =
@@ -38,7 +36,7 @@ class WalletProviderAdapter(
 
     override fun onBindViewHolder(holder: ProviderViewHolder, position: Int) {
         getItem(position)?.let {
-            holder.bind(it, dialog, listener)
+            holder.bind(it, dialog, onWalletProviderClick)
         }
     }
 }
