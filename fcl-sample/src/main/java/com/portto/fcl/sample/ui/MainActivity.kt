@@ -80,21 +80,13 @@ class MainActivity : AppCompatActivity() {
         address.observe(this@MainActivity) { address ->
             binding.authCard.btnConnectWallet.setOnClickListener {
                 if (address == null) it.showMenu(R.menu.menu_connect) { item ->
-                    return@showMenu when (item.itemId) {
-                        R.id.menu_item_authn_with_account_proof -> {
-                            showConnectWalletDialog(Fcl.config.supportedWallets) { provider ->
-                                mainViewModel.connect(provider, true)
-                            }
-                            true
-                        }
-                        R.id.menu_item_authn_without_account_proof -> {
-                            showConnectWalletDialog(Fcl.config.supportedWallets) { provider ->
-                                mainViewModel.connect(provider, false)
-                            }
-                            true
-                        }
-                        else -> false
+                    showConnectWalletDialog(Fcl.config.supportedWallets) { provider ->
+                        mainViewModel.connect(
+                            walletProvider = provider,
+                            withAccountPoof = item.itemId == R.id.menu_item_authn_with_account_proof
+                        )
                     }
+                    return@showMenu true
                 }
                 else mainViewModel.disconnect()
             }
