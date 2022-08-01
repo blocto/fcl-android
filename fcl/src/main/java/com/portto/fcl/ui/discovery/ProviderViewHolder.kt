@@ -11,13 +11,13 @@ import com.portto.fcl.provider.Provider
 class ProviderViewHolder(private val binding: ListItemWalletProviderBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(provider: Provider, dialog: Dialog, listener: Listener) {
+    fun bind(provider: Provider, dialog: Dialog, onClick: (provider: Provider) -> Unit) {
         binding.apply {
             tvTitle.text = provider.info.title
             tvDescription.text = provider.info.description
             imgIcon.load(provider.info.icon)
             root.setOnClickListener {
-                listener.onClick(provider)
+                onClick(provider)
                 dialog.dismiss()
             }
         }
@@ -29,9 +29,5 @@ class ProviderViewHolder(private val binding: ListItemWalletProviderBinding) :
             val binding = ListItemWalletProviderBinding.inflate(layoutInflater, parent, false)
             return ProviderViewHolder(binding)
         }
-    }
-
-    class Listener(val clickListener: (provider: Provider) -> Unit) {
-        fun onClick(provider: Provider) = clickListener(provider)
     }
 }
