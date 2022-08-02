@@ -22,4 +22,4 @@ transaction {
         log("A transaction happened")
     }
 }
-        """
+"""

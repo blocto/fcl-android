@@ -45,8 +45,8 @@ object Fcl {
         currentUser = null
     }
 
-    suspend fun query(cadence: String, arguments: List<Field<*>>? = null): Result<Any?> = try {
-        Result.Success(AppUtils.query(cadence, arguments))
+    suspend fun query(cadence: String, arguments: List<Field<*>>? = null): Result<String?> = try {
+        Result.Success(AppUtils.query(cadence, arguments).value?.toString())
     } catch (e: Exception) {
         Result.Failure(e)
     }

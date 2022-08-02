@@ -106,7 +106,7 @@ class MainViewModel : ViewModel() {
 
     fun sendQuery(script: String) {
         viewModelScope.launch {
-            when (val result = Fcl.query(script)) {
+            when (val result = Fcl.query(script, listOf())) {
                 is Result.Success -> _queryResult.value = result.value.toString()
                 is Result.Failure -> _queryResult.value = result.throwable.message
             }
