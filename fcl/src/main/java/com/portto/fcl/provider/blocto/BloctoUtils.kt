@@ -20,11 +20,13 @@ fun BloctoSDKError.parseErrorMessage() = message.split("_").joinToString(" ")
  */
 internal fun BloctoAccountProofData.mapToFclAccountProofData(): FclAccountProofData =
     FclAccountProofData(
-        nonce = nonce ?: throw NullPointerException("None"),
+        nonce = nonce
+            ?: throw NullPointerException("Unable to transform account proof data since nonce is null"),
         address = address,
         signatures = signatures?.map {
             it.mapToFclCompositeSignature()
-        } ?: throw NullPointerException("Signatures"))
+        }
+            ?: throw NullPointerException("Unable to transform account proof data since signatures are null"))
 
 /**
  * Map from [BloctoCompositeSignature] to [FclCompositeSignature]
