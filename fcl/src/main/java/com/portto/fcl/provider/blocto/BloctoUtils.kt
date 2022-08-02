@@ -1,6 +1,5 @@
 package com.portto.fcl.provider.blocto
 
-import com.portto.fcl.error.NullPointerException
 import com.portto.fcl.model.CompositeSignature as FclCompositeSignature
 import com.portto.sdk.wallet.BloctoSDKError
 import com.portto.sdk.wallet.flow.CompositeSignature as BloctoCompositeSignature
@@ -20,17 +19,11 @@ fun BloctoSDKError.parseErrorMessage() = message.split("_").joinToString(" ")
  */
 internal fun BloctoAccountProofData.mapToFclAccountProofData(): FclAccountProofData =
     FclAccountProofData(
-        nonce = nonce ?: throw NullPointerException(
-            field = "nonce",
-            reason = "It's required to transform account proof data"
-        ),
+        nonce = requireNotNull(nonce) { "Nonce can not be null" },
         address = address,
-        signatures = signatures?.map {
+        signatures = requireNotNull(signatures?.map {
             it.mapToFclCompositeSignature()
-        } ?: throw NullPointerException(
-            field = "signatures",
-            reason = "It's required to transform account proof data"
-        ))
+        }) { "Signatures can not be null" })
 
 /**
  * Map from [BloctoCompositeSignature] to [FclCompositeSignature]
