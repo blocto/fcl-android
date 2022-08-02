@@ -23,7 +23,7 @@
                 android:id="@+id/tv_script"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="@dimen/spacing_medium"
+                android:layout_marginHorizontal="@dimen/spacing_medium"
                 android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                 tools:text="hello" />
         </com.google.android.material.card.MaterialCardView>

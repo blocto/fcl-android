@@ -11,10 +11,10 @@ import com.portto.fcl.model.User
 import com.portto.fcl.model.authn.AccountProofResolvedData
 import com.portto.fcl.provider.Provider
 import com.portto.fcl.provider.Provider.ProviderInfo
-import com.portto.fcl.utils.PROVIDER_DAPPER_DESC
-import com.portto.fcl.utils.PROVIDER_DAPPER_ICON
-import com.portto.fcl.utils.PROVIDER_DAPPER_ID
-import com.portto.fcl.utils.PROVIDER_DAPPER_TITLE
+import com.portto.fcl.provider.PROVIDER_DAPPER_DESC
+import com.portto.fcl.provider.PROVIDER_DAPPER_ICON
+import com.portto.fcl.provider.PROVIDER_DAPPER_ID
+import com.portto.fcl.provider.PROVIDER_DAPPER_TITLE
 import com.portto.fcl.webview.WebViewActivity
 import kotlinx.coroutines.delay
 import kotlinx.serialization.ExperimentalSerializationApi

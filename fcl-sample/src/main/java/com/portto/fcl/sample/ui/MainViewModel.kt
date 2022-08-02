@@ -1,6 +1,9 @@
 package com.portto.fcl.sample.ui
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.portto.fcl.Fcl
 import com.portto.fcl.config.Config
 import com.portto.fcl.model.CompositeSignature
@@ -29,6 +32,10 @@ class MainViewModel : ViewModel() {
     // user_signature - signatures
     private val _userSignatures = MutableStateFlow<List<CompositeSignature>?>(null)
     val userSignatures get() = _userSignatures.asStateFlow()
+
+    // query
+    private val _queryResult = MutableLiveData<String?>(null)
+    val queryResult: LiveData<String?> get() = _queryResult
 
     // Message to be shown as snackbar
     private val _message = MutableStateFlow<String?>(null)
@@ -93,6 +100,15 @@ class MainViewModel : ViewModel() {
                 _message.value = "$type is $validString"
             } catch (exception: Exception) {
                 _message.value = exception.message
+            }
+        }
+    }
+
+    fun sendQuery(script: String) {
+        viewModelScope.launch {
+            when (val result = Fcl.query(script)) {
+                is Result.Success -> _queryResult.value = result.value.toString()
+                is Result.Failure -> _queryResult.value = result.throwable.message
             }
         }
     }

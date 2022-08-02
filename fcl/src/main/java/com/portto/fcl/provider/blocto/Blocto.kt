@@ -8,14 +8,13 @@ import com.portto.fcl.model.authn.AccountProofResolvedData
 import com.portto.fcl.provider.Provider
 import com.portto.fcl.provider.Provider.ProviderInfo
 import com.portto.fcl.provider.blocto.Blocto.Companion.getInstance
-import com.portto.fcl.utils.PROVIDER_BLOCTO_DESC
-import com.portto.fcl.utils.PROVIDER_BLOCTO_ICON
-import com.portto.fcl.utils.PROVIDER_BLOCTO_ID
-import com.portto.fcl.utils.PROVIDER_BLOCTO_TITLE
+import com.portto.fcl.provider.PROVIDER_BLOCTO_DESC
+import com.portto.fcl.provider.PROVIDER_BLOCTO_ICON
+import com.portto.fcl.provider.PROVIDER_BLOCTO_ID
+import com.portto.fcl.provider.PROVIDER_BLOCTO_TITLE
 import com.portto.sdk.core.BloctoSDK
 import com.portto.sdk.flow.flow
 import com.portto.sdk.wallet.BloctoSDKError
-import kotlinx.coroutines.Dispatchers
 import com.portto.sdk.wallet.flow.CompositeSignature as BloctoCompositeSignature
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume

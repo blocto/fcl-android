@@ -71,6 +71,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        scriptsCard.apply {
+            tvScript.text = SCRIPT_QUERY_SAMPLE
+            btnSendScript.setOnClickListener { mainViewModel.sendQuery(SCRIPT_QUERY_SAMPLE)}
+        }
+
         txCard.apply {
             tvScript.text = SCRIPT
         }

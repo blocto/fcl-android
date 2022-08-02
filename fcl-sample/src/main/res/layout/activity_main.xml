@@ -21,7 +21,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/spacing_large">
 
                 <!-- Authentication -->
                 <include
@@ -33,9 +34,15 @@
                 <include
                     android:id="@+id/sign_message_card"
                     layout="@layout/layout_user_signature_card"
-                    app:viewModel="@{viewModel}"/>
+                    app:viewModel="@{viewModel}" />
 
-                <!-- Transactions -->
+                <!-- Scripts - query -->
+                <include
+                    android:id="@+id/scripts_card"
+                    layout="@layout/layout_scripts_card"
+                    app:result="@{viewModel.queryResult}" />
+
+                <!-- Transactions - mutate -->
                 <include
                     android:id="@+id/tx_card"
                     layout="@layout/layout_transaction_card" />

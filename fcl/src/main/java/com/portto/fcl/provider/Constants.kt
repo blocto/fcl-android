@@ -1,4 +1,4 @@
-package com.portto.fcl.utils
+package com.portto.fcl.provider
 
 // Blocto
 internal const val PROVIDER_BLOCTO_ID = 0

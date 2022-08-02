@@ -2,10 +2,7 @@ package com.portto.fcl.utils
 
 import com.nftco.flow.sdk.Flow
 import com.nftco.flow.sdk.bytesToHex
-import com.nftco.flow.sdk.cadence.AddressField
-import com.nftco.flow.sdk.cadence.ArrayField
-import com.nftco.flow.sdk.cadence.IntNumberField
-import com.nftco.flow.sdk.cadence.StringField
+import com.nftco.flow.sdk.cadence.*
 import com.nftco.flow.sdk.simpleFlowScript
 import com.portto.fcl.Fcl
 import com.portto.fcl.config.Network
@@ -69,6 +66,21 @@ object AppUtils {
             }
 
             result.jsonCadence.value as Boolean
+        } catch (exception: Exception) {
+            throw exception
+        }
+    }
+
+    suspend fun query(
+        script: String,
+        arguments: List<Field<*>>?
+    ): Any? = withContext(Dispatchers.IO) {
+        try {
+            val result = getFlowApi(Fcl.isMainnet).simpleFlowScript {
+                script(script)
+                arguments?.forEach { arg(it) }
+            }
+            result.jsonCadence.value
         } catch (exception: Exception) {
             throw exception
         }
