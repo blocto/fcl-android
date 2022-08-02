@@ -22,5 +22,6 @@ dependencies {
     implementation(libs.flow.sdk)
     implementation(libs.grpc.okhttp)
     implementation(libs.material)
+    testImplementation(libs.coroutines.test)
     testImplementation(libs.junit)
 }

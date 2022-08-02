@@ -1,5 +1,6 @@
 package com.portto.fcl
 
+import com.nftco.flow.sdk.cadence.Field
 import com.portto.fcl.config.AppDetail
 import com.portto.fcl.config.Config
 import com.portto.fcl.config.Config.Option.*
@@ -11,6 +12,7 @@ import com.portto.fcl.model.Result
 import com.portto.fcl.model.User
 import com.portto.fcl.model.authn.AccountProofResolvedData
 import com.portto.fcl.provider.Provider
+import com.portto.fcl.utils.AppUtils
 
 object Fcl {
     val config: Config = Config
@@ -43,8 +45,10 @@ object Fcl {
         currentUser = null
     }
 
-    fun query() {
-        TODO("Not yet implemented")
+    suspend fun query(cadence: String, arguments: List<Field<*>>? = null): Result<Any?> = try {
+        Result.Success(AppUtils.query(cadence, arguments))
+    } catch (e: Exception) {
+        Result.Failure(e)
     }
 
     fun sendTx() {
