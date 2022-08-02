@@ -48,7 +48,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/spacing_large"
-                android:text="@{@string/text_send_script_result(result)}"
+                android:text="@{@string/text_send_query_result(result)}"
                 android:visibility="@{result == null ? View.GONE : View.VISIBLE}"
                 app:layout_constraintBaseline_toBaselineOf="@id/btn_send_script"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -60,7 +60,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_medium"
-                android:text="@string/btn_send_script"
+                android:text="@string/btn_send_query"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/card" />

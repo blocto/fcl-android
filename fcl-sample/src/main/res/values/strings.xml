@@ -14,8 +14,8 @@
     <string name="btn_verify">Verify</string>
 
     <!-- Scripts (Query) -->
-    <string name="btn_send_script">Send Script</string>
-    <string name="text_send_script_result">Result: %1$s</string>
+    <string name="btn_send_query">Send Query</string>
+    <string name="text_send_query_result">Result: %1$s</string>
 
     <!-- Transactions (Mutate) -->
     <string name="btn_send_tx">Send Transaction</string>
