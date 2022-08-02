@@ -76,7 +76,7 @@ object AppUtils {
         arguments: List<Field<*>>?
     ): Any? = withContext(Dispatchers.IO) {
         try {
-            val result = getFlowApi(false).simpleFlowScript {
+            val result = getFlowApi(Fcl.isMainnet).simpleFlowScript {
                 script(script)
                 arguments?.forEach { arg(it) }
             }
