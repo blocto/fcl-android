@@ -17,7 +17,8 @@ import com.portto.fcl.utils.AppUtils
 object Fcl {
     val config: Config = Config
 
-    val isMainnet: Boolean = config.env == Network.MAINNET
+    val isMainnet: Boolean
+        get() = config.env == Network.MAINNET
 
     var currentUser: User? = null
 
