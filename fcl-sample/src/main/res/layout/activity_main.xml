@@ -45,7 +45,8 @@
                 <!-- Transactions - mutate -->
                 <include
                     android:id="@+id/mutate_card"
-                    layout="@layout/layout_mutate_card" />
+                    layout="@layout/layout_mutate_card"
+                    app:result="@{viewModel.txHash}" />
             </LinearLayout>
         </ScrollView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

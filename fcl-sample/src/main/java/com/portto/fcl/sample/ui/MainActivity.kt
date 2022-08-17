@@ -80,6 +80,7 @@ class MainActivity : AppCompatActivity() {
         mutateCard.apply {
             val mutateScript = getMutateSampleScript(Fcl.isMainnet)
             tvScript.text = mutateScript
+            btnSendTx.setOnClickListener { mainViewModel.sendTransaction(mutateScript) }
         }
     }
 
@@ -103,7 +104,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             lifecycleScope.launch {
-                mainViewModel.message.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+                message.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
                     .collect {
                         it?.let {
                             binding.coordinator.showSnackbar(it)

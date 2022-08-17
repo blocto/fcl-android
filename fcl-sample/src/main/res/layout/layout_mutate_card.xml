@@ -1,38 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    style="?attr/materialCardViewFilledStyle"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginHorizontal="@dimen/spacing_large"
-    android:layout_marginTop="@dimen/spacing_large">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
+    <data>
+
+        <variable
+            name="result"
+            type="String" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        style="?attr/materialCardViewFilledStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="@dimen/spacing_large">
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/spacing_large"
+        android:layout_marginTop="@dimen/spacing_large">
 
-        <com.google.android.material.card.MaterialCardView
-            style="@style/Widget.Material3.CardView.Outlined"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:padding="@dimen/spacing_large">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card"
+                style="@style/Widget.Material3.CardView.Outlined"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/tv_script"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/spacing_medium"
+                    android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+                    tools:text="hello" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_send_tx"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_medium"
+                android:text="@string/btn_send_tx"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/card" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/group_tx_hash"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="@{result == null ? View.GONE : View.VISIBLE}"
+                app:constraint_referenced_ids="tv_tx_hash, btn_open_in_flowscan" />
 
             <TextView
-                android:id="@+id/tv_script"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="@dimen/spacing_medium"
-                android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-                tools:text="hello" />
-        </com.google.android.material.card.MaterialCardView>
+                android:id="@+id/tv_tx_hash"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_large"
+                android:ellipsize="middle"
+                android:singleLine="true"
+                android:text="@{result}"
+                app:layout_constraintEnd_toStartOf="@id/btn_open_in_flowscan"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btn_send_tx"
+                tools:text="testtesttesttesttesttesesttesesttesesttesesttesesttesesttesesttesesttes" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_send_tx"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_medium"
-            android:text="@string/btn_send_tx" />
-    </LinearLayout>
-</com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_open_in_flowscan"
+                style="@style/Widget.Material3.Button.IconButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_small"
+                app:backgroundTint="?android:attr/colorButtonNormal"
+                app:icon="@drawable/ic_open_in_new"
+                app:layout_constraintBottom_toBottomOf="@id/tv_tx_hash"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tv_tx_hash"
+                app:layout_constraintTop_toTopOf="@id/tv_tx_hash" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>
