@@ -71,13 +71,15 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        scriptsCard.apply {
-            tvScript.text = SCRIPT_QUERY_SAMPLE
-            btnSendScript.setOnClickListener { mainViewModel.sendQuery(SCRIPT_QUERY_SAMPLE)}
+        queryCard.apply {
+            val queryScript = getQuerySampleScript(Fcl.isMainnet)
+            tvScript.text = queryScript
+            btnSendScript.setOnClickListener { mainViewModel.sendQuery(queryScript) }
         }
 
-        txCard.apply {
-            tvScript.text = SCRIPT
+        mutateCard.apply {
+            val mutateScript = getMutateSampleScript(Fcl.isMainnet)
+            tvScript.text = mutateScript
         }
     }
 

@@ -17,7 +17,8 @@ import com.portto.fcl.utils.AppUtils
 object Fcl {
     val config: Config = Config
 
-    val isMainnet: Boolean = config.env == Network.MAINNET
+    val isMainnet: Boolean
+        get() = config.env == Network.MAINNET
 
     var currentUser: User? = null
 
@@ -45,13 +46,30 @@ object Fcl {
         currentUser = null
     }
 
+    /**
+     * Query the Flow Blockchain
+     * @param cadence Cadence script used to query Flow
+     * @param arguments Arguments passed to cadence query
+     * @return Cadence response Value from Flow contract
+     */
     suspend fun query(cadence: String, arguments: List<Field<*>>? = null): Result<Any?> = try {
-        Result.Success(AppUtils.query(cadence, arguments))
+        Result.Success(AppUtils.query(cadence, arguments).value)
     } catch (e: Exception) {
         Result.Failure(e)
     }
 
-    fun sendTx() {
+    /**
+     * Mutate the Flow Blockchain
+     * @param cadence Cadence script used to mutate Flow
+     * @param arguments Arguments passed to cadence transaction
+     * @param limit Gas limit for the computation of the transaction
+     * @return Transaction id
+     */
+    fun mutate(
+//        cadence: String,
+//        arguments: List<Field<*>>? = null,
+//        limit: Long = 1000L
+    ): Result<String> {
         TODO("Not yet implemented")
     }
 

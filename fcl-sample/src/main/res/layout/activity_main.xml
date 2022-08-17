@@ -38,14 +38,14 @@
 
                 <!-- Scripts - query -->
                 <include
-                    android:id="@+id/scripts_card"
-                    layout="@layout/layout_scripts_card"
+                    android:id="@+id/query_card"
+                    layout="@layout/layout_query_card"
                     app:result="@{viewModel.queryResult}" />
 
                 <!-- Transactions - mutate -->
                 <include
-                    android:id="@+id/tx_card"
-                    layout="@layout/layout_transaction_card" />
+                    android:id="@+id/mutate_card"
+                    layout="@layout/layout_mutate_card" />
             </LinearLayout>
         </ScrollView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -21,8 +21,9 @@ object AppUtils {
         accountProofData: AccountProofData
     ): Boolean = withContext(Dispatchers.IO) {
         try {
-            val contract =
-                getAccountProofContactAddress(Fcl.config.env ?: throw UnspecifiedNetworkException())
+            val contract = getAccountProofContactAddress(
+                Fcl.config.env ?: throw UnspecifiedNetworkException()
+            )
             val script = getVerifySignaturesScript(isAccountProof = true, contract = contract)
 
             val verifyMessage = encodeAccountProof(
@@ -32,14 +33,15 @@ object AppUtils {
                 includeDomainTag = false
             )
 
-            val result = getFlowApi(Fcl.isMainnet).simpleFlowScript {
-                script(script)
-                arg(AddressField(accountProofData.address))
-                arg(StringField(verifyMessage))
-                arg(ArrayField(accountProofData.signatures.map { IntNumberField(it.keyId) }))
-                arg(ArrayField(accountProofData.signatures.map { StringField(it.signature) }))
-            }
-            result.jsonCadence.value as Boolean
+            query(
+                queryScript = script,
+                args = listOf(
+                    AddressField(accountProofData.address),
+                    StringField(verifyMessage),
+                    ArrayField(accountProofData.signatures.map { IntNumberField(it.keyId) }),
+                    ArrayField(accountProofData.signatures.map { StringField(it.signature) }),
+                )
+            ).value as Boolean
         } catch (exception: Exception) {
             throw exception
         }
@@ -57,30 +59,30 @@ object AppUtils {
 
             val verifyMessage = message.toByteArray(Charsets.UTF_8).bytesToHex()
 
-            val result = getFlowApi(Fcl.isMainnet).simpleFlowScript {
-                script(script)
-                arg(AddressField(signatures.first().address))
-                arg(StringField(verifyMessage))
-                arg(ArrayField(signatures.map { IntNumberField(it.keyId) }))
-                arg(ArrayField(signatures.map { StringField(it.signature) }))
-            }
-
-            result.jsonCadence.value as Boolean
+            query(
+                queryScript = script,
+                args = listOf(
+                    AddressField(signatures.first().address),
+                    StringField(verifyMessage),
+                    ArrayField(signatures.map { IntNumberField(it.keyId) }),
+                    ArrayField(signatures.map { StringField(it.signature) }),
+                )
+            ).value as Boolean
         } catch (exception: Exception) {
             throw exception
         }
     }
 
     suspend fun query(
-        script: String,
-        arguments: List<Field<*>>?
-    ): Any? = withContext(Dispatchers.IO) {
+        queryScript: String,
+        args: List<Field<*>>?
+    ): Field<*> = withContext(Dispatchers.IO) {
         try {
             val result = getFlowApi(Fcl.isMainnet).simpleFlowScript {
-                script(script)
-                arguments?.forEach { arg(it) }
+                script(queryScript)
+                args?.let { arguments { it } }
             }
-            result.jsonCadence.value
+            result.jsonCadence
         } catch (exception: Exception) {
             throw exception
         }
