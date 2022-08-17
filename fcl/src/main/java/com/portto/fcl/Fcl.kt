@@ -66,9 +66,9 @@ object Fcl {
      * @return Transaction id
      */
     fun mutate(
-        cadence: String,
-        arguments: List<Field<*>>? = null,
-        limit: Long = 1000L
+//        cadence: String,
+//        arguments: List<Field<*>>? = null,
+//        limit: Long = 1000L
     ): Result<String> {
         TODO("Not yet implemented")
     }
