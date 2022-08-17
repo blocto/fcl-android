@@ -52,24 +52,38 @@
                 app:layout_constraintTop_toBottomOf="@id/card" />
 
             <androidx.constraintlayout.widget.Group
-                android:id="@+id/group_tx_hash"
+                android:id="@+id/group_tx_result"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="@{result == null ? View.GONE : View.VISIBLE}"
-                app:constraint_referenced_ids="tv_tx_hash, btn_open_in_flowscan" />
+                app:constraint_referenced_ids="tv_tx_result,btn_copy, btn_open_in_flowscan" />
 
             <TextView
-                android:id="@+id/tv_tx_hash"
+                android:id="@+id/tv_tx_result"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_large"
                 android:ellipsize="middle"
                 android:singleLine="true"
                 android:text="@{result}"
-                app:layout_constraintEnd_toStartOf="@id/btn_open_in_flowscan"
+                app:layout_constraintEnd_toStartOf="@id/btn_copy"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/btn_send_tx"
                 tools:text="testtesttesttesttesttesesttesesttesesttesesttesesttesesttesesttesesttes" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_copy"
+                style="@style/Widget.Material3.Button.IconButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_small"
+                app:backgroundTint="?android:attr/colorButtonNormal"
+                app:icon="@drawable/ic_copy"
+                app:layout_constraintBottom_toBottomOf="@id/tv_tx_result"
+                app:layout_constraintEnd_toStartOf="@id/btn_open_in_flowscan"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toEndOf="@id/tv_tx_result"
+                app:layout_constraintTop_toTopOf="@id/tv_tx_result" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_open_in_flowscan"
@@ -79,10 +93,10 @@
                 android:layout_marginStart="@dimen/spacing_small"
                 app:backgroundTint="?android:attr/colorButtonNormal"
                 app:icon="@drawable/ic_open_in_new"
-                app:layout_constraintBottom_toBottomOf="@id/tv_tx_hash"
+                app:layout_constraintBottom_toBottomOf="@id/tv_tx_result"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/tv_tx_hash"
-                app:layout_constraintTop_toTopOf="@id/tv_tx_hash" />
+                app:layout_constraintStart_toEndOf="@id/btn_copy"
+                app:layout_constraintTop_toTopOf="@id/tv_tx_result" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 </layout>

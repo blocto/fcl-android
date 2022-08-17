@@ -112,6 +112,17 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
             }
+
+            transactionId.observe(this@MainActivity) {
+                it?.let { txId ->
+                    binding.mutateCard.btnCopy.setOnClickListener {
+                        copyToClipboard("transaction ID", txId, binding.coordinator)
+                    }
+                    binding.mutateCard.btnOpenInFlowscan.setOnClickListener {
+                        openInExplorer("transaction/$txId")
+                    }
+                }
+            }
         }
     }
 }

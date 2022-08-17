@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nftco.flow.sdk.FlowArgument
 import com.nftco.flow.sdk.cadence.JsonCadenceBuilder
 import com.portto.fcl.Fcl
 import com.portto.fcl.config.Config
@@ -39,8 +40,8 @@ class MainViewModel : ViewModel() {
     val queryResult: LiveData<String?> get() = _queryResult
 
     // transaction
-    private val _txHash = MutableLiveData<String?>(null)
-    val txHash: LiveData<String?> get() = _txHash
+    private val _transactionId = MutableLiveData<String?>(null)
+    val transactionId: LiveData<String?> get() = _transactionId
 
     // Message to be shown as snackbar
     private val _message = MutableStateFlow<String?>(null)
@@ -120,9 +121,9 @@ class MainViewModel : ViewModel() {
 
     fun sendTransaction(script: String) {
         viewModelScope.launch {
-            val args = listOf(JsonCadenceBuilder().ufix64(12))
+            val args = listOf(FlowArgument(JsonCadenceBuilder().ufix64(12)))
             when (val result = Fcl.mutate(cadence = script, arguments = args, limit = 300u)) {
-                is Result.Success -> _txHash.value = result.value
+                is Result.Success -> _transactionId.value = result.value
                 is Result.Failure -> _message.value = result.throwable.message
             }
         }
