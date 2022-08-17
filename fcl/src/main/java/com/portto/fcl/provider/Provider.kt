@@ -1,5 +1,7 @@
 package com.portto.fcl.provider
 
+import com.nftco.flow.sdk.FlowArgument
+import com.nftco.flow.sdk.cadence.Field
 import com.portto.fcl.model.CompositeSignature
 import com.portto.fcl.model.User
 import com.portto.fcl.model.authn.AccountProofResolvedData
@@ -13,9 +15,9 @@ interface Provider {
 
     suspend fun authn(accountProofResolvedData: AccountProofResolvedData? = null)
 
-    suspend fun authz(): String
-
     suspend fun getUserSignature(message: String): List<CompositeSignature>
+
+    suspend fun mutate(cadence: String, args: List<FlowArgument>, limit: ULong): String
 
     data class ProviderInfo(
         val title: String,

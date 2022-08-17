@@ -1,18 +1,18 @@
 package com.portto.fcl
 
+import com.nftco.flow.sdk.FlowArgument
 import com.nftco.flow.sdk.cadence.Field
 import com.portto.fcl.config.AppDetail
 import com.portto.fcl.config.Config
 import com.portto.fcl.config.Config.Option.*
 import com.portto.fcl.config.Network
-import com.portto.fcl.error.AuthenticationException
-import com.portto.fcl.error.UnspecifiedWalletProviderException
 import com.portto.fcl.model.CompositeSignature
 import com.portto.fcl.model.Result
 import com.portto.fcl.model.User
 import com.portto.fcl.model.authn.AccountProofResolvedData
 import com.portto.fcl.provider.Provider
 import com.portto.fcl.utils.AppUtils
+import com.portto.fcl.utils.FclError
 
 object Fcl {
     val config: Config = Config
@@ -31,7 +31,7 @@ object Fcl {
 
     suspend fun authenticate(accountProofData: AccountProofResolvedData?): Result<String> {
         val selectedProvider = config.selectedWalletProvider
-            ?: throw UnspecifiedWalletProviderException()
+            ?: throw FclError.UnspecifiedWalletProviderException()
         return try {
             selectedProvider.authn(accountProofData)
             val address = currentUser?.address
@@ -65,19 +65,23 @@ object Fcl {
      * @param limit Gas limit for the computation of the transaction
      * @return Transaction id
      */
-    fun mutate(
-//        cadence: String,
-//        arguments: List<Field<*>>? = null,
-//        limit: Long = 1000L
-    ): Result<String> {
-        TODO("Not yet implemented")
+    suspend fun mutate(
+        cadence: String,
+        arguments: List<FlowArgument>?,
+        limit: ULong = 1000u
+    ): Result<String> = try {
+        val selectedProvider = config.selectedWalletProvider
+            ?: throw FclError.UnspecifiedWalletProviderException()
+        Result.Success(selectedProvider.mutate(cadence, arguments ?: emptyList(), limit))
+    } catch (e: Exception) {
+        Result.Failure(e)
     }
 
     suspend fun signUserMessage(message: String): Result<List<CompositeSignature>> {
         return try {
-            currentUser ?: throw AuthenticationException()
+            currentUser ?: throw FclError.AuthenticationException()
             val selectedProvider = config.selectedWalletProvider
-                ?: throw UnspecifiedWalletProviderException()
+                ?: throw FclError.UnspecifiedWalletProviderException()
             Result.Success(selectedProvider.getUserSignature(message))
         } catch (e: Exception) {
             Result.Failure(e)

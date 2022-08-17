@@ -1,10 +1,18 @@
 package com.portto.fcl.provider.blocto
 
+import com.portto.sdk.core.BloctoSDK
+import com.portto.sdk.flow.flow
 import com.portto.fcl.model.CompositeSignature as FclCompositeSignature
 import com.portto.sdk.wallet.BloctoSDKError
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import com.portto.sdk.wallet.flow.CompositeSignature as BloctoCompositeSignature
 import com.portto.fcl.model.authn.AccountProofData as FclAccountProofData
 import com.portto.sdk.wallet.flow.AccountProofData as BloctoAccountProofData
+
+suspend fun getFeePayerAddress(): String = withContext(Dispatchers.IO) {
+    BloctoSDK.flow.getFeePayerAddress()
+}
 
 /**
  * Parse message from [BloctoSDKError]

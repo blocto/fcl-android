@@ -1,13 +1,9 @@
 package com.portto.fcl.utils
 
-import com.nftco.flow.sdk.Flow
-import com.nftco.flow.sdk.bytesToHex
+import com.nftco.flow.sdk.*
 import com.nftco.flow.sdk.cadence.*
-import com.nftco.flow.sdk.simpleFlowScript
 import com.portto.fcl.Fcl
 import com.portto.fcl.config.Network
-import com.portto.fcl.error.UnspecifiedNetworkException
-import com.portto.fcl.error.UnsupportedNetworkException
 import com.portto.fcl.model.CompositeSignature
 import com.portto.fcl.model.authn.AccountProofData
 import kotlinx.coroutines.Dispatchers
@@ -15,6 +11,12 @@ import kotlinx.coroutines.withContext
 
 
 object AppUtils {
+    private const val FLOW_MAINNET_ENDPOINT = "access.mainnet.nodes.onflow.org"
+    private const val FLOW_TESTNET_ENDPOINT = "access.devnet.nodes.onflow.org"
+
+    private val flowApi = Flow.newAccessApi(
+        host = if (Fcl.isMainnet) FLOW_MAINNET_ENDPOINT else FLOW_TESTNET_ENDPOINT
+    )
 
     suspend fun verifyAccountProof(
         appIdentifier: String,
@@ -22,7 +24,7 @@ object AppUtils {
     ): Boolean = withContext(Dispatchers.IO) {
         try {
             val contract = getAccountProofContactAddress(
-                Fcl.config.env ?: throw UnspecifiedNetworkException()
+                Fcl.config.env ?: throw FclError.UnspecifiedNetworkException()
             )
             val script = getVerifySignaturesScript(isAccountProof = true, contract = contract)
 
@@ -53,7 +55,7 @@ object AppUtils {
     ): Boolean = withContext(Dispatchers.IO) {
         try {
             val contract = getAccountProofContactAddress(
-                Fcl.config.env ?: throw UnspecifiedNetworkException()
+                Fcl.config.env ?: throw FclError.UnspecifiedNetworkException()
             )
             val script = getVerifySignaturesScript(isAccountProof = false, contract = contract)
 
@@ -78,7 +80,7 @@ object AppUtils {
         args: List<Field<*>>?
     ): Field<*> = withContext(Dispatchers.IO) {
         try {
-            val result = getFlowApi(Fcl.isMainnet).simpleFlowScript {
+            val result = flowApi.simpleFlowScript {
                 script(queryScript)
                 args?.let { arguments { it } }
             }
@@ -88,18 +90,19 @@ object AppUtils {
         }
     }
 
-    private const val FLOW_MAINNET_ENDPOINT = "access.mainnet.nodes.onflow.org"
-    private const val FLOW_TESTNET_ENDPOINT = "access.devnet.nodes.onflow.org"
+    internal suspend fun getAccount(address: String): FlowAccount = withContext(Dispatchers.IO) {
+        flowApi.getAccountAtLatestBlock(FlowAddress(address))
+            ?: throw  FclError.AccountNotFoundException()
+    }
 
-    private fun getFlowApi(isMainNet: Boolean) = Flow.newAccessApi(
-        host = if (isMainNet) FLOW_MAINNET_ENDPOINT else FLOW_TESTNET_ENDPOINT,
-        port = 9000
-    )
+    internal suspend fun getLatestBlock(): FlowBlock = withContext(Dispatchers.IO) {
+        flowApi.getLatestBlock(true)
+    }
 
     private fun getAccountProofContactAddress(network: Network): String = when (network) {
         Network.TESTNET -> "0x74daa6f9c7ef24b1"
         Network.MAINNET -> "0xb4b82a1c9d21d284"
-        Network.LOCAL, Network.CANARYNET -> throw UnsupportedNetworkException(network)
+        Network.LOCAL, Network.CANARYNET -> throw FclError.UnsupportedNetworkException(network)
     }
 
     private fun getVerifySignaturesScript(isAccountProof: Boolean, contract: String): String {
