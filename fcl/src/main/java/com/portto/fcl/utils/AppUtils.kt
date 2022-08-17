@@ -34,8 +34,8 @@ object AppUtils {
             )
 
             query(
-                script = script,
-                arguments = listOf(
+                queryScript = script,
+                args = listOf(
                     AddressField(accountProofData.address),
                     StringField(verifyMessage),
                     ArrayField(accountProofData.signatures.map { IntNumberField(it.keyId) }),
@@ -60,8 +60,8 @@ object AppUtils {
             val verifyMessage = message.toByteArray(Charsets.UTF_8).bytesToHex()
 
             query(
-                script = script,
-                arguments = listOf(
+                queryScript = script,
+                args = listOf(
                     AddressField(signatures.first().address),
                     StringField(verifyMessage),
                     ArrayField(signatures.map { IntNumberField(it.keyId) }),
@@ -74,13 +74,13 @@ object AppUtils {
     }
 
     suspend fun query(
-        script: String,
-        arguments: List<Field<*>>?
+        queryScript: String,
+        args: List<Field<*>>?
     ): Field<*> = withContext(Dispatchers.IO) {
         try {
             val result = getFlowApi(Fcl.isMainnet).simpleFlowScript {
-                script(script)
-                arguments?.forEach { arg(it) }
+                script(queryScript)
+                args?.let { arguments { it } }
             }
             result.jsonCadence
         } catch (exception: Exception) {
