@@ -80,6 +80,11 @@ class MainActivity : AppCompatActivity() {
         mutateCard.apply {
             val mutateScript = getMutateSampleScript(Fcl.isMainnet)
             tvScript.text = mutateScript
+            btnSendTx.setOnClickListener {
+                val userAddress = mainViewModel.address.value
+                if (userAddress.isNullOrEmpty()) return@setOnClickListener
+                mainViewModel.sendTransaction(mutateScript, userAddress)
+            }
         }
     }
 
@@ -103,13 +108,24 @@ class MainActivity : AppCompatActivity() {
             }
 
             lifecycleScope.launch {
-                mainViewModel.message.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+                message.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
                     .collect {
                         it?.let {
                             binding.coordinator.showSnackbar(it)
                             mainViewModel.resetMessage()
                         }
                     }
+            }
+
+            transactionId.observe(this@MainActivity) {
+                it?.let { txId ->
+                    binding.mutateCard.btnCopy.setOnClickListener {
+                        copyToClipboard("transaction ID", txId, binding.coordinator)
+                    }
+                    binding.mutateCard.btnOpenInFlowscan.setOnClickListener {
+                        openInExplorer("transaction/$txId")
+                    }
+                }
             }
         }
     }

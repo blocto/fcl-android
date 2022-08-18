@@ -2,6 +2,9 @@ package com.portto.fcl.provider.dapper
 
 import android.net.Uri
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.nftco.flow.sdk.FlowAddress
+import com.nftco.flow.sdk.FlowArgument
+import com.nftco.flow.sdk.cadence.Field
 import com.portto.fcl.Fcl
 import com.portto.fcl.lifecycle.LifecycleObserver
 import com.portto.fcl.model.CompositeSignature
@@ -155,11 +158,16 @@ object Dapper : Provider {
         ): PollingResponse
     }
 
-    override suspend fun authz(): String {
+    override suspend fun getUserSignature(message: String): List<CompositeSignature> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getUserSignature(message: String): List<CompositeSignature> {
+    override suspend fun mutate(
+        cadence: String,
+        args: List<FlowArgument>,
+        limit: ULong,
+        authorizers: List<FlowAddress>,
+    ): String {
         TODO("Not yet implemented")
     }
 }

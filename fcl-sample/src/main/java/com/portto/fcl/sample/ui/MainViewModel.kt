@@ -4,6 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nftco.flow.sdk.FlowAddress
+import com.nftco.flow.sdk.FlowArgument
+import com.nftco.flow.sdk.cadence.JsonCadenceBuilder
 import com.portto.fcl.Fcl
 import com.portto.fcl.config.Config
 import com.portto.fcl.model.CompositeSignature
@@ -36,6 +39,13 @@ class MainViewModel : ViewModel() {
     // query
     private val _queryResult = MutableLiveData<String?>(null)
     val queryResult: LiveData<String?> get() = _queryResult
+
+    // transaction - input value
+    val txInputValue = MutableLiveData("123")
+
+    // transaction - result
+    private val _transactionId = MutableLiveData<String?>(null)
+    val transactionId: LiveData<String?> get() = _transactionId
 
     // Message to be shown as snackbar
     private val _message = MutableStateFlow<String?>(null)
@@ -109,6 +119,20 @@ class MainViewModel : ViewModel() {
             when (val result = Fcl.query(script)) {
                 is Result.Success -> _queryResult.value = result.value.toString()
                 is Result.Failure -> _queryResult.value = result.throwable.message
+            }
+        }
+    }
+
+    fun sendTransaction(script: String, userAddress: String) {
+        viewModelScope.launch {
+            val value = txInputValue.value ?: return@launch
+            val args = listOf(FlowArgument(JsonCadenceBuilder().ufix64(value)))
+            when (val result = Fcl.mutate(
+                cadence = script, arguments = args, limit = 300u,
+                authorizers = listOf(FlowAddress(userAddress))
+            )) {
+                is Result.Success -> _transactionId.value = result.value
+                is Result.Failure -> _message.value = result.throwable.message
             }
         }
     }

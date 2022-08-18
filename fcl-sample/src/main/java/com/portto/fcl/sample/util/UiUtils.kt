@@ -3,7 +3,6 @@ package com.portto.fcl.sample.util
 import android.content.*
 import android.net.Uri
 import android.view.View
-import android.widget.TextView
 import androidx.annotation.MenuRes
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
