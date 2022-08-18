@@ -39,7 +39,10 @@ class MainViewModel : ViewModel() {
     private val _queryResult = MutableLiveData<String?>(null)
     val queryResult: LiveData<String?> get() = _queryResult
 
-    // transaction
+    // transaction - input value
+    val txInputValue = MutableLiveData("123")
+
+    // transaction - result
     private val _transactionId = MutableLiveData<String?>(null)
     val transactionId: LiveData<String?> get() = _transactionId
 
@@ -121,7 +124,8 @@ class MainViewModel : ViewModel() {
 
     fun sendTransaction(script: String) {
         viewModelScope.launch {
-            val args = listOf(FlowArgument(JsonCadenceBuilder().ufix64(12)))
+            val value = txInputValue.value ?: return@launch
+            val args = listOf(FlowArgument(JsonCadenceBuilder().ufix64(value)))
             when (val result = Fcl.mutate(cadence = script, arguments = args, limit = 300u)) {
                 is Result.Success -> _transactionId.value = result.value
                 is Result.Failure -> _message.value = result.throwable.message

@@ -9,6 +9,16 @@
             name="result"
             type="String" />
 
+        <variable
+            name="inputValue"
+            type="String" />
+
+        <variable
+            name="isComposingTx"
+            type="Boolean" />
+
+        <import type="android.text.TextUtils" />
+
         <import type="android.view.View" />
     </data>
 
@@ -42,14 +52,36 @@
                     tools:text="hello" />
             </com.google.android.material.card.MaterialCardView>
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tf_value"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_medium"
+                app:endIconMode="clear_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/card"
+                app:shapeAppearance="?attr/shapeAppearanceCornerMedium">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_send_tx"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_send_tx"
+                    android:inputType="numberDecimal"
+                    android:maxLines="1"
+                    android:text="@={inputValue}" />
+            </com.google.android.material.textfield.TextInputLayout>
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_send_tx"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_medium"
+                android:enabled="@{!TextUtils.isEmpty(inputValue)}"
                 android:text="@string/btn_send_tx"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/card" />
+                app:layout_constraintTop_toBottomOf="@id/tf_value" />
 
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/group_tx_result"

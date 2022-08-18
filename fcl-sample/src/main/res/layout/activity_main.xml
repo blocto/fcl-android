@@ -46,6 +46,7 @@
                 <include
                     android:id="@+id/mutate_card"
                     layout="@layout/layout_mutate_card"
+                    app:inputValue="@={viewModel.txInputValue}"
                     app:result="@{viewModel.transactionId}" />
             </LinearLayout>
         </ScrollView>
