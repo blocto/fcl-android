@@ -80,7 +80,11 @@ class MainActivity : AppCompatActivity() {
         mutateCard.apply {
             val mutateScript = getMutateSampleScript(Fcl.isMainnet)
             tvScript.text = mutateScript
-            btnSendTx.setOnClickListener { mainViewModel.sendTransaction(mutateScript) }
+            btnSendTx.setOnClickListener {
+                val userAddress = mainViewModel.address.value
+                if (userAddress.isNullOrEmpty()) return@setOnClickListener
+                mainViewModel.sendTransaction(mutateScript, userAddress)
+            }
         }
     }
 

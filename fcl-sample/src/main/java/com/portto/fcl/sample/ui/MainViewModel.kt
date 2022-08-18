@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nftco.flow.sdk.FlowAddress
 import com.nftco.flow.sdk.FlowArgument
 import com.nftco.flow.sdk.cadence.JsonCadenceBuilder
 import com.portto.fcl.Fcl
@@ -122,11 +123,14 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    fun sendTransaction(script: String) {
+    fun sendTransaction(script: String, userAddress: String) {
         viewModelScope.launch {
             val value = txInputValue.value ?: return@launch
             val args = listOf(FlowArgument(JsonCadenceBuilder().ufix64(value)))
-            when (val result = Fcl.mutate(cadence = script, arguments = args, limit = 300u)) {
+            when (val result = Fcl.mutate(
+                cadence = script, arguments = args, limit = 300u,
+                authorizers = listOf(FlowAddress(userAddress))
+            )) {
                 is Result.Success -> _transactionId.value = result.value
                 is Result.Failure -> _message.value = result.throwable.message
             }

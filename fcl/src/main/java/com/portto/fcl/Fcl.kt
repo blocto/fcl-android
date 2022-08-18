@@ -1,5 +1,6 @@
 package com.portto.fcl
 
+import com.nftco.flow.sdk.FlowAddress
 import com.nftco.flow.sdk.FlowArgument
 import com.nftco.flow.sdk.cadence.Field
 import com.portto.fcl.config.AppDetail
@@ -63,16 +64,25 @@ object Fcl {
      * @param cadence Cadence script used to mutate Flow
      * @param arguments Arguments passed to cadence transaction
      * @param limit Gas limit for the computation of the transaction
+     * @param authorizers Accounts authorizing the transaction to mutate their state
      * @return Transaction id
      */
     suspend fun mutate(
         cadence: String,
         arguments: List<FlowArgument>?,
-        limit: ULong = 1000u
+        limit: ULong = 1000u,
+        authorizers: List<FlowAddress>,
     ): Result<String> = try {
         val selectedProvider = config.selectedWalletProvider
             ?: throw FclError.UnspecifiedWalletProviderException()
-        Result.Success(selectedProvider.mutate(cadence, arguments ?: emptyList(), limit))
+        Result.Success(
+            selectedProvider.mutate(
+                cadence = cadence,
+                args = arguments ?: emptyList(),
+                limit = limit,
+                authorizers = authorizers
+            )
+        )
     } catch (e: Exception) {
         Result.Failure(e)
     }

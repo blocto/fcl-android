@@ -93,7 +93,12 @@ class Blocto(bloctoAppId: String, isDebug: Boolean) : Provider {
         }
     }
 
-    override suspend fun mutate(cadence: String, args: List<FlowArgument>, limit: ULong): String {
+    override suspend fun mutate(
+        cadence: String,
+        args: List<FlowArgument>,
+        limit: ULong,
+        authorizers: List<FlowAddress>,
+    ): String {
         val context = LifecycleObserver.context() ?: throw Exception("Context is required")
 
         val user = Fcl.currentUser ?: throw FclError.AuthenticationException()
@@ -120,7 +125,7 @@ class Blocto(bloctoAppId: String, isDebug: Boolean) : Provider {
             gasLimit = limit.toLong(),
             proposalKey = proposalKey,
             payerAddress = FlowAddress(feePayerAddress),
-            authorizers = listOf(FlowAddress(user.address))
+            authorizers = authorizers
         )
 
         return suspendCancellableCoroutine { cont ->

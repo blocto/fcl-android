@@ -13,10 +13,6 @@
             name="inputValue"
             type="String" />
 
-        <variable
-            name="isComposingTx"
-            type="Boolean" />
-
         <import type="android.text.TextUtils" />
 
         <import type="android.view.View" />
@@ -101,7 +97,7 @@
                 app:layout_constraintEnd_toStartOf="@id/btn_copy"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/btn_send_tx"
-                tools:text="testtesttesttesttesttesesttesesttesesttesesttesesttesesttesesttesesttes" />
+                tools:text="hello" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_copy"
