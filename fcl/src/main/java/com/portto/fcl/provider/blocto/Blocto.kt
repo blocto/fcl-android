@@ -8,18 +8,10 @@ import com.portto.fcl.model.authn.AccountProofResolvedData
 import com.portto.fcl.provider.*
 import com.portto.fcl.provider.Provider.ProviderInfo
 import com.portto.fcl.provider.blocto.Blocto.Companion.getInstance
-import com.portto.fcl.utils.AppUtils.getAccount
-import com.portto.fcl.utils.AppUtils.getLatestBlock
+import com.portto.fcl.provider.blocto.native.BloctoNativeMethod
 import com.portto.fcl.utils.FclError
 import com.portto.sdk.core.BloctoSDK
-import com.portto.sdk.flow.flow
-import com.portto.sdk.wallet.BloctoSDKError
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 import com.portto.fcl.model.CompositeSignature as FclCompositeSignature
-import com.portto.sdk.wallet.flow.AccountProofData as BloctoAccountProofData
-import com.portto.sdk.wallet.flow.CompositeSignature as BloctoCompositeSignature
 
 /**
  * Blocto Wallet Provider
@@ -46,51 +38,14 @@ class Blocto(bloctoAppId: String, isDebug: Boolean) : Provider {
 
     override suspend fun authn(accountProofResolvedData: AccountProofResolvedData?) {
         val context = LifecycleObserver.context() ?: throw Exception("Context is required")
-
-        suspendCancellableCoroutine { cont ->
-            val successCallback: (BloctoAccountProofData) -> Unit = {
-                Fcl.currentUser = User(
-                    address = it.address,
-                    accountProofData =
-                    if (accountProofResolvedData != null) it.mapToFclAccountProofData()
-                    else null
-                )
-                cont.resume(Fcl.currentUser)
-            }
-            val failureCallback: (BloctoSDKError) -> Unit = {
-                cont.resumeWithException(Exception(it.parseErrorMessage()))
-            }
-
-            BloctoSDK.flow.authenticate(
-                context = context,
-                flowAppId = accountProofResolvedData?.appIdentifier,
-                flowNonce = accountProofResolvedData?.nonce,
-                onSuccess = successCallback,
-                onError = failureCallback
-            )
-        }
+        val user = BloctoNativeMethod.authenticate(context, accountProofResolvedData)
+        Fcl.currentUser = user
     }
 
     override suspend fun getUserSignature(message: String): List<FclCompositeSignature> {
         val context = LifecycleObserver.context() ?: throw Exception("Context is required")
         val user = Fcl.currentUser ?: throw FclError.AuthenticationException()
-
-        return suspendCancellableCoroutine { cont ->
-            val successCallback: (List<BloctoCompositeSignature>) -> Unit = {
-                cont.resume(it.map { signature -> signature.mapToFclCompositeSignature() })
-            }
-            val failureCallback: (BloctoSDKError) -> Unit = {
-                cont.resumeWithException(Exception(it.parseErrorMessage()))
-            }
-
-            BloctoSDK.flow.signUserMessage(
-                context = context,
-                address = user.address,
-                message = message.trim(),
-                onSuccess = successCallback,
-                onError = failureCallback,
-            )
-        }
+        return BloctoNativeMethod.signUserMessage(context, user.address, message)
     }
 
     override suspend fun mutate(
@@ -103,47 +58,13 @@ class Blocto(bloctoAppId: String, isDebug: Boolean) : Provider {
 
         val user = Fcl.currentUser ?: throw FclError.AuthenticationException()
 
-        val account = getAccount(user.address)
-
-        val block = getLatestBlock()
-
-        val cosignerKey = account.keys.find { it.weight == 999 && !it.revoked }
-            ?: throw FclError.KeyNotFoundException()
-
-        val proposalKey = FlowTransactionProposalKey(
-            address = FlowAddress(user.address),
-            keyIndex = cosignerKey.id,
-            sequenceNumber = cosignerKey.sequenceNumber.toLong(),
+        return BloctoNativeMethod.sendTransaction(
+            context = context, userAddress = user.address,
+            script = cadence,
+            args = args,
+            limit = limit,
+            authorizers = authorizers,
         )
-
-        val feePayerAddress = getFeePayerAddress()
-
-        val transaction = FlowTransaction(
-            script = FlowScript(script = cadence),
-            arguments = args,
-            referenceBlockId = block.id,
-            gasLimit = limit.toLong(),
-            proposalKey = proposalKey,
-            payerAddress = FlowAddress(feePayerAddress),
-            authorizers = authorizers
-        )
-
-        return suspendCancellableCoroutine { cont ->
-            val successCallback: (String) -> Unit = {
-                cont.resume(it)
-            }
-            val failureCallback: (BloctoSDKError) -> Unit = {
-                cont.resumeWithException(Exception(it.parseErrorMessage()))
-            }
-
-            BloctoSDK.flow.sendTransaction(
-                context = context,
-                address = user.address,
-                transaction = transaction.canonicalTransaction.bytesToHex(),
-                onSuccess = successCallback,
-                onError = failureCallback,
-            )
-        }
     }
 
     companion object {
