@@ -4,6 +4,11 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <queries>
+        <package android:name="com.portto.blocto"/>
+        <package android:name="com.portto.blocto.staging"/>
+    </queries>
+
     <application>
         <activity
             android:name=".webview.WebViewActivity"

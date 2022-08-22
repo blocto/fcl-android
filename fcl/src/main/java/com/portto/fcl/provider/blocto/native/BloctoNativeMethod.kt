@@ -5,9 +5,11 @@ import com.nftco.flow.sdk.*
 import com.portto.fcl.model.CompositeSignature as FclCompositeSignature
 import com.portto.fcl.model.User
 import com.portto.fcl.model.authn.AccountProofResolvedData
-import com.portto.fcl.provider.blocto.*
-import com.portto.fcl.provider.blocto.mapToFclAccountProofData
-import com.portto.fcl.provider.blocto.mapToFclCompositeSignature
+import com.portto.fcl.provider.blocto.BloctoMethod
+import com.portto.fcl.provider.blocto.native.BloctoNativeUtils.getFeePayerAddress
+import com.portto.fcl.provider.blocto.native.BloctoNativeUtils.mapToFclAccountProofData
+import com.portto.fcl.provider.blocto.native.BloctoNativeUtils.mapToFclCompositeSignature
+import com.portto.fcl.provider.blocto.native.BloctoNativeUtils.parseErrorMessage
 import com.portto.fcl.utils.AppUtils
 import com.portto.fcl.utils.FclError
 import com.portto.sdk.core.BloctoSDK
