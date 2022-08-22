@@ -1,6 +1,9 @@
-package com.portto.fcl.model
+package com.portto.fcl.model.network
 
+import android.net.Uri
+import com.portto.fcl.lifecycle.LifecycleObserver
 import com.portto.fcl.model.authn.AuthnResponse
+import com.portto.fcl.webview.WebViewActivity
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -23,4 +26,17 @@ data class PollingResponse(
     val updates: BackChannelRpc?,
     @SerialName("local")
     val local: Frame?
-)
+) {
+    fun openAuthenticationWebView() {
+        local ?: throw Error()
+        val url = local.endpoint ?: throw Error()
+        val params = local.params ?: throw Error()
+
+        val uri = Uri.parse(url).buildUpon().apply {
+            params.forEach { appendQueryParameter(it.key, it.value) }
+        }.build()
+        LifecycleObserver.context()?.apply {
+            WebViewActivity.launchUrl(this, uri.toString())
+        }
+    }
+}

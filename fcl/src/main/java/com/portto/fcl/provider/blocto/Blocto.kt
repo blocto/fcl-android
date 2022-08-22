@@ -12,6 +12,7 @@ import com.portto.fcl.provider.*
 import com.portto.fcl.provider.Provider.ProviderInfo
 import com.portto.fcl.provider.blocto.Blocto.Companion.getInstance
 import com.portto.fcl.provider.blocto.native.BloctoNativeMethod
+import com.portto.fcl.provider.blocto.web.BloctoWebMethod
 import com.portto.fcl.utils.FclError
 import com.portto.sdk.core.BloctoSDK
 import com.portto.fcl.model.CompositeSignature as FclCompositeSignature
@@ -43,8 +44,9 @@ class Blocto(bloctoAppId: String, private val isDebug: Boolean) : Provider {
         val context = requireContext()
         // Get user from app or web accordingly
         val user: User? = if (isBloctoAppInstalled(context = context, isMainnet = Fcl.isMainnet))
-            BloctoNativeMethod.authenticate(requireContext(), accountProofResolvedData)
-        else null
+            BloctoNativeMethod.authenticate(context, accountProofResolvedData)
+        else
+            BloctoWebMethod.authenticate(context, accountProofResolvedData)
 
         Fcl.currentUser = user
     }

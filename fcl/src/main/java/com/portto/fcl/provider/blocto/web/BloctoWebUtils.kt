@@ -8,5 +8,4 @@ object BloctoWebUtils {
     fun getWebAuthnUrl(isMainnet: Boolean): String {
         return if (isMainnet) AUTHN_PRODUCTION_URL else AUTHN_STAGING_URL
     }
-
 }

@@ -1,4 +1,4 @@
-package com.portto.fcl.model
+package com.portto.fcl.model.network
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
