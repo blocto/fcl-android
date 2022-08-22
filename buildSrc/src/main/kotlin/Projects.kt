@@ -22,7 +22,7 @@ fun Project.setupLibraryModule(
         generateBuildConfigProvider?.configure { enabled = buildConfig }
     }
     if (publish) {
-        if (document) apply(plugin = "org.jetbrains.dokka")
+//        if (document) apply(plugin = "org.jetbrains.dokka")
         apply(plugin = "com.vanniktech.maven.publish.base")
         publishing {
             singleVariant("release") {
