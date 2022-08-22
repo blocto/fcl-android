@@ -3,6 +3,7 @@ package com.portto.fcl.model.network
 import android.net.Uri
 import com.portto.fcl.lifecycle.LifecycleObserver
 import com.portto.fcl.model.authn.AuthnResponse
+import com.portto.fcl.network.ResponseStatus
 import com.portto.fcl.webview.WebViewActivity
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -17,7 +18,7 @@ typealias Frame = Service
 @Serializable
 data class PollingResponse(
     @SerialName("status")
-    val status: String,
+    val status: ResponseStatus,
     @SerialName("reason")
     val reason: String?,
     @SerialName("data")

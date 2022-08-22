@@ -10,8 +10,10 @@ import com.portto.fcl.model.network.PollingResponse
 import com.portto.fcl.network.FclClient
 import com.portto.fcl.network.NetworkUtils.polling
 import com.portto.fcl.network.NetworkUtils.repeatWhen
+import com.portto.fcl.network.ResponseStatus
 import com.portto.fcl.provider.*
 import com.portto.fcl.provider.Provider.ProviderInfo
+import com.portto.fcl.utils.FclError
 import kotlinx.coroutines.delay
 
 object Dapper : Provider {
@@ -27,16 +29,19 @@ object Dapper : Provider {
         )
 
     override suspend fun authn(accountProofResolvedData: AccountProofResolvedData?) {
-        val pollingResponse = FclClient.authService.executePost("https://dapper-http-post.vercel.app/api/authn")
+        val authnUrl = "https://dapper-http-post.vercel.app/api/authn"
+        val pollingResponse = FclClient.authService.executePost(authnUrl)
 
         val updates = pollingResponse.updates ?: throw Error()
         pollingResponse.openAuthenticationWebView()
 
         var authnResponse: PollingResponse? = null
-        repeatWhen(predicate = { (authnResponse == null || authnResponse?.status == "PENDING") }) {
+        repeatWhen(predicate = { (authnResponse == null || authnResponse?.status == ResponseStatus.PENDING) }) {
             delay(1000)
             authnResponse = polling(updates)
         }
+
+        if (authnResponse?.status == ResponseStatus.DECLINED) throw FclError.UserDeniedException()
 
         Fcl.currentUser = User(address = authnResponse?.data?.address.orEmpty())
     }

@@ -34,4 +34,9 @@ object FclError {
      */
     class UnsupportedNetworkException(network: Network) :
         Exception("${network.value} is not supported by FCL")
+
+    /**
+     * Exception thrown when the user has denied the operation
+     */
+    class UserDeniedException : Exception("User denied")
 }
