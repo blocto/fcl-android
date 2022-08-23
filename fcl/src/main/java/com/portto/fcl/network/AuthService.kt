@@ -1,6 +1,7 @@
 package com.portto.fcl.network
 
 import com.portto.fcl.model.PollingResponse
+import kotlinx.serialization.json.JsonObject
 import retrofit2.http.*
 
 internal interface AuthService {
@@ -9,13 +10,13 @@ internal interface AuthService {
     suspend fun executePost(
         @Url url: String,
         @QueryMap params: Map<String, String>? = mapOf(),
-        @Body data: Any
+        @Body data: JsonObject
     ): PollingResponse
 
     @POST
     suspend fun executePost(
         @Url url: String,
-        @Body params: Map<String, String>? = mapOf()
+        @QueryMap params: Map<String, String>? = mapOf()
     ): PollingResponse
 
     @GET

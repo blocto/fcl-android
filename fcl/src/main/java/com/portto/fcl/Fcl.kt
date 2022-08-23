@@ -89,7 +89,7 @@ object Fcl {
 
     suspend fun signUserMessage(message: String): Result<List<CompositeSignature>> {
         return try {
-            currentUser ?: throw FclError.AuthenticationException()
+            currentUser ?: throw FclError.UnauthenticatedException()
             val selectedProvider = config.selectedWalletProvider
                 ?: throw FclError.UnspecifiedWalletProviderException()
             Result.Success(selectedProvider.getUserSignature(message))

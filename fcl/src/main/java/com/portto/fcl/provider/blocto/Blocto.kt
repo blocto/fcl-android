@@ -52,7 +52,7 @@ class Blocto(bloctoAppId: String, private val isDebug: Boolean) : Provider {
     }
 
     override suspend fun getUserSignature(message: String): List<FclCompositeSignature> {
-        val user = Fcl.currentUser ?: throw FclError.AuthenticationException()
+        val user = Fcl.currentUser ?: throw FclError.UnauthenticatedException()
         return BloctoNativeMethod.signUserMessage(requireContext(), user.address, message)
     }
 
@@ -64,7 +64,7 @@ class Blocto(bloctoAppId: String, private val isDebug: Boolean) : Provider {
     ): String {
         val context = LifecycleObserver.context() ?: throw Exception("Context is required")
 
-        val user = Fcl.currentUser ?: throw FclError.AuthenticationException()
+        val user = Fcl.currentUser ?: throw FclError.UnauthenticatedException()
 
         return BloctoNativeMethod.sendTransaction(
             context = context, userAddress = user.address,
