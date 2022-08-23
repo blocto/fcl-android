@@ -6,8 +6,9 @@ import com.portto.fcl.Fcl
 import com.portto.fcl.model.CompositeSignature
 import com.portto.fcl.model.User
 import com.portto.fcl.model.authn.AccountProofResolvedData
-import com.portto.fcl.model.network.PollingResponse
+import com.portto.fcl.model.PollingResponse
 import com.portto.fcl.network.FclClient
+import com.portto.fcl.network.NetworkUtils.openAuthenticationWebView
 import com.portto.fcl.network.NetworkUtils.polling
 import com.portto.fcl.network.NetworkUtils.repeatWhen
 import com.portto.fcl.network.ResponseStatus

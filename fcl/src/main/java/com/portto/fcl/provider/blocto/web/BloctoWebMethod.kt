@@ -7,8 +7,11 @@ import com.portto.fcl.Fcl
 import com.portto.fcl.model.CompositeSignature
 import com.portto.fcl.model.User
 import com.portto.fcl.model.authn.AccountProofResolvedData
-import com.portto.fcl.model.network.PollingResponse
+import com.portto.fcl.model.PollingResponse
+import com.portto.fcl.model.authn.AccountProofData
+import com.portto.fcl.model.service.ServiceType
 import com.portto.fcl.network.FclClient
+import com.portto.fcl.network.NetworkUtils.openAuthenticationWebView
 import com.portto.fcl.network.NetworkUtils.polling
 import com.portto.fcl.network.NetworkUtils.repeatWhen
 import com.portto.fcl.network.ResponseStatus
@@ -22,18 +25,21 @@ object BloctoWebMethod : BloctoMethod {
         context: Context,
         accountProofData: AccountProofResolvedData?
     ): User? {
-        val queryData = accountProofData?.run {
+        val body = accountProofData?.run {
             mapOf(
                 "accountProofIdentifier" to accountProofData.appIdentifier,
                 "accountProofNonce" to accountProofData.nonce
             )
         }.orEmpty()
         val pollingResponse =
-            FclClient.authService.executePost(getWebAuthnUrl(Fcl.isMainnet), queryData)
-        val updates = pollingResponse.updates ?: throw Error()
+            FclClient.authService.executePost(getWebAuthnUrl(Fcl.isMainnet), body)
+
+        val updates = pollingResponse.updates ?: throw Error("No updates from polling response")
+
         pollingResponse.openAuthenticationWebView()
 
         var authnResponse: PollingResponse? = null
+
         repeatWhen(predicate = { (authnResponse == null || authnResponse?.status == ResponseStatus.PENDING) }) {
             delay(1000)
             authnResponse = polling(updates)
@@ -41,7 +47,32 @@ object BloctoWebMethod : BloctoMethod {
 
         if (authnResponse?.status == ResponseStatus.DECLINED) throw FclError.UserDeniedException()
 
-        Fcl.currentUser = User(address = authnResponse?.data?.address.orEmpty())
+        val accountProofService = authnResponse?.data?.services?.find {
+            it.type == ServiceType.ACCOUNT_PROOF
+        }
+
+        val hasSignatures = !accountProofService?.data?.signatures.isNullOrEmpty()
+
+        if (accountProofData != null && !hasSignatures) throw Error("Unable to fetch signatures")
+
+        Fcl.currentUser = User(
+            address = authnResponse?.data?.address.orEmpty(),
+            accountProofData = if (hasSignatures) {
+                val accountProofSignedData = accountProofService?.data
+
+                AccountProofData(
+                    nonce = accountProofSignedData?.nonce!!,
+                    address = accountProofSignedData.address!!,
+                    signatures = accountProofSignedData.signatures!!.map {
+                        CompositeSignature(
+                            it.address,
+                            it.keyId,
+                            it.signature
+                        )
+                    }
+                )
+            } else null
+        )
 
         return Fcl.currentUser
     }
