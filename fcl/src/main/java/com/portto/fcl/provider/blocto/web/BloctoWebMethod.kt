@@ -1,9 +1,9 @@
 package com.portto.fcl.provider.blocto.web
 
 import android.content.Context
-import android.util.Log
 import com.nftco.flow.sdk.FlowAddress
 import com.nftco.flow.sdk.FlowArgument
+import com.nftco.flow.sdk.bytesToHex
 import com.portto.fcl.Fcl
 import com.portto.fcl.model.AuthData
 import com.portto.fcl.model.CompositeSignature
@@ -27,7 +27,6 @@ object BloctoWebMethod : BloctoMethod {
             url = getAuthnUrl(Fcl.isMainnet),
             data = accountProofData?.toJsonObject()
         )
-        Log.d("Test", "response: $response")
 
         val authData = response.data?.toDataClass<AuthData>()
             ?: throw FclError.AccountNotFoundException()
@@ -39,7 +38,7 @@ object BloctoWebMethod : BloctoMethod {
         val signatures = accountProofService?.data?.signatures
 
         if (accountProofData != null && signatures.isNullOrEmpty())
-            throw Error("Unable to fetch signatures.")
+            throw FclError.SignaturesNotFoundException()
 
         Fcl.currentUser = User(
             address = authData.address,
@@ -64,7 +63,17 @@ object BloctoWebMethod : BloctoMethod {
         userAddress: String,
         message: String
     ): List<CompositeSignature> {
-        TODO("Not yet implemented")
+        val service = Fcl.currentUser?.services?.find { it.type == ServiceType.USER_SIGNATURE }
+            ?: throw FclError.ServiceNotFoundException()
+
+        val response = execHttpPost(
+            url = service.endpoint!!,
+            params = service.params,
+            data = mapOf("message" to message.trim().toByteArray().bytesToHex()).toJsonObject()
+        )
+
+        return response.data?.toDataClass<List<CompositeSignature>>()
+            ?: throw FclError.SignaturesNotFoundException()
     }
 
     override suspend fun sendTransaction(

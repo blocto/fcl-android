@@ -25,6 +25,16 @@ object FclError {
     class KeyNotFoundException : Exception("Cosigner key is not found.")
 
     /**
+     * Exception thrown when the service is not available for the current user
+     */
+    class ServiceNotFoundException : Exception("Service is not available.")
+
+    /**
+     * Exception thrown when the signatures are unavailable
+     */
+    class SignaturesNotFoundException : Exception("Unable to fetch signatures.")
+
+    /**
      * Exception thrown when the network is not specified
      */
     class UnspecifiedNetworkException : Exception("A Flow network must be specified.")

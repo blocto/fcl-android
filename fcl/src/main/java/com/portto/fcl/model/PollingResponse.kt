@@ -4,6 +4,7 @@ import com.portto.fcl.model.service.Service
 import com.portto.fcl.network.ResponseStatus
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 
 
@@ -20,7 +21,7 @@ data class PollingResponse(
     @SerialName("reason")
     val reason: String?,
     @SerialName("data")
-    val data: JsonObject?, // authn,
+    val data: JsonElement?, // authn, user_signature
     @SerialName("updates")
     val updates: BackChannelRpc?,
     @SerialName("local")
