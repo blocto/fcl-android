@@ -53,7 +53,11 @@ class Blocto(bloctoAppId: String, private val isDebug: Boolean) : Provider {
 
     override suspend fun getUserSignature(message: String): List<FclCompositeSignature> {
         val user = Fcl.currentUser ?: throw FclError.UnauthenticatedException()
-        return BloctoNativeMethod.signUserMessage(requireContext(), user.address, message)
+        val context = requireContext()
+        return if (isBloctoAppInstalled(context = context, isMainnet = Fcl.isMainnet))
+            BloctoNativeMethod.signUserMessage(requireContext(), user.address, message)
+        else
+            BloctoWebMethod.signUserMessage(requireContext(), user.address, message)
     }
 
     override suspend fun mutate(

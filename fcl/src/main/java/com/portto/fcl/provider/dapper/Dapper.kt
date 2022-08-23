@@ -1,18 +1,17 @@
 package com.portto.fcl.provider.dapper
 
-import android.util.Log
 import com.nftco.flow.sdk.FlowAddress
 import com.nftco.flow.sdk.FlowArgument
 import com.portto.fcl.Fcl
+import com.portto.fcl.model.AuthData
 import com.portto.fcl.model.CompositeSignature
 import com.portto.fcl.model.User
-import com.portto.fcl.model.authn.AccountProofData
 import com.portto.fcl.model.authn.AccountProofResolvedData
-import com.portto.fcl.model.service.ServiceType
 import com.portto.fcl.network.execHttpPost
 import com.portto.fcl.provider.*
 import com.portto.fcl.provider.Provider.ProviderInfo
 import com.portto.fcl.utils.FclError
+import com.portto.fcl.utils.toDataClass
 import com.portto.fcl.utils.toJsonObject
 
 object Dapper : Provider {
@@ -34,8 +33,10 @@ object Dapper : Provider {
             data = accountProofResolvedData?.toJsonObject()
         )
 
+        val authData = response.data?.toDataClass<AuthData>()
+
         Fcl.currentUser = User(
-            address = response.data?.address ?: throw FclError.AccountNotFoundException()
+            address = authData?.address ?: throw FclError.AccountNotFoundException()
         )
     }
 

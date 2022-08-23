@@ -23,6 +23,7 @@
 package com.portto.fcl.network
 
 import android.util.Log
+import androidx.annotation.WorkerThread
 import com.portto.fcl.model.PollingResponse
 import com.portto.fcl.model.service.Service
 import com.portto.fcl.network.FclClient.authService
@@ -35,6 +36,7 @@ import com.portto.fcl.webview.WebViewLifecycleObserver
 import com.portto.fcl.webview.openAuthenticationWebView
 import kotlinx.serialization.json.JsonObject
 
+@WorkerThread
 internal suspend fun execHttpPost(
     url: String,
     params: Map<String, String>? = mapOf(),

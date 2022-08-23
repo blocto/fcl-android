@@ -5,6 +5,7 @@ import android.util.Log
 import com.nftco.flow.sdk.FlowAddress
 import com.nftco.flow.sdk.FlowArgument
 import com.portto.fcl.Fcl
+import com.portto.fcl.model.AuthData
 import com.portto.fcl.model.CompositeSignature
 import com.portto.fcl.model.User
 import com.portto.fcl.model.authn.AccountProofData
@@ -14,6 +15,7 @@ import com.portto.fcl.network.execHttpPost
 import com.portto.fcl.provider.blocto.BloctoMethod
 import com.portto.fcl.provider.blocto.web.BloctoWebUtils.getAuthnUrl
 import com.portto.fcl.utils.FclError
+import com.portto.fcl.utils.toDataClass
 import com.portto.fcl.utils.toJsonObject
 
 object BloctoWebMethod : BloctoMethod {
@@ -27,27 +29,31 @@ object BloctoWebMethod : BloctoMethod {
         )
         Log.d("Test", "response: $response")
 
-        val accountProofService = response.data?.services?.find {
+        val authData = response.data?.toDataClass<AuthData>()
+            ?: throw FclError.AccountNotFoundException()
+
+        val accountProofService = authData.services.find {
             it.type == ServiceType.ACCOUNT_PROOF
         }
 
-        val hasSignatures = !accountProofService?.data?.signatures.isNullOrEmpty()
+        val signatures = accountProofService?.data?.signatures
 
-        if (accountProofData != null && !hasSignatures) throw Error("Unable to fetch signatures.")
+        if (accountProofData != null && signatures.isNullOrEmpty())
+            throw Error("Unable to fetch signatures.")
 
         Fcl.currentUser = User(
-            address = response.data?.address ?: throw FclError.AccountNotFoundException(),
-            accountProofData = if (hasSignatures) {
-                val accountProofSignedData = accountProofService?.data
-
+            address = authData.address,
+            accountProofData = if (!signatures.isNullOrEmpty()) {
+                val accountProofSignedData = accountProofService.data
                 AccountProofData(
-                    nonce = accountProofSignedData?.nonce!!,
+                    nonce = accountProofSignedData.nonce!!,
                     address = accountProofSignedData.address!!,
                     signatures = accountProofSignedData.signatures!!.map {
                         CompositeSignature(it.address, it.keyId, it.signature)
                     }
                 )
-            } else null
+            } else null,
+            services = authData.services
         )
 
         return Fcl.currentUser
