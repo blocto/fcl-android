@@ -5,10 +5,10 @@ import com.nftco.flow.sdk.FlowAddress
 import com.nftco.flow.sdk.FlowArgument
 import com.portto.fcl.Fcl
 import com.portto.fcl.model.CompositeSignature
-import com.portto.fcl.model.User
-import com.portto.fcl.model.authn.AccountProofResolvedData
 import com.portto.fcl.model.PollingResponse
+import com.portto.fcl.model.User
 import com.portto.fcl.model.authn.AccountProofData
+import com.portto.fcl.model.authn.AccountProofResolvedData
 import com.portto.fcl.model.service.ServiceType
 import com.portto.fcl.network.FclClient
 import com.portto.fcl.network.NetworkUtils.openAuthenticationWebView
@@ -18,7 +18,6 @@ import com.portto.fcl.network.ResponseStatus
 import com.portto.fcl.provider.blocto.BloctoMethod
 import com.portto.fcl.provider.blocto.web.BloctoWebUtils.getWebAuthnUrl
 import com.portto.fcl.utils.FclError
-import kotlinx.coroutines.delay
 
 object BloctoWebMethod : BloctoMethod {
     override suspend fun authenticate(
@@ -41,7 +40,6 @@ object BloctoWebMethod : BloctoMethod {
         var authnResponse: PollingResponse? = null
 
         repeatWhen(predicate = { (authnResponse == null || authnResponse?.status == ResponseStatus.PENDING) }) {
-            delay(1000)
             authnResponse = polling(updates)
         }
 
@@ -56,7 +54,7 @@ object BloctoWebMethod : BloctoMethod {
         if (accountProofData != null && !hasSignatures) throw Error("Unable to fetch signatures")
 
         Fcl.currentUser = User(
-            address = authnResponse?.data?.address.orEmpty(),
+            address = authnResponse?.data?.address ?: throw FclError.AccountNotFoundException(),
             accountProofData = if (hasSignatures) {
                 val accountProofSignedData = accountProofService?.data
 
@@ -64,11 +62,7 @@ object BloctoWebMethod : BloctoMethod {
                     nonce = accountProofSignedData?.nonce!!,
                     address = accountProofSignedData.address!!,
                     signatures = accountProofSignedData.signatures!!.map {
-                        CompositeSignature(
-                            it.address,
-                            it.keyId,
-                            it.signature
-                        )
+                        CompositeSignature(it.address, it.keyId, it.signature)
                     }
                 )
             } else null

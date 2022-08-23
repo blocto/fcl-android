@@ -7,9 +7,9 @@ import kotlinx.serialization.SerialName
 @Serializable
 data class ServiceData(
     @SerialName("f_type")
-    val fclType: String,
+    val fclType: String?, // blocto only
     @SerialName("f_vsn")
-    val fclVersion: String,
+    val fclVersion: String?, // blocto only
     @SerialName("email")
     val email: Email?,
     @SerialName("signatures")

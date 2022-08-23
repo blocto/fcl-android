@@ -4,9 +4,9 @@ import com.nftco.flow.sdk.FlowAddress
 import com.nftco.flow.sdk.FlowArgument
 import com.portto.fcl.Fcl
 import com.portto.fcl.model.CompositeSignature
+import com.portto.fcl.model.PollingResponse
 import com.portto.fcl.model.User
 import com.portto.fcl.model.authn.AccountProofResolvedData
-import com.portto.fcl.model.PollingResponse
 import com.portto.fcl.network.FclClient
 import com.portto.fcl.network.NetworkUtils.openAuthenticationWebView
 import com.portto.fcl.network.NetworkUtils.polling
@@ -15,7 +15,6 @@ import com.portto.fcl.network.ResponseStatus
 import com.portto.fcl.provider.*
 import com.portto.fcl.provider.Provider.ProviderInfo
 import com.portto.fcl.utils.FclError
-import kotlinx.coroutines.delay
 
 object Dapper : Provider {
     override val id: Int = PROVIDER_DAPPER_ID
@@ -38,7 +37,6 @@ object Dapper : Provider {
 
         var authnResponse: PollingResponse? = null
         repeatWhen(predicate = { (authnResponse == null || authnResponse?.status == ResponseStatus.PENDING) }) {
-            delay(1000)
             authnResponse = polling(updates)
         }
 

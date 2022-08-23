@@ -6,11 +6,13 @@ import com.portto.fcl.lifecycle.LifecycleObserver
 import com.portto.fcl.model.PollingResponse
 import com.portto.fcl.model.service.Service
 import com.portto.fcl.webview.WebViewActivity
+import kotlinx.coroutines.delay
 
 internal object NetworkUtils {
     suspend fun repeatWhen(predicate: suspend () -> Boolean, block: suspend () -> Unit) {
         while (predicate()) {
             block.invoke()
+            delay(1000L)
         }
     }
 

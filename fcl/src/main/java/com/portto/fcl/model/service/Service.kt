@@ -11,7 +11,7 @@ data class Service(
     @SerialName("f_vsn")
     val fclVersion: String,
     @SerialName("type")
-    val type: ServiceType,
+    val type: ServiceType?, // blocto only
     @SerialName("uid")
     val uid: String?,
     @SerialName("id")
@@ -58,8 +58,8 @@ data class Service(
         @SerialName("name")
         val name: String,
         @SerialName("icon")
-        val icon: String,
+        val icon: String?, // blocto only
         @SerialName("description")
-        val description: String
+        val description: String? // blocto only
     )
 }
