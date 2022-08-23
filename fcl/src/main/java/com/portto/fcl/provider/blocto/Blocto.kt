@@ -2,9 +2,9 @@ package com.portto.fcl.provider.blocto
 
 import android.content.Context
 import android.content.pm.PackageManager
-import com.nftco.flow.sdk.*
+import com.nftco.flow.sdk.FlowAddress
+import com.nftco.flow.sdk.FlowArgument
 import com.portto.fcl.Fcl
-import com.portto.fcl.lifecycle.LifecycleObserver
 import com.portto.fcl.lifecycle.LifecycleObserver.Companion.requireContext
 import com.portto.fcl.model.User
 import com.portto.fcl.model.authn.AccountProofResolvedData
@@ -22,9 +22,8 @@ import com.portto.fcl.model.CompositeSignature as FclCompositeSignature
  *
  * Usage: [getInstance] to init Blocto as a wallet provider
  * @param bloctoAppId the Blocto app identifier. For more info, check https://docs.blocto.app/blocto-sdk/register-app-id
- * @param isDebug indicator of the flow network. Set to true to connect testnet; false to mainnet
  */
-class Blocto(bloctoAppId: String, private val isDebug: Boolean) : Provider {
+class Blocto(bloctoAppId: String) : Provider {
     override val id: Int = PROVIDER_BLOCTO_ID
 
     override var user: User? = null
@@ -37,16 +36,15 @@ class Blocto(bloctoAppId: String, private val isDebug: Boolean) : Provider {
         )
 
     init {
-        BloctoSDK.init(appId = bloctoAppId, debug = isDebug)
+        BloctoSDK.init(appId = bloctoAppId, debug = Fcl.isMainnet)
     }
 
     override suspend fun authn(accountProofResolvedData: AccountProofResolvedData?) {
         val context = requireContext()
-        // Get user from app or web accordingly
-        val user: User? = if (isBloctoAppInstalled(context = context, isMainnet = Fcl.isMainnet))
-            BloctoNativeMethod.authenticate(context, accountProofResolvedData)
-        else
-            BloctoWebMethod.authenticate(context, accountProofResolvedData)
+
+        val user: User? = isAppInstalled(context = context, isMainnet = Fcl.isMainnet)
+            .getCaller()
+            .authenticate(context, accountProofResolvedData)
 
         Fcl.currentUser = user
     }
@@ -54,10 +52,9 @@ class Blocto(bloctoAppId: String, private val isDebug: Boolean) : Provider {
     override suspend fun getUserSignature(message: String): List<FclCompositeSignature> {
         val user = Fcl.currentUser ?: throw FclError.UnauthenticatedException()
         val context = requireContext()
-        return if (isBloctoAppInstalled(context = context, isMainnet = Fcl.isMainnet))
-            BloctoNativeMethod.signUserMessage(requireContext(), user.address, message)
-        else
-            BloctoWebMethod.signUserMessage(requireContext(), user.address, message)
+        return isAppInstalled(context = context, isMainnet = Fcl.isMainnet)
+            .getCaller()
+            .signUserMessage(requireContext(), user.address, message)
     }
 
     override suspend fun mutate(
@@ -66,17 +63,19 @@ class Blocto(bloctoAppId: String, private val isDebug: Boolean) : Provider {
         limit: ULong,
         authorizers: List<FlowAddress>,
     ): String {
-        val context = LifecycleObserver.context() ?: throw Exception("Context is required")
-
+        val context = requireContext()
         val user = Fcl.currentUser ?: throw FclError.UnauthenticatedException()
 
-        return BloctoNativeMethod.sendTransaction(
-            context = context, userAddress = user.address,
-            script = cadence,
-            args = args,
-            limit = limit,
-            authorizers = authorizers,
-        )
+        return isAppInstalled(context = context, isMainnet = Fcl.isMainnet)
+            .getCaller()
+            .sendTransaction(
+                context = context,
+                userAddress = user.address,
+                script = cadence,
+                args = args,
+                limit = limit,
+                authorizers = authorizers,
+            )
     }
 
     companion object {
@@ -87,14 +86,14 @@ class Blocto(bloctoAppId: String, private val isDebug: Boolean) : Provider {
         private var INSTANCE: Blocto? = null
 
         @Synchronized
-        fun getInstance(bloctoAppId: String, isDebug: Boolean) =
-            INSTANCE ?: Blocto(bloctoAppId, isDebug).also { INSTANCE = it }
+        fun getInstance(bloctoAppId: String) =
+            INSTANCE ?: Blocto(bloctoAppId).also { INSTANCE = it }
 
         /**
          * Check if blocto app is installed
          * @return true if its installed; Otherwise false
          */
-        fun isBloctoAppInstalled(context: Context, isMainnet: Boolean) =
+        private fun isAppInstalled(context: Context, isMainnet: Boolean) =
             try {
                 context.packageManager.getPackageInfo(
                     if (isMainnet) BLOCTO_PRODUCTION_APP_ID else BLOCTO_STAGING_APP_ID, 0
@@ -103,5 +102,12 @@ class Blocto(bloctoAppId: String, private val isDebug: Boolean) : Provider {
             } catch (e: PackageManager.NameNotFoundException) {
                 false
             }
+
+        /**
+         * Get the corresponding methods
+         * @return native methods if app is installed; Otherwise, web methods
+         */
+        private fun Boolean.getCaller(): BloctoMethod =
+            if (this) BloctoNativeMethod else BloctoWebMethod
     }
 }

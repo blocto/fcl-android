@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
             env = Network.TESTNET,
             appDetail = AppDetail(),
             supportedWallets = listOf(
-                Blocto.getInstance(bloctoAppId = BLOCTO_APP_ID, isDebug = true),
+                Blocto.getInstance(bloctoAppId = BLOCTO_APP_ID),
                 Dapper,
             )
         )
