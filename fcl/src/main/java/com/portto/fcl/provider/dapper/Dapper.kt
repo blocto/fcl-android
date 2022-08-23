@@ -34,28 +34,8 @@ object Dapper : Provider {
             data = accountProofResolvedData?.toJsonObject()
         )
 
-        Log.d("Test", "response: $response")
-        val accountProofService = response.data?.services?.find {
-            it.type == ServiceType.ACCOUNT_PROOF
-        }
-
-        val hasSignatures = !accountProofService?.data?.signatures.isNullOrEmpty()
-
-        if (accountProofResolvedData != null && !hasSignatures) throw Error("Unable to fetch signatures.")
-
         Fcl.currentUser = User(
-            address = response.data?.address ?: throw FclError.AccountNotFoundException(),
-            accountProofData = if (hasSignatures) {
-                val accountProofSignedData = accountProofService?.data
-
-                AccountProofData(
-                    nonce = accountProofSignedData?.nonce!!,
-                    address = accountProofSignedData.address!!,
-                    signatures = accountProofSignedData.signatures!!.map {
-                        CompositeSignature(it.address, it.keyId, it.signature)
-                    }
-                )
-            } else null
+            address = response.data?.address ?: throw FclError.AccountNotFoundException()
         )
     }
 
