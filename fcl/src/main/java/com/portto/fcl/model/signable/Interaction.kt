@@ -1,6 +1,5 @@
 package com.portto.fcl.model.signable
 
-import android.util.Log
 import com.nftco.flow.sdk.*
 import com.portto.fcl.utils.AppUtils.flowApi
 import com.portto.fcl.utils.sansPrefix
@@ -94,19 +93,17 @@ data class Interaction(
 
 fun Interaction.toFlowTransaction(): FlowTransaction {
     val ix = this
-    Log.d("toFlowTransaction", "Test - ix: $ix")
     val propKey = createFlowProposalKey()
 
-    Log.d("toFlowTransaction", "Test - propKey: $propKey")
 
     val payerAccount = payer
-    Log.d("toFlowTransaction", "Test - payerAccount: $payerAccount")
+
     val payer = accounts[payerAccount]?.address ?: throw Exception("missing payer")
-    Log.d("toFlowTransaction", "Test - payer: $payer")
+
     val insideSigners = findInsideSigners()
-    Log.d("toFlowTransaction", "Test - insideSigners: $insideSigners")
+
     val outsideSigners = findOutsideSigners()
-    Log.d("toFlowTransaction", "Test - outsideSigners: $outsideSigners")
+
 
     return flowTransaction {
         script(FlowScript(message.cadence.orEmpty()))
@@ -115,25 +112,18 @@ fun Interaction.toFlowTransaction(): FlowTransaction {
                 mapOf("type" to JsonPrimitive(it.type), "value" to JsonPrimitive(it.value))
             ).toString().toByteArray()
         }.map { FlowArgument(it) }.toMutableList()
-        Log.d("toFlowTransaction", "Test - arguments: $arguments")
 
         referenceBlockId = FlowId(message.refBlock.orEmpty())
-        Log.d("toFlowTransaction", "Test - referenceBlockId: $referenceBlockId")
         gasLimit = message.computeLimit ?: 100
-        Log.d("toFlowTransaction", "Test - gasLimit: $gasLimit")
         proposalKey = propKey
-        Log.d("toFlowTransaction", "Test - proposalKey: $proposalKey")
         payerAddress = FlowAddress(payer)
-        Log.d("toFlowTransaction", "Test - payerAddress: $payerAddress")
-        authorizers =
-            authorizations.mapNotNull { accounts[it]?.address }.distinct().map { FlowAddress(it) }
-        Log.d("toFlowTransaction", "Test - authorizers: $authorizers")
+        authorizers = authorizations.mapNotNull { accounts[it]?.address }
+            .distinct().map { FlowAddress(it) }
 
 
 
         addPayloadSignatures {
             insideSigners.forEach { tempID ->
-                Log.d("toFlowTransaction", "Test - accounts[$tempID]: ${accounts[tempID]}")
                 accounts[tempID]?.let { signableUser ->
                     signature(
                         FlowAddress(signableUser.address.orEmpty()),

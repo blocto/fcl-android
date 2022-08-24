@@ -1,6 +1,5 @@
 package com.portto.fcl.resolve
 
-import android.util.Log
 import com.nftco.flow.sdk.DomainTag
 import com.nftco.flow.sdk.bytesToHex
 import com.portto.fcl.model.AuthData
@@ -11,7 +10,7 @@ import com.portto.fcl.utils.toJsonObject
 class SignatureResolver : Resolver {
 
     override suspend fun resolve(ix: Interaction) {
-        Log.d("SignatureResolver", "Test - ix: $ix")
+
         if (ix.tag != Interaction.Tag.TRANSACTION) throw Error("Interaction tag error")
 
         val insideSigners = ix.findInsideSigners()
@@ -56,8 +55,6 @@ class SignatureResolver : Resolver {
 
         val authData = response.data?.toDataClass<AuthData>()
 
-
-        // todo: refactor response
         return Pair(id, authData?.signature ?: response.compositeSignature?.signature.orEmpty())
     }
 

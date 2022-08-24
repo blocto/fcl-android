@@ -1,7 +1,6 @@
 package com.portto.fcl.provider.blocto.web
 
 import android.content.Context
-import android.util.Log
 import com.nftco.flow.sdk.FlowAddress
 import com.nftco.flow.sdk.FlowArgument
 import com.nftco.flow.sdk.bytesToHex
@@ -16,7 +15,6 @@ import com.portto.fcl.network.execHttpPost
 import com.portto.fcl.provider.blocto.BloctoMethod
 import com.portto.fcl.provider.blocto.web.BloctoWebUtils.getAuthnUrl
 import com.portto.fcl.request.AuthzRequest
-import com.portto.fcl.request.TxBuilder
 import com.portto.fcl.utils.FclError
 import com.portto.fcl.utils.toDataClass
 import com.portto.fcl.utils.toJsonObject
@@ -92,7 +90,6 @@ object BloctoWebMethod : BloctoMethod {
             args.forEach { arg(it.jsonCadence) }
             gasLimit(limit.toInt())
         }
-        Log.d("BloctoWebMethod", "Test - sendTransaction - result: $result")
         return result
     }
 }

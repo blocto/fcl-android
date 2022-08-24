@@ -1,6 +1,5 @@
 package com.portto.fcl.resolve
 
-import android.util.Log
 import com.portto.fcl.Fcl
 import com.portto.fcl.model.AuthData
 import com.portto.fcl.model.PollingResponse
@@ -36,11 +35,7 @@ class AccountsResolver : Resolver {
 
         val response = execHttpPost(endpoint, service.params, data = preSignable.toJsonObject())
 
-        Log.d("AccountsResolver", "Test - collectAccounts - response: $response")
-
         val signableUsers = response.getAccounts()
-
-        Log.d("AccountsResolver", "Test - collectAccounts - signableUsers: $signableUsers")
 
         val accounts = mutableMapOf<String, SignableUser>()
 
@@ -75,11 +70,7 @@ class AccountsResolver : Resolver {
     private fun PollingResponse.getAccounts(): List<SignableUser> {
         val axs = mutableListOf<Pair<String, Service>>()
 
-        Log.d("AccountsResolver", "Test - getAccounts - data: $data")
-
         val authData = data?.toDataClass<AuthData>()
-
-        Log.d("AccountsResolver", "Test - getAccounts - authData: $authData")
 
         authData?.proposer?.let { axs.add(Pair("PROPOSER", it)) }
 

@@ -1,28 +1,5 @@
-/*
- * MIT License
- * Copyright (c) 2021 Zed
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
 package com.portto.fcl.network
 
-import android.util.Log
 import androidx.annotation.WorkerThread
 import com.portto.fcl.model.PollingResponse
 import com.portto.fcl.model.service.Service
@@ -42,14 +19,11 @@ internal suspend fun execHttpPost(
     params: Map<String, String>? = mapOf(),
     data: JsonObject? = null
 ): PollingResponse {
-    Log.d("execHttpPost", "Test - url: $url")
-    Log.d("execHttpPost", "Test - params: $params")
-    Log.d("execHttpPost", "Test - data: $data")
+
     val response = if (data == null) {
         authService.executePost(url, params)
     } else authService.executePost(url, params, data)
-    Log.d("execHttpPost", "Test - response: $response")
-    Log.d("execHttpPost", "Test - status: ${response.status}")
+
 
     when (response.status) {
         ResponseStatus.APPROVED -> WebViewActivity.close()
@@ -66,8 +40,6 @@ internal suspend fun execHttpPost(
 private suspend fun tryPollService(
     response: PollingResponse,
 ): PollingResponse {
-    Log.d("tryPollService", "Test - response: $response")
-
     PollServiceState.poll()
 
     val local = response.local()
@@ -89,8 +61,6 @@ private suspend fun tryPollService(
         }
     }
 
-    Log.d("tryPollService", "Test - pollResponse: $pollResponse")
-    Log.d("tryPollService", "Test - response: $response")
     return pollResponse ?: response
 }
 
