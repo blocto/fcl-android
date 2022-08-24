@@ -29,7 +29,7 @@ internal suspend fun execHttpPost(
         ResponseStatus.APPROVED -> WebViewActivity.close()
         ResponseStatus.DECLINED -> {
             WebViewActivity.close()
-            throw FclError.UserDeclinedException()
+            throw FclError.UserRejectedException()
         }
         ResponseStatus.PENDING -> return tryPollService(response)
     }
@@ -77,7 +77,7 @@ private suspend fun poll(service: Service): PollingResponse? {
         ResponseStatus.APPROVED -> WebViewActivity.close()
         ResponseStatus.DECLINED -> {
             WebViewActivity.close()
-            throw FclError.UserDeclinedException()
+            throw FclError.UserRejectedException()
         }
         else -> return response
     }

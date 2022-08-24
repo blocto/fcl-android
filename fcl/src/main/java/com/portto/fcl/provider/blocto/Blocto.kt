@@ -83,11 +83,15 @@ class Blocto(val bloctoAppId: String) : Provider {
         private const val BLOCTO_STAGING_APP_ID = "com.portto.blocto.staging"
 
         @Volatile
+        lateinit var bloctoAppIdentifier: String
+
+        @Volatile
         private var INSTANCE: Blocto? = null
 
         @Synchronized
-        fun getInstance(bloctoAppId: String) =
-            INSTANCE ?: Blocto(bloctoAppId).also { INSTANCE = it }
+        fun getInstance(bloctoAppId: String) = INSTANCE ?: Blocto(bloctoAppId)
+            .also { INSTANCE = it }
+            .also { bloctoAppIdentifier = bloctoAppId }
 
         /**
          * Check if blocto app is installed

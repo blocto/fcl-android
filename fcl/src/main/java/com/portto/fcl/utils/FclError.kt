@@ -52,7 +52,7 @@ object FclError {
         Exception("${network.value} is not supported by FCL.")
 
     /**
-     * Exception thrown when the user has denied the operation
+     * Exception thrown when the user has rejected the operation
      */
-    class UserDeclinedException : Exception("User denied.")
+    class UserRejectedException : Exception("User rejected.")
 }

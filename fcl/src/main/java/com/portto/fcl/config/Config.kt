@@ -20,11 +20,6 @@ object Config {
     var selectedWalletProvider: Provider? = null
         private set
 
-    val location: Origin?
-        get() = if (selectedWalletProvider is Blocto)
-            Origin.Blocto((selectedWalletProvider as Blocto).bloctoAppId)
-        else null
-
     fun put(option: Option): Config = apply {
         when (option) {
             is Option.Env -> env = option.value

@@ -2,7 +2,7 @@ package com.portto.fcl.network
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.portto.fcl.Fcl
-import com.portto.fcl.config.Origin
+import com.portto.fcl.provider.blocto.Blocto
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -18,8 +18,8 @@ internal object FclClient {
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor { chain ->
             val builder = chain.request().newBuilder()
-            val headers = when (val location = Fcl.config.location) {
-                is Origin.Blocto -> mapOf("Blocto-Application-Identifier" to location.value)
+            val headers = when (Fcl.config.selectedWalletProvider) {
+                is Blocto -> mapOf("Blocto-Application-Identifier" to Blocto.bloctoAppIdentifier)
                 else -> null
             }
             headers?.forEach { builder.addHeader(it.key, it.value) }
