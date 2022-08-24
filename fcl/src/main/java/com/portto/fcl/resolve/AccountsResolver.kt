@@ -11,7 +11,7 @@ import com.portto.fcl.utils.FclError
 import com.portto.fcl.utils.toDataClass
 import com.portto.fcl.utils.toJsonObject
 
-class AccountsResolver : Resolver {
+internal class AccountsResolver : Resolver {
 
     override suspend fun resolve(ix: Interaction) {
         if (!ix.isTransaction()) {

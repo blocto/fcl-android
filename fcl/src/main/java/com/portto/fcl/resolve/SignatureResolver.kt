@@ -7,7 +7,7 @@ import com.portto.fcl.model.signable.*
 import com.portto.fcl.utils.toDataClass
 import com.portto.fcl.utils.toJsonObject
 
-class SignatureResolver : Resolver {
+internal class SignatureResolver : Resolver {
 
     override suspend fun resolve(ix: Interaction) {
 

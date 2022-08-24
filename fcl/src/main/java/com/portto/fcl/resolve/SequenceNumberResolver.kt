@@ -4,7 +4,7 @@ import com.nftco.flow.sdk.FlowAddress
 import com.portto.fcl.model.signable.Interaction
 import com.portto.fcl.utils.AppUtils.flowApi
 
-class SequenceNumberResolver : Resolver {
+internal class SequenceNumberResolver : Resolver {
 
     override suspend fun resolve(ix: Interaction) {
         val proposer = ix.proposer

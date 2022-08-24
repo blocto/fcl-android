@@ -7,15 +7,8 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.jsonArray
 
 
-typealias BackChannelRpc = Service
-typealias Frame = Service
-
-/**
- *  Ref: https://github.com/onflow/fcl-js/blob/master/packages/fcl/src/current-user/normalize/polling-response.js
- */
 @Serializable
 data class PollingResponse(
     @SerialName("status")
@@ -25,7 +18,7 @@ data class PollingResponse(
     @SerialName("data")
     val data: JsonElement?,
     @SerialName("updates")
-    val updates: BackChannelRpc?,
+    val updates: Service?,
     @SerialName("local")
     val local: JsonElement?,
     @SerialName("compositeSignature")

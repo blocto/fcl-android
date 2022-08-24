@@ -4,7 +4,7 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.*
 
 @OptIn(ExperimentalSerializationApi::class)
-private val json = Json {
+internal val json = Json {
     ignoreUnknownKeys = true
     encodeDefaults = false
     isLenient = true

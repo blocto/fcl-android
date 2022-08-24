@@ -3,8 +3,8 @@ package com.portto.fcl.network
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.portto.fcl.Fcl
 import com.portto.fcl.provider.blocto.Blocto
+import com.portto.fcl.utils.json
 import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -33,16 +33,6 @@ internal object FclClient {
         .readTimeout(20, TimeUnit.SECONDS)
         .writeTimeout(20, TimeUnit.SECONDS)
         .build()
-
-    @OptIn(ExperimentalSerializationApi::class)
-    private val json = Json {
-        ignoreUnknownKeys = true
-        encodeDefaults = false
-        isLenient = true
-        useArrayPolymorphism = true
-        coerceInputValues = true
-        explicitNulls = false
-    }
 
     @OptIn(ExperimentalSerializationApi::class)
     private fun retrofit(url: String? = null): Retrofit = Retrofit.Builder()

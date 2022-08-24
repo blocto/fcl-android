@@ -4,7 +4,7 @@ import com.portto.fcl.model.signable.Interaction
 import com.portto.fcl.model.signable.isScript
 import com.portto.fcl.model.signable.isTransaction
 
-class CadenceResolver : Resolver {
+internal class CadenceResolver : Resolver {
 
     override suspend fun resolve(ix: Interaction) {
         if (!(ix.isTransaction() || ix.isScript())) {

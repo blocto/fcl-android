@@ -2,7 +2,7 @@ package com.portto.fcl.utils
 
 import com.portto.fcl.config.Network
 
-object FclError {
+internal object FclError {
 
     /**
      * General exception thrown from FCL.

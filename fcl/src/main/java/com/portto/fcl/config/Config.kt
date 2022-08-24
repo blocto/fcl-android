@@ -1,7 +1,6 @@
 package com.portto.fcl.config
 
 import com.portto.fcl.provider.Provider
-import com.portto.fcl.provider.blocto.Blocto
 
 /**
  * Copyright 2022 Portto, Inc.

@@ -1,7 +1,7 @@
 package com.portto.fcl.provider.blocto.web
 
 
-object BloctoWebUtils {
+internal object BloctoWebUtils {
     private const val AUTHN_STAGING_URL = "https://flow-wallet-testnet.blocto.app/api/flow/authn"
     private const val AUTHN_PRODUCTION_URL = "https://flow-wallet.blocto.app/api/flow/authn"
 

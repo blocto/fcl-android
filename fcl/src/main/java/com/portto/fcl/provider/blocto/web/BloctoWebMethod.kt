@@ -19,7 +19,7 @@ import com.portto.fcl.utils.FclError
 import com.portto.fcl.utils.toDataClass
 import com.portto.fcl.utils.toJsonObject
 
-object BloctoWebMethod : BloctoMethod {
+internal object BloctoWebMethod : BloctoMethod {
     override suspend fun authenticate(
         context: Context,
         accountProofData: AccountProofResolvedData?

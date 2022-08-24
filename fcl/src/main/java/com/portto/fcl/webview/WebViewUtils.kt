@@ -6,7 +6,7 @@ import com.portto.fcl.model.service.Service
 import com.portto.fcl.utils.FclError
 
 
-fun Service.openAuthenticationWebView() {
+internal fun Service.openAuthenticationWebView() {
     val url = endpoint ?: throw FclError.GeneralException("URL is missing.")
 
     val context = LifecycleObserver.requireContext()
