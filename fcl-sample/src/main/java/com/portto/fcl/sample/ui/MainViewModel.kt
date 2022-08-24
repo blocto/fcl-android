@@ -19,7 +19,6 @@ import com.portto.fcl.utils.AppUtils
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class MainViewModel : ViewModel() {
     // authn - account address
@@ -133,10 +132,7 @@ class MainViewModel : ViewModel() {
                 authorizers = listOf(FlowAddress(userAddress))
             )) {
                 is Result.Success -> _transactionId.value = result.value
-                is Result.Failure -> {
-                    Timber.e("Test - Error: ${result.throwable.message}")
-                    _message.value = result.throwable.message
-                }
+                is Result.Failure -> _message.value = result.throwable.message
             }
         }
     }
