@@ -1,9 +1,10 @@
 package com.portto.fcl.network
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.portto.fcl.Fcl
+import com.portto.fcl.config.Origin
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -15,6 +16,15 @@ internal object FclClient {
     private const val HEADER_CONTENT_TYPE_JSON = "application/json"
 
     private val okHttpClient = OkHttpClient.Builder()
+        .addInterceptor { chain ->
+            val builder = chain.request().newBuilder()
+            val headers = when (val location = Fcl.config.location) {
+                is Origin.Blocto -> mapOf("Blocto-Application-Identifier" to location.value)
+                else -> null
+            }
+            headers?.forEach { builder.addHeader(it.key, it.value) }
+            chain.proceed(builder.build())
+        }
         .addInterceptor(HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         })

@@ -23,7 +23,7 @@ import com.portto.fcl.model.CompositeSignature as FclCompositeSignature
  * Usage: [getInstance] to init Blocto as a wallet provider
  * @param bloctoAppId the Blocto app identifier. For more info, check https://docs.blocto.app/blocto-sdk/register-app-id
  */
-class Blocto(bloctoAppId: String) : Provider {
+class Blocto(val bloctoAppId: String) : Provider {
     override val id: Int = PROVIDER_BLOCTO_ID
 
     override var user: User? = null
