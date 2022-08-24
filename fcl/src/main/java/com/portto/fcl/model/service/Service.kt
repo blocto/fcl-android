@@ -7,11 +7,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Service(
     @SerialName("f_type")
-    val fclType: String,
+    val fclType: String?,
     @SerialName("f_vsn")
-    val fclVersion: String,
+    val fclVersion: String?,
     @SerialName("type")
-    val type: ServiceType?, // blocto only
+    val type: ServiceType? = null, // blocto only
     @SerialName("uid")
     val uid: String?,
     @SerialName("id")

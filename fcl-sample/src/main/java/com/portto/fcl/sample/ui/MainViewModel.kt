@@ -62,10 +62,7 @@ class MainViewModel : ViewModel() {
                 _address.value = result.value
                 _accountProofSignatures.value = Fcl.currentUser?.accountProofData?.signatures
             }
-            is Result.Failure -> {
-                Timber.e("Test - Error: ${result.throwable.message}")
-                _message.value = result.throwable.message
-            }
+            is Result.Failure -> _message.value = result.throwable.message
         }
     }
 
@@ -136,7 +133,10 @@ class MainViewModel : ViewModel() {
                 authorizers = listOf(FlowAddress(userAddress))
             )) {
                 is Result.Success -> _transactionId.value = result.value
-                is Result.Failure -> _message.value = result.throwable.message
+                is Result.Failure -> {
+                    Timber.e("Test - Error: ${result.throwable.message}")
+                    _message.value = result.throwable.message
+                }
             }
         }
     }

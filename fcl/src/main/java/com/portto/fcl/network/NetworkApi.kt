@@ -70,9 +70,9 @@ private suspend fun tryPollService(
 
     PollServiceState.poll()
 
-    val local = response.local
+    val local = response.local()
         ?: throw FclError.GeneralException("No local from polling response.")
-    val updates = response.updates
+    val updates = (response.updates ?: response.authorizationUpdates)
         ?: throw FclError.GeneralException("No updates from polling response.")
 
     try {
