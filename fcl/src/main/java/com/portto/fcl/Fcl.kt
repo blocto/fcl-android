@@ -10,6 +10,7 @@ import com.portto.fcl.config.Network
 import com.portto.fcl.model.CompositeSignature
 import com.portto.fcl.model.Result
 import com.portto.fcl.model.User
+import com.portto.fcl.model.authn.AccountProofData
 import com.portto.fcl.model.authn.AccountProofResolvedData
 import com.portto.fcl.provider.Provider
 import com.portto.fcl.utils.AppUtils
@@ -30,18 +31,71 @@ object Fcl {
             put(WalletProviders(supportedWallets))
         }
 
+    /**
+     * Retrieve the information of a user
+     * @param accountProofData data to prove the ownership of a Flow account
+     * @return Account address
+     */
     suspend fun authenticate(accountProofData: AccountProofResolvedData?): Result<String> {
         val selectedProvider = config.selectedWalletProvider
             ?: throw FclError.UnspecifiedWalletProviderException()
         return try {
             selectedProvider.authn(accountProofData)
             val address = currentUser?.address
-                ?: throw Exception("Error while authenticating")
+                ?: throw FclError.AccountNotFoundException()
             Result.Success(address)
         } catch (e: Exception) {
             Result.Failure(e)
         }
     }
+
+    /**
+     * Allowing the user to personally sign data
+     * @param message A raw string to be signed
+     * @return A list of [CompositeSignature]
+     */
+    suspend fun signUserMessage(message: String): Result<List<CompositeSignature>> {
+        return try {
+            currentUser ?: throw FclError.UnauthenticatedException()
+            val selectedProvider = config.selectedWalletProvider
+                ?: throw FclError.UnspecifiedWalletProviderException()
+            Result.Success(selectedProvider.getUserSignature(message))
+        } catch (e: Exception) {
+            Result.Failure(e)
+        }
+    }
+
+    /**
+     * Prove a user is in control of a Flow address
+     * @param appIdentifier A human-readable string that uniquely identifies your application name
+     * @param accountProofData A composite data of nonce, address and signatures
+     * @return true if verified; Otherwise false
+     */
+    suspend fun verifyAccountProof(
+        appIdentifier: String,
+        accountProofData: AccountProofData
+    ): Result<Boolean> = try {
+        Result.Success(AppUtils.verifyAccountProof(appIdentifier, accountProofData))
+    } catch (e: Exception) {
+        Result.Failure(e)
+    }
+
+    /**
+     * Verify the ownership of a Flow account by verifying a message was signed by a
+     * user's private keys.
+     * @param message A raw string by which the user was signed
+     * @param signatures A list of [CompositeSignature] created from [signUserMessage]
+     * @return true if verified; Otherwise false
+     */
+    suspend fun verifyUserSignatures(
+        message: String,
+        signatures: List<CompositeSignature>
+    ): Result<Boolean> = try {
+        Result.Success(AppUtils.verifyUserSignatures(message, signatures))
+    } catch (e: Exception) {
+        Result.Failure(e)
+    }
+
 
     fun unauthenticate() {
         currentUser = null
@@ -85,16 +139,5 @@ object Fcl {
         )
     } catch (e: Exception) {
         Result.Failure(e)
-    }
-
-    suspend fun signUserMessage(message: String): Result<List<CompositeSignature>> {
-        return try {
-            currentUser ?: throw FclError.UnauthenticatedException()
-            val selectedProvider = config.selectedWalletProvider
-                ?: throw FclError.UnspecifiedWalletProviderException()
-            Result.Success(selectedProvider.getUserSignature(message))
-        } catch (e: Exception) {
-            Result.Failure(e)
-        }
     }
 }

@@ -81,8 +81,7 @@ class MainActivity : AppCompatActivity() {
             val mutateScript = getMutateSampleScript(Fcl.isMainnet)
             tvScript.text = mutateScript
             btnSendTx.setOnClickListener {
-                val userAddress = mainViewModel.address.value
-                if (userAddress.isNullOrEmpty()) return@setOnClickListener
+                val userAddress = mainViewModel.address.value.orEmpty()
                 mainViewModel.sendTransaction(mutateScript, userAddress)
             }
         }
