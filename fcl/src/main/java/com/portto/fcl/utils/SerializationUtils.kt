@@ -14,7 +14,7 @@ internal val json = Json {
 }
 
 internal inline fun <reified T> T.toJsonObject(): JsonObject {
-    return Json.encodeToJsonElement(this).jsonObject
+    return json.encodeToJsonElement(this).jsonObject
 }
 
 internal inline fun <reified T> JsonElement.toDataClass() =
