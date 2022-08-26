@@ -10,7 +10,7 @@
         android:id="@+id/tv_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Log in..."
+        android:text="Select a wallet"
         android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall" />
 
     <androidx.recyclerview.widget.RecyclerView

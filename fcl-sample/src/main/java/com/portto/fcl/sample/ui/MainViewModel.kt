@@ -15,12 +15,15 @@ import com.portto.fcl.model.authn.AccountProofResolvedData
 import com.portto.fcl.provider.Provider
 import com.portto.fcl.sample.util.FLOW_APP_IDENTIFIER
 import com.portto.fcl.sample.util.FLOW_NONCE
-import com.portto.fcl.utils.AppUtils
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {
+    // current network
+    private val _isCurrentMainnet = MutableLiveData(false)
+    val isCurrentMainnet: LiveData<Boolean> get() = _isCurrentMainnet
+
     // authn - account address
     private val _address = MutableLiveData<String?>(null)
     val address: LiveData<String?> get() = _address
@@ -65,6 +68,10 @@ class MainViewModel : ViewModel() {
         }
     }
 
+    fun setCurrentNetwork(isMainnet: Boolean) {
+        _isCurrentMainnet.value = isMainnet
+    }
+
     fun disconnect() {
         Fcl.unauthenticate()
         _address.value = null
@@ -89,10 +96,11 @@ class MainViewModel : ViewModel() {
                     val accountProofData = Fcl.currentUser?.accountProofData
                         ?: throw Exception("No Account Proof Data")
 
-                    AppUtils.verifyAccountProof(
-                        appIdentifier = FLOW_APP_IDENTIFIER,
-                        accountProofData = accountProofData
-                    )
+                    when (val result =
+                        Fcl.verifyAccountProof(FLOW_APP_IDENTIFIER, accountProofData)) {
+                        is Result.Success -> result.value
+                        is Result.Failure -> throw result.throwable
+                    }
                 } else {
                     val userMessage = userMessage.value
                         ?: throw Exception("Invalid message: ${userMessage.value}")
@@ -100,10 +108,10 @@ class MainViewModel : ViewModel() {
                     val userSignatures = userSignatures.value
                         ?: throw Exception("Signature is not provided")
 
-                    AppUtils.verifyUserSignatures(
-                        message = userMessage,
-                        signatures = userSignatures
-                    )
+                    when (val result = Fcl.verifyUserSignatures(userMessage, userSignatures)) {
+                        is Result.Success -> result.value
+                        is Result.Failure -> throw result.throwable
+                    }
                 }
                 val type = if (isAccountProof) "Account Proof Data" else "User Signature Data"
                 val validString = if (isValid) "valid" else "invalid"

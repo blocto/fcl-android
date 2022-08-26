@@ -14,7 +14,7 @@ object AppUtils {
     private const val FLOW_MAINNET_ENDPOINT = "access.mainnet.nodes.onflow.org"
     private const val FLOW_TESTNET_ENDPOINT = "access.devnet.nodes.onflow.org"
 
-    private val flowApi = Flow.newAccessApi(
+    internal val flowApi = Flow.newAccessApi(
         host = if (Fcl.isMainnet) FLOW_MAINNET_ENDPOINT else FLOW_TESTNET_ENDPOINT
     )
 

@@ -48,8 +48,12 @@ internal class LifecycleObserver : Application.ActivityLifecycleCallbacks {
             isRegistered = true
         }
 
-        private fun topActivity() = if (instance.activityStack.isEmpty()) null else instance.activityStack.lastElement()
+        private fun topActivity() = if (instance.activityStack.isEmpty()) null
+        else instance.activityStack.lastElement()
 
         fun context(): Context? = topActivity() ?: application
+
+        fun requireContext(): Context = context()
+            ?: throw IllegalStateException("Not attached to a context")
     }
 }

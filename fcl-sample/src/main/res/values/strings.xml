@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">fcl sample</string>
 
+    <string name="testnet">Testnet</string>
+    <string name="mainnet">Mainnet</string>
+
     <!-- Authentication / Wallet Discovery -->
     <string name="btn_connect_wallet">Connect Wallet</string>
     <string name="btn_disconnect_wallet">Disconnect Wallet</string>

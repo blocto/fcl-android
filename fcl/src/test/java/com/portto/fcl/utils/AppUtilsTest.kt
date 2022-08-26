@@ -35,14 +35,14 @@ class AppUtilsTest {
 
         try {
             val result = AppUtils.query(
-                script = script,
-                arguments = listOf(
+                queryScript = script,
+                args = listOf(
                     IntNumberField("2"),
                     IntNumberField("3"),
                     AddressField("0xba1132bc08f82fe2")
                 )
             )
-            Assert.assertEquals("5", result)
+            Assert.assertEquals("5", result.value)
         } catch (e: Exception) {
             throw e
         }

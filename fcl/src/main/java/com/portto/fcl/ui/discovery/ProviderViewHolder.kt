@@ -8,7 +8,7 @@ import coil.load
 import com.portto.fcl.databinding.ListItemWalletProviderBinding
 import com.portto.fcl.provider.Provider
 
-class ProviderViewHolder(private val binding: ListItemWalletProviderBinding) :
+internal class ProviderViewHolder(private val binding: ListItemWalletProviderBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
     fun bind(provider: Provider, dialog: Dialog, onClick: (provider: Provider) -> Unit) {

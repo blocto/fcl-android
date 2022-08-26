@@ -9,7 +9,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.portto.fcl.databinding.WalletDiscoveryDialogBinding
 import com.portto.fcl.provider.Provider
 
-
 fun Activity.showConnectWalletDialog(
     providers: List<Provider>,
     onWalletSelected: (Provider) -> Unit
@@ -26,7 +25,7 @@ fun Activity.showConnectWalletDialog(
     dialog.show()
 }
 
-class WalletProviderAdapter(
+internal class WalletProviderAdapter(
     private val dialog: Dialog,
     private val onWalletProviderClick: (Provider) -> Unit
 ) :
@@ -41,7 +40,7 @@ class WalletProviderAdapter(
     }
 }
 
-object ProviderDiffCallback : DiffUtil.ItemCallback<Provider>() {
+internal object ProviderDiffCallback : DiffUtil.ItemCallback<Provider>() {
     override fun areItemsTheSame(oldItem: Provider, newItem: Provider) =
         oldItem.info.title == newItem.info.title
 

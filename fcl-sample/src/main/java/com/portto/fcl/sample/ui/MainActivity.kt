@@ -32,15 +32,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        Fcl.init(
-            env = Network.TESTNET,
-            appDetail = AppDetail(),
-            supportedWallets = listOf(
-                Blocto.getInstance(bloctoAppId = BLOCTO_APP_ID, isDebug = true),
-                Dapper,
-            )
-        )
-
         binding.setUpUi()
 
         mainViewModel.bindUi()
@@ -49,6 +40,11 @@ class MainActivity : AppCompatActivity() {
     private fun ActivityMainBinding.setUpUi() {
         lifecycleOwner = this@MainActivity
         viewModel = mainViewModel
+
+        binding.toggleButton.check(R.id.btn_testnet)
+        binding.toggleButton.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (isChecked) mainViewModel.setCurrentNetwork(checkedId == R.id.btn_mainnet)
+        }
 
         authCard.apply {
             btnShowAccountProofData.setOnClickListener {
@@ -81,14 +77,18 @@ class MainActivity : AppCompatActivity() {
             val mutateScript = getMutateSampleScript(Fcl.isMainnet)
             tvScript.text = mutateScript
             btnSendTx.setOnClickListener {
-                val userAddress = mainViewModel.address.value
-                if (userAddress.isNullOrEmpty()) return@setOnClickListener
+                val userAddress = mainViewModel.address.value.orEmpty()
                 mainViewModel.sendTransaction(mutateScript, userAddress)
             }
         }
     }
 
     private fun MainViewModel.bindUi() {
+        isCurrentMainnet.observe(this@MainActivity) {
+            mainViewModel.disconnect()
+            initFcl(it)
+        }
+
         address.observe(this@MainActivity) { address ->
             binding.authCard.btnConnectWallet.setOnClickListener {
                 if (address == null) it.showMenu(R.menu.menu_connect) { item ->
@@ -129,4 +129,18 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun initFcl(isMainnet: Boolean) {
+        Fcl.init(
+            env = if (isMainnet) Network.MAINNET else Network.TESTNET,
+            appDetail = AppDetail(),
+            supportedWallets = getWalletList(isMainnet)
+        )
+        binding.coordinator.showSnackbar("Switched to ${if (isMainnet) "mainnet" else "testnet"}")
+    }
+
+    private fun getWalletList(isMainnet: Boolean) = listOf(
+        Blocto.getInstance(if (isMainnet) BLOCTO_MAINNET_APP_ID else BLOCTO_TESTNET_APP_ID),
+        Dapper
+    )
 }

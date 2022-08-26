@@ -11,13 +11,14 @@ internal class WebViewActivity : AppCompatActivity() {
 
     private val url by lazy { intent.getStringExtra(EXTRA_URL).orEmpty() }
 
-    private val webView by lazy { FCLWebView(this) }
+    private val webView by lazy { FclWebView(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         instance = this
         setContentView(webView)
         webView.loadUrl(url)
+        FclWebViewLifecycle.onWebViewOpen(url)
         webView.settings.userAgentString = WebSettings.getDefaultUserAgent(this).replace("; wv", "")
 
         actionBar?.hide()
@@ -26,6 +27,7 @@ internal class WebViewActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         instance = null
+        FclWebViewLifecycle.onWebViewClose(webView.url)
         super.onDestroy()
     }
 
