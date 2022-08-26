@@ -15,12 +15,15 @@ import com.portto.fcl.model.authn.AccountProofResolvedData
 import com.portto.fcl.provider.Provider
 import com.portto.fcl.sample.util.FLOW_APP_IDENTIFIER
 import com.portto.fcl.sample.util.FLOW_NONCE
-import com.portto.fcl.utils.AppUtils
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {
+    // current network
+    private val _isCurrentMainnet = MutableLiveData(false)
+    val isCurrentMainnet: LiveData<Boolean> get() = _isCurrentMainnet
+
     // authn - account address
     private val _address = MutableLiveData<String?>(null)
     val address: LiveData<String?> get() = _address
@@ -63,6 +66,10 @@ class MainViewModel : ViewModel() {
             }
             is Result.Failure -> _message.value = result.throwable.message
         }
+    }
+
+    fun setCurrentNetwork(isMainnet: Boolean) {
+        _isCurrentMainnet.value = isMainnet
     }
 
     fun disconnect() {

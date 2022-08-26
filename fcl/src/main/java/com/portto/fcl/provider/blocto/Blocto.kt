@@ -10,7 +10,6 @@ import com.portto.fcl.model.User
 import com.portto.fcl.model.authn.AccountProofResolvedData
 import com.portto.fcl.provider.*
 import com.portto.fcl.provider.Provider.ProviderInfo
-import com.portto.fcl.provider.blocto.Blocto.Companion.getInstance
 import com.portto.fcl.provider.blocto.native.BloctoNativeMethod
 import com.portto.fcl.provider.blocto.web.BloctoWebMethod
 import com.portto.fcl.utils.FclError
@@ -20,10 +19,9 @@ import com.portto.fcl.model.CompositeSignature as FclCompositeSignature
 /**
  * Blocto Wallet Provider
  *
- * Usage: [getInstance] to init Blocto as a wallet provider
  * @param bloctoAppId the Blocto app identifier. For more info, check https://docs.blocto.app/blocto-sdk/register-app-id
  */
-class Blocto private constructor(bloctoAppId: String, debug: Boolean) : Provider {
+class Blocto private constructor(bloctoAppId: String) : Provider {
     override val id: Int = PROVIDER_BLOCTO_ID
 
     override var user: User? = null
@@ -36,12 +34,12 @@ class Blocto private constructor(bloctoAppId: String, debug: Boolean) : Provider
         )
 
     init {
-        BloctoSDK.init(appId = bloctoAppId, debug = debug)
+        bloctoAppIdentifier = bloctoAppId
     }
 
     override suspend fun authn(accountProofResolvedData: AccountProofResolvedData?) {
         val context = requireContext()
-
+        BloctoSDK.init(appId = bloctoAppIdentifier, debug = !Fcl.isMainnet)
         val user: User? = isAppInstalled(context = context, isMainnet = Fcl.isMainnet)
             .getCaller()
             .authenticate(context, accountProofResolvedData)
@@ -89,8 +87,8 @@ class Blocto private constructor(bloctoAppId: String, debug: Boolean) : Provider
         private var INSTANCE: Blocto? = null
 
         @Synchronized
-        fun getInstance(bloctoAppId: String, isMainnet: Boolean) =
-            INSTANCE ?: Blocto(bloctoAppId = bloctoAppId, debug = !isMainnet)
+        fun getInstance(bloctoAppId: String) =
+            INSTANCE?.takeIf { bloctoAppIdentifier == bloctoAppId } ?: Blocto(bloctoAppId)
                 .also { INSTANCE = it }
                 .also { bloctoAppIdentifier = bloctoAppId }
 
