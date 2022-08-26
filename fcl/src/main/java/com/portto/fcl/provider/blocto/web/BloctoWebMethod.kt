@@ -46,11 +46,13 @@ internal object BloctoWebMethod : BloctoMethod {
             accountProofData = if (!signatures.isNullOrEmpty()) {
                 val accountProofSignedData = accountProofService.data
                 AccountProofData(
-                    nonce = accountProofSignedData.nonce!!,
-                    address = accountProofSignedData.address!!,
-                    signatures = accountProofSignedData.signatures!!.map {
+                    nonce = accountProofSignedData.nonce
+                        ?: throw FclError.GeneralException("Nonce not found in account proof"),
+                    address = accountProofSignedData.address
+                        ?: throw FclError.GeneralException("Address not found in account proof"),
+                    signatures = accountProofSignedData.signatures?.map {
                         CompositeSignature(it.address, it.keyId, it.signature)
-                    }
+                    } ?: throw FclError.GeneralException("Signatures not found in account proof")
                 )
             } else null,
             services = authData.services

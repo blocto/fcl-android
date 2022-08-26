@@ -52,7 +52,7 @@ class Blocto private constructor(bloctoAppId: String) : Provider {
         val context = requireContext()
         return isAppInstalled(context = context, isMainnet = Fcl.isMainnet)
             .getCaller()
-            .signUserMessage(requireContext(), user.address, message)
+            .signUserMessage(context, user.address, message)
     }
 
     override suspend fun mutate(
