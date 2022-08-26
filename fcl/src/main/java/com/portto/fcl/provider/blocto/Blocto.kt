@@ -2,7 +2,6 @@ package com.portto.fcl.provider.blocto
 
 import android.content.Context
 import android.content.pm.PackageManager
-import android.util.Log
 import com.nftco.flow.sdk.FlowAddress
 import com.nftco.flow.sdk.FlowArgument
 import com.portto.fcl.Fcl
@@ -24,7 +23,7 @@ import com.portto.fcl.model.CompositeSignature as FclCompositeSignature
  * Usage: [getInstance] to init Blocto as a wallet provider
  * @param bloctoAppId the Blocto app identifier. For more info, check https://docs.blocto.app/blocto-sdk/register-app-id
  */
-class Blocto(bloctoAppId: String) : Provider {
+class Blocto private constructor(bloctoAppId: String, debug: Boolean) : Provider {
     override val id: Int = PROVIDER_BLOCTO_ID
 
     override var user: User? = null
@@ -37,7 +36,7 @@ class Blocto(bloctoAppId: String) : Provider {
         )
 
     init {
-        BloctoSDK.init(appId = bloctoAppId, debug = !Fcl.isMainnet)
+        BloctoSDK.init(appId = bloctoAppId, debug = debug)
     }
 
     override suspend fun authn(accountProofResolvedData: AccountProofResolvedData?) {
@@ -90,9 +89,10 @@ class Blocto(bloctoAppId: String) : Provider {
         private var INSTANCE: Blocto? = null
 
         @Synchronized
-        fun getInstance(bloctoAppId: String) = INSTANCE ?: Blocto(bloctoAppId)
-            .also { INSTANCE = it }
-            .also { bloctoAppIdentifier = bloctoAppId }
+        fun getInstance(bloctoAppId: String, isMainnet: Boolean) =
+            INSTANCE ?: Blocto(bloctoAppId = bloctoAppId, debug = !isMainnet)
+                .also { INSTANCE = it }
+                .also { bloctoAppIdentifier = bloctoAppId }
 
         /**
          * Check if blocto app is installed

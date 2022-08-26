@@ -32,14 +32,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        Fcl.init(
-            env = Network.TESTNET,
-            appDetail = AppDetail(),
-            supportedWallets = listOf(
-                Blocto.getInstance(bloctoAppId = BLOCTO_APP_ID),
-                Dapper,
-            )
-        )
+        initFcl(isMainnet = false)
 
         binding.setUpUi()
 
@@ -127,5 +120,19 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun initFcl(isMainnet: Boolean) {
+        Fcl.init(
+            env = if (isMainnet) Network.MAINNET else Network.TESTNET,
+            appDetail = AppDetail(),
+            supportedWallets = listOf(
+                Blocto.getInstance(
+                    bloctoAppId = if (isMainnet) BLOCTO_MAINNET_APP_ID else BLOCTO_TESTNET_APP_ID,
+                    isMainnet = isMainnet
+                ),
+                Dapper,
+            )
+        )
     }
 }
