@@ -32,8 +32,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initFcl(isMainnet = false)
-
         binding.setUpUi()
 
         mainViewModel.bindUi()
@@ -42,6 +40,11 @@ class MainActivity : AppCompatActivity() {
     private fun ActivityMainBinding.setUpUi() {
         lifecycleOwner = this@MainActivity
         viewModel = mainViewModel
+
+        binding.toggleButton.check(R.id.btn_testnet)
+        binding.toggleButton.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (isChecked) mainViewModel.setCurrentNetwork(checkedId == R.id.btn_mainnet)
+        }
 
         authCard.apply {
             btnShowAccountProofData.setOnClickListener {
@@ -81,6 +84,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun MainViewModel.bindUi() {
+        isCurrentMainnet.observe(this@MainActivity) {
+            mainViewModel.disconnect()
+            initFcl(it)
+        }
+
         address.observe(this@MainActivity) { address ->
             binding.authCard.btnConnectWallet.setOnClickListener {
                 if (address == null) it.showMenu(R.menu.menu_connect) { item ->
@@ -126,13 +134,13 @@ class MainActivity : AppCompatActivity() {
         Fcl.init(
             env = if (isMainnet) Network.MAINNET else Network.TESTNET,
             appDetail = AppDetail(),
-            supportedWallets = listOf(
-                Blocto.getInstance(
-                    bloctoAppId = if (isMainnet) BLOCTO_MAINNET_APP_ID else BLOCTO_TESTNET_APP_ID,
-                    isMainnet = isMainnet
-                ),
-                Dapper,
-            )
+            supportedWallets = getWalletList(isMainnet)
         )
+        binding.coordinator.showSnackbar("Switched to ${if (isMainnet) "mainnet" else "testnet"}")
     }
+
+    private fun getWalletList(isMainnet: Boolean) = listOf(
+        Blocto.getInstance(if (isMainnet) BLOCTO_MAINNET_APP_ID else BLOCTO_TESTNET_APP_ID),
+        Dapper
+    )
 }

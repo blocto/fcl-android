@@ -1,5 +1,6 @@
 package com.portto.fcl
 
+
 import com.nftco.flow.sdk.FlowAddress
 import com.nftco.flow.sdk.FlowArgument
 import com.nftco.flow.sdk.cadence.Field
@@ -17,7 +18,8 @@ import com.portto.fcl.utils.AppUtils
 import com.portto.fcl.utils.FclError
 
 object Fcl {
-    val config: Config = Config
+    val config: Config
+        get() = Config
 
     val isMainnet: Boolean
         get() = config.env == Network.MAINNET
@@ -96,7 +98,9 @@ object Fcl {
         Result.Failure(e)
     }
 
-
+    /**
+     * Remove the current user
+     */
     fun unauthenticate() {
         currentUser = null
     }

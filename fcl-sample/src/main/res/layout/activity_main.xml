@@ -24,6 +24,31 @@
                 android:orientation="vertical"
                 android:paddingBottom="@dimen/spacing_large">
 
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/toggleButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/spacing_large"
+                    android:layout_marginTop="@dimen/spacing_large"
+                    android:gravity="center"
+                    app:selectionRequired="true"
+                    app:singleSelection="true">
+
+                    <Button
+                        android:id="@+id/btn_testnet"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/testnet" />
+
+                    <Button
+                        android:id="@+id/btn_mainnet"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/mainnet" />
+                </com.google.android.material.button.MaterialButtonToggleGroup>
+
                 <!-- Authentication -->
                 <include
                     android:id="@+id/auth_card"

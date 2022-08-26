@@ -13,9 +13,8 @@ internal val json = Json {
     explicitNulls = false
 }
 
-internal inline fun <reified T> T.toJsonObject(): JsonObject {
-    return json.encodeToJsonElement(this).jsonObject
-}
+internal inline fun <reified T> T.toJsonObject(): JsonObject =
+    json.encodeToJsonElement(this).jsonObject
 
 internal inline fun <reified T> JsonElement.toDataClass() =
     json.decodeFromJsonElement<T>(this)

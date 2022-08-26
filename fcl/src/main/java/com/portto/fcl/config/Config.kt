@@ -33,6 +33,13 @@ object Config {
         }
     }
 
+    fun clear() {
+        env = null
+        appDetail = null
+        supportedWallets = emptyList()
+        selectedWalletProvider = null
+    }
+
     sealed class Option {
         class Env(val value: Network) : Option()
         class App(val value: AppDetail?) : Option()
