@@ -64,9 +64,9 @@ private suspend fun tryPollService(
     return pollResponse ?: response
 }
 
-private suspend fun poll(service: Service): PollingResponse? {
+private suspend fun poll(service: Service): PollingResponse {
     if (!PollServiceState.isPollEnable()) {
-        return null
+        throw FclError.UserRejectedException()
     }
 
     val url = service.endpoint ?: throw FclError.GeneralException("URL not found.")
