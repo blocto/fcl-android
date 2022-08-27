@@ -37,6 +37,11 @@ class MainActivity : AppCompatActivity() {
         mainViewModel.bindUi()
     }
 
+    override fun onPause() {
+        super.onPause()
+        binding.root.clearFocus()
+    }
+
     private fun ActivityMainBinding.setUpUi() {
         lifecycleOwner = this@MainActivity
         viewModel = mainViewModel
@@ -77,12 +82,14 @@ class MainActivity : AppCompatActivity() {
         queryScript.observe(this@MainActivity) { script ->
             binding.queryCard.tvScript.text = script
             binding.queryCard.btnSendScript.setOnClickListener {
+                binding.root.hideKeyboard()
                 mainViewModel.sendQuery(script) }
         }
 
         mutateScript.observe(this@MainActivity) {script ->
             binding.mutateCard.tvScript.text = script
             binding.mutateCard.btnSendTx.setOnClickListener {
+                binding.root.hideKeyboard()
                 val userAddress = mainViewModel.address.value.orEmpty()
                 mainViewModel.sendTransaction(script, userAddress)
             }
