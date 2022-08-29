@@ -10,7 +10,7 @@ on Flow and their users without any custom integrations or changes needed to the
 
 ## Download
 
-In build.gradle of app module, include this dependency
+In `build.gradle` of app module, include this dependency
 
 ```kotlin
 implementation("com.portto.fcl:fcl:x.y.z")
@@ -48,7 +48,7 @@ listOf(Blocto.getInstance(BLOCTO_TESTNET_APP_ID), Dapper)
 
 ### Current Wallet Providers
 
-- [Blocto](https://blocto.portto.io/en/) (Fully supported)
+- [Blocto](https://portto.com/) (Fully supported)
 - [Dapper Wallet](https://www.meetdapper.com/) (Support only authn for now)
 - [Ledger](https://ledger.com) (Not yet supported)
 - [Lilico](https://lilico.app/) (Not yet supported)
@@ -121,13 +121,14 @@ when (val result = Fcl.authenticate(accountProofData)) {
 
 ### Verify `AccountProof`
 
-If you've authenticated with account proof provided, you may retrieve the signatures from `config`.
+If you've acquired account proof signed data from `authenticate`, you may retrieve the signatures
+from `config`.
 
 ```kotlin
 val accountProofData = Fcl.currentUser?.accountProofData
 ```
 
-Then you may verify the signatures by calling `Fcl.verifyAccountProof()`.
+Then you can verify the signatures by calling `Fcl.verifyAccountProof()`.
 
 ```kotlin
 when (val result = Fcl.verifyAccountProof(FLOW_APP_IDENTIFIER, accountProofData)) {
