@@ -181,7 +181,7 @@ when (val result = Fcl.verifyUserSignatures(userMessage, userSignatures)) {
 - `Fcl.mutate()`: Send arbitrary transactions with your own signatures or via a user's wallet to
   perform state changes on chain
 
-[Learn more about on-chain interactions >](https://docs.onflow.org/fcl/reference/api/#on-chain-interactions)
+[Learn more about on-chain interactions](https://docs.onflow.org/fcl/reference/api/#on-chain-interactions)
 
 ## Support
 
