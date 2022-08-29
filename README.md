@@ -183,6 +183,11 @@ when (val result = Fcl.verifyUserSignatures(userMessage, userSignatures)) {
 
 [Learn more about on-chain interactions >](https://docs.onflow.org/fcl/reference/api/#on-chain-interactions)
 
+## Support
+
+Discuss FCL with the community on
+the [forum](https://forum.onflow.org/c/developer-tools/flow-fcl/22).
+
 ## License
 
     MIT License
