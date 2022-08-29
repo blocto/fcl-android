@@ -11,6 +11,7 @@ buildscript {
         classpath(libs.gradlePlugin.mavenPublish)
         classpath(libs.kotlin.serialization)
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10")
+        classpath ("com.google.gms:google-services:4.3.13")
     }
 }
 
