@@ -83,10 +83,11 @@ class MainActivity : AppCompatActivity() {
             binding.queryCard.tvScript.text = script
             binding.queryCard.btnSendScript.setOnClickListener {
                 binding.root.hideKeyboard()
-                mainViewModel.sendQuery(script) }
+                mainViewModel.sendQuery(script)
+            }
         }
 
-        mutateScript.observe(this@MainActivity) {script ->
+        mutateScript.observe(this@MainActivity) { script ->
             binding.mutateCard.tvScript.text = script
             binding.mutateCard.btnSendTx.setOnClickListener {
                 binding.root.hideKeyboard()
@@ -98,9 +99,8 @@ class MainActivity : AppCompatActivity() {
         address.observe(this@MainActivity) { address ->
             binding.authCard.btnConnectWallet.setOnClickListener {
                 if (address == null) it.showMenu(R.menu.menu_connect) { item ->
-                    showConnectWalletDialog(Fcl.config.supportedWallets) { provider ->
+                    showConnectWalletDialog {
                         mainViewModel.connect(
-                            walletProvider = provider,
                             withAccountPoof = item.itemId == R.id.menu_item_authn_with_account_proof
                         )
                     }

@@ -6,13 +6,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.portto.fcl.Fcl
 import com.portto.fcl.databinding.WalletDiscoveryDialogBinding
 import com.portto.fcl.provider.Provider
 
-fun Activity.showConnectWalletDialog(
-    providers: List<Provider>,
-    onWalletSelected: (Provider) -> Unit
-) {
+fun Activity.showConnectWalletDialog(onWalletSelected: (Provider) -> Unit) {
     val dialog = MaterialAlertDialogBuilder(this).create()
     val providerAdapter = WalletProviderAdapter(dialog, onWalletSelected)
     val binding: WalletDiscoveryDialogBinding =
@@ -21,7 +19,7 @@ fun Activity.showConnectWalletDialog(
             providerList.setHasFixedSize(true)
         }
     dialog.setView(binding.root)
-    providerAdapter.submitList(providers)
+    providerAdapter.submitList(Fcl.config.supportedWallets)
     dialog.show()
 }
 

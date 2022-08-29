@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.portto.fcl.Fcl
+import com.portto.fcl.config.Config
 import com.portto.fcl.databinding.ListItemWalletProviderBinding
 import com.portto.fcl.provider.Provider
 
@@ -17,6 +19,8 @@ internal class ProviderViewHolder(private val binding: ListItemWalletProviderBin
             tvDescription.text = provider.info.description
             imgIcon.load(provider.info.icon)
             root.setOnClickListener {
+                // Set the selected provider
+                Fcl.config.put(Config.Option.SelectedWalletProvider(provider))
                 onClick(provider)
                 dialog.dismiss()
             }
