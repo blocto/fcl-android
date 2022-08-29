@@ -37,6 +37,11 @@ class MainActivity : AppCompatActivity() {
         mainViewModel.bindUi()
     }
 
+    override fun onPause() {
+        super.onPause()
+        binding.root.clearFocus()
+    }
+
     private fun ActivityMainBinding.setUpUi() {
         lifecycleOwner = this@MainActivity
         viewModel = mainViewModel
@@ -66,27 +71,28 @@ class MainActivity : AppCompatActivity() {
                 openInExplorer("account/${requireAddress()}")
             }
         }
-
-        queryCard.apply {
-            val queryScript = getQuerySampleScript(Fcl.isMainnet)
-            tvScript.text = queryScript
-            btnSendScript.setOnClickListener { mainViewModel.sendQuery(queryScript) }
-        }
-
-        mutateCard.apply {
-            val mutateScript = getMutateSampleScript(Fcl.isMainnet)
-            tvScript.text = mutateScript
-            btnSendTx.setOnClickListener {
-                val userAddress = mainViewModel.address.value.orEmpty()
-                mainViewModel.sendTransaction(mutateScript, userAddress)
-            }
-        }
     }
 
     private fun MainViewModel.bindUi() {
         isCurrentMainnet.observe(this@MainActivity) {
             mainViewModel.disconnect()
             initFcl(it)
+        }
+
+        queryScript.observe(this@MainActivity) { script ->
+            binding.queryCard.tvScript.text = script
+            binding.queryCard.btnSendScript.setOnClickListener {
+                binding.root.hideKeyboard()
+                mainViewModel.sendQuery(script) }
+        }
+
+        mutateScript.observe(this@MainActivity) {script ->
+            binding.mutateCard.tvScript.text = script
+            binding.mutateCard.btnSendTx.setOnClickListener {
+                binding.root.hideKeyboard()
+                val userAddress = mainViewModel.address.value.orEmpty()
+                mainViewModel.sendTransaction(script, userAddress)
+            }
         }
 
         address.observe(this@MainActivity) { address ->

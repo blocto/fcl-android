@@ -1,9 +1,6 @@
 package com.portto.fcl.sample.ui
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.nftco.flow.sdk.FlowAddress
 import com.nftco.flow.sdk.FlowArgument
 import com.nftco.flow.sdk.cadence.JsonCadenceBuilder
@@ -15,6 +12,8 @@ import com.portto.fcl.model.authn.AccountProofResolvedData
 import com.portto.fcl.provider.Provider
 import com.portto.fcl.sample.util.FLOW_APP_IDENTIFIER
 import com.portto.fcl.sample.util.FLOW_NONCE
+import com.portto.fcl.sample.util.getMutateSampleScript
+import com.portto.fcl.sample.util.getQuerySampleScript
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -23,6 +22,14 @@ class MainViewModel : ViewModel() {
     // current network
     private val _isCurrentMainnet = MutableLiveData(false)
     val isCurrentMainnet: LiveData<Boolean> get() = _isCurrentMainnet
+
+    val queryScript: LiveData<String> = Transformations.map(isCurrentMainnet) {
+        getQuerySampleScript(isMainnet = it)
+    }
+
+    val mutateScript: LiveData<String> = Transformations.map(isCurrentMainnet) {
+        getMutateSampleScript(isMainnet = it)
+    }
 
     // authn - account address
     private val _address = MutableLiveData<String?>(null)
@@ -77,6 +84,8 @@ class MainViewModel : ViewModel() {
         _address.value = null
         _accountProofSignatures.value = null
         _userSignatures.value = null
+        _queryResult.value = null
+        _transactionId.value = null
         resetMessage()
     }
 

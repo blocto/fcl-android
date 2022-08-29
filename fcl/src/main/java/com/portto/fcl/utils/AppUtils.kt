@@ -14,9 +14,10 @@ object AppUtils {
     private const val FLOW_MAINNET_ENDPOINT = "access.mainnet.nodes.onflow.org"
     private const val FLOW_TESTNET_ENDPOINT = "access.devnet.nodes.onflow.org"
 
-    internal val flowApi = Flow.newAccessApi(
-        host = if (Fcl.isMainnet) FLOW_MAINNET_ENDPOINT else FLOW_TESTNET_ENDPOINT
-    )
+    internal val flowApi
+        get() = Flow.newAccessApi(
+            host = if (Fcl.isMainnet) FLOW_MAINNET_ENDPOINT else FLOW_TESTNET_ENDPOINT
+        )
 
     suspend fun verifyAccountProof(
         appIdentifier: String,
