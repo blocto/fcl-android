@@ -61,8 +61,7 @@ class MainViewModel : ViewModel() {
     private val _message = MutableStateFlow<String?>(null)
     val message get() = _message.asStateFlow()
 
-    fun connect(walletProvider: Provider, withAccountPoof: Boolean) = viewModelScope.launch {
-        Fcl.config.put(Config.Option.SelectedWalletProvider(walletProvider))
+    fun connect(withAccountPoof: Boolean) = viewModelScope.launch {
         val accountProofResolvedData =
             if (withAccountPoof) AccountProofResolvedData(FLOW_APP_IDENTIFIER, FLOW_NONCE)
             else null

@@ -38,7 +38,7 @@ object Fcl {
      * @param accountProofData data to prove the ownership of a Flow account
      * @return Account address
      */
-    suspend fun authenticate(accountProofData: AccountProofResolvedData?): Result<String> {
+    suspend fun authenticate(accountProofData: AccountProofResolvedData? = null): Result<String> {
         val selectedProvider = config.selectedWalletProvider
             ?: throw FclError.UnspecifiedWalletProviderException()
         return try {
