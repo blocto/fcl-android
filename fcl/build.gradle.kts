@@ -11,12 +11,10 @@ setupLibraryModule {
 }
 
 dependencies {
-    api(files("libs/core-debug.aar"))
-    api(files("libs/wallet-debug.aar"))
-    api(files("libs/flow-debug.aar"))
     api(libs.flow.sdk)
     implementation(libs.androidx.core)
     implementation(libs.androidx.recyclerview)
+    implementation(libs.bundles.blocto)
     implementation(libs.bundles.network)
     implementation(libs.coil)
     implementation(libs.coroutines.android)

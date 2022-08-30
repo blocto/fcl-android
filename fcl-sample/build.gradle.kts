@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("com.google.gms.google-services")
+    id("com.google.firebase.appdistribution")
     kotlin("android")
     kotlin("kapt")
 }
@@ -14,20 +15,24 @@ setupAppModule {
         create("release") {
             keyAlias = getSigningProperties()["KEY_ALIAS"]
             keyPassword = getSigningProperties()["KEY_PASSWORD"]
-            storeFile = file("${project.rootDir}/keystore.jks")
+            storeFile = rootProject.file("secrets/keystore.jks")
             storePassword = getSigningProperties()["STORE_PASSWORD"]
         }
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = true
-            isShrinkResources = true
+            isMinifyEnabled = false
             signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            configure<com.google.firebase.appdistribution.gradle.AppDistributionExtension> {
+                serviceCredentialsFile = "secrets/app-distribution.json"
+                artifactType = "APK"
+                groups = "portto"
+            }
         }
     }
     buildFeatures {
@@ -54,7 +59,7 @@ dependencies {
 fun getSigningProperties(): Map<String, String> {
     val items = HashMap<String, String>()
 
-    val fl = rootProject.file("signing.properties")
+    val fl = rootProject.file("secrets/signing.properties")
 
     fl.exists().let {
         fl.forEachLine {

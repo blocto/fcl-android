@@ -12,6 +12,7 @@ buildscript {
         classpath(libs.kotlin.serialization)
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10")
         classpath ("com.google.gms:google-services:4.3.13")
+        classpath ("com.google.firebase:firebase-appdistribution-gradle:3.0.3")
     }
 }
 
@@ -26,6 +27,7 @@ allprojects {
         google()
         mavenCentral()
         maven("https://jitpack.io") // Required by flow-sdk (java-rlp)
+        maven("https://s01.oss.sonatype.org/content/repositories/staging")
     }
 
     group = project.groupId
