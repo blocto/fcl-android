@@ -13,11 +13,12 @@ setupAppModule {
 
     signingConfigs {
         create("release") {
-            val signingProps = signingProperties
-            keyAlias = signingProps["KEY_ALIAS"]
-            keyPassword = signingProps["KEY_PASSWORD"]
-            storeFile = rootProject.file("secrets/keystore.jks")
-            storePassword = signingProps["STORE_PASSWORD"]
+            signingProperties?.let {
+                keyAlias = it["KEY_ALIAS"]
+                keyPassword = it["KEY_PASSWORD"]
+                storeFile = rootProject.file("secrets/keystore.jks")
+                storePassword = it["STORE_PASSWORD"]
+            }
         }
     }
 

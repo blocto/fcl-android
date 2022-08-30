@@ -29,14 +29,17 @@ val Project.versionCode: Int
             (unit * 10.0.pow(2 * index + 1)).toInt()
         }
 
-val Project.signingProperties: Map<String, String>
-    get() = rootProject.file("secrets/signing.properties").run {
-        val items = HashMap<String, String>()
-        this.forEachLine {
-            val (key, value) = it.split("=")
-            items[key] = value
-        }
-        items
+val Project.signingProperties: Map<String, String>?
+    get() {
+        val file = rootProject.file("secrets/signing.properties")
+        return if (file.exists()) {
+            val items = HashMap<String, String>()
+            file.forEachLine {
+                val (key, value) = it.split("=")
+                items[key] = value
+            }
+            items
+        } else null
     }
 
 
