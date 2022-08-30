@@ -6,6 +6,7 @@ androidx-activity = "1.4.0"
 androidx-compose = "1.1.1"
 androidx-lifecycle = "2.4.1"
 androidx-test = "1.4.0"
+blocto="0.3.0"
 coil = "2.1.0"
 coroutines = "1.6.3"
 koin = "3.2.0"
@@ -37,6 +38,8 @@ androidx-test-core = { module = "androidx.test:core-ktx", version.ref = "android
 androidx-test-junit = "androidx.test.ext:junit-ktx:1.1.3"
 androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidx-test" }
 androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidx-test" }
+
+blocto-sdk-flow = { module = "com.portto.sdk:flow", version.ref = "blocto"}
 
 coil = { module = "io.coil-kt:coil", version.ref = "coil" }
 

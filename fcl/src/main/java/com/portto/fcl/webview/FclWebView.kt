@@ -7,13 +7,13 @@ import android.webkit.WebView
 import androidx.viewbinding.BuildConfig
 
 @SuppressLint("SetJavaScriptEnabled")
-internal class FCLWebView : WebView {
-    private var callback: WebviewCallback? = null
+internal class FclWebView : WebView {
+    private var callback: WebViewCallback? = null
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int)
-      : super(context, attrs, defStyleAttr)
+            : super(context, attrs, defStyleAttr)
 
     init {
         with(settings) {
@@ -26,7 +26,7 @@ internal class FCLWebView : WebView {
         setWebContentsDebuggingEnabled(BuildConfig.DEBUG)
     }
 
-    fun setWebViewCallback(callback: WebviewCallback?) {
+    fun setWebViewCallback(callback: WebViewCallback?) {
         this.callback = callback
     }
 
@@ -56,14 +56,10 @@ internal class FCLWebView : WebView {
         }
     }
 
-    companion object {
-        private val TAG = FCLWebView::class.java.simpleName
+    interface WebViewCallback {
+        fun onScrollChange(scrollY: Int, offset: Int)
+        fun onProgressChange(progress: Float)
+        fun onTitleChange(title: String)
+        fun onPageUrlChange(url: String, isReload: Boolean)
     }
-}
-
-interface WebviewCallback {
-    fun onScrollChange(scrollY: Int, offset: Int)
-    fun onProgressChange(progress: Float)
-    fun onTitleChange(title: String)
-    fun onPageUrlChange(url: String, isReload: Boolean)
 }

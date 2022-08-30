@@ -14,3 +14,6 @@ build
 .idea
 
 # Docs
+
+# app distrubution
+/secrets

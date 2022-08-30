@@ -32,23 +32,24 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        Fcl.init(
-            env = Network.TESTNET,
-            appDetail = AppDetail(),
-            supportedWallets = listOf(
-                Blocto.getInstance(bloctoAppId = BLOCTO_APP_ID, isDebug = true),
-                Dapper,
-            )
-        )
-
         binding.setUpUi()
 
         mainViewModel.bindUi()
     }
 
+    override fun onPause() {
+        super.onPause()
+        binding.root.clearFocus()
+    }
+
     private fun ActivityMainBinding.setUpUi() {
         lifecycleOwner = this@MainActivity
         viewModel = mainViewModel
+
+        binding.toggleButton.check(R.id.btn_testnet)
+        binding.toggleButton.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (isChecked) mainViewModel.setCurrentNetwork(checkedId == R.id.btn_mainnet)
+        }
 
         authCard.apply {
             btnShowAccountProofData.setOnClickListener {
@@ -70,31 +71,36 @@ class MainActivity : AppCompatActivity() {
                 openInExplorer("account/${requireAddress()}")
             }
         }
-
-        queryCard.apply {
-            val queryScript = getQuerySampleScript(Fcl.isMainnet)
-            tvScript.text = queryScript
-            btnSendScript.setOnClickListener { mainViewModel.sendQuery(queryScript) }
-        }
-
-        mutateCard.apply {
-            val mutateScript = getMutateSampleScript(Fcl.isMainnet)
-            tvScript.text = mutateScript
-            btnSendTx.setOnClickListener {
-                val userAddress = mainViewModel.address.value
-                if (userAddress.isNullOrEmpty()) return@setOnClickListener
-                mainViewModel.sendTransaction(mutateScript, userAddress)
-            }
-        }
     }
 
     private fun MainViewModel.bindUi() {
+        isCurrentMainnet.observe(this@MainActivity) {
+            mainViewModel.disconnect()
+            initFcl(it)
+        }
+
+        queryScript.observe(this@MainActivity) { script ->
+            binding.queryCard.tvScript.text = script
+            binding.queryCard.btnSendScript.setOnClickListener {
+                binding.root.hideKeyboard()
+                mainViewModel.sendQuery(script)
+            }
+        }
+
+        mutateScript.observe(this@MainActivity) { script ->
+            binding.mutateCard.tvScript.text = script
+            binding.mutateCard.btnSendTx.setOnClickListener {
+                binding.root.hideKeyboard()
+                val userAddress = mainViewModel.address.value.orEmpty()
+                mainViewModel.sendTransaction(script, userAddress)
+            }
+        }
+
         address.observe(this@MainActivity) { address ->
             binding.authCard.btnConnectWallet.setOnClickListener {
                 if (address == null) it.showMenu(R.menu.menu_connect) { item ->
-                    showConnectWalletDialog(Fcl.config.supportedWallets) { provider ->
+                    showConnectWalletDialog {
                         mainViewModel.connect(
-                            walletProvider = provider,
                             withAccountPoof = item.itemId == R.id.menu_item_authn_with_account_proof
                         )
                     }
@@ -129,4 +135,18 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun initFcl(isMainnet: Boolean) {
+        Fcl.init(
+            env = if (isMainnet) Network.MAINNET else Network.TESTNET,
+            appDetail = AppDetail(),
+            supportedWallets = getWalletList(isMainnet)
+        )
+        binding.coordinator.showSnackbar("Switched to ${if (isMainnet) "mainnet" else "testnet"}")
+    }
+
+    private fun getWalletList(isMainnet: Boolean) = listOf(
+        Blocto.getInstance(if (isMainnet) BLOCTO_MAINNET_APP_ID else BLOCTO_TESTNET_APP_ID),
+        Dapper
+    )
 }
