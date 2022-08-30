@@ -29,6 +29,17 @@ val Project.versionCode: Int
             (unit * 10.0.pow(2 * index + 1)).toInt()
         }
 
+val Project.signingProperties: Map<String, String>
+    get() = rootProject.file("secrets/signing.properties").run {
+        val items = HashMap<String, String>()
+        this.forEachLine {
+            val (key, value) = it.split("=")
+            items[key] = value
+        }
+        items
+    }
+
+
 private fun Project.intProperty(name: String): Int {
     return (property(name) as String).toInt()
 }

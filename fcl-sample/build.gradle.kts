@@ -13,10 +13,11 @@ setupAppModule {
 
     signingConfigs {
         create("release") {
-            keyAlias = getSigningProperties()["KEY_ALIAS"]
-            keyPassword = getSigningProperties()["KEY_PASSWORD"]
+            val signingProps = signingProperties
+            keyAlias = signingProps["KEY_ALIAS"]
+            keyPassword = signingProps["KEY_PASSWORD"]
             storeFile = rootProject.file("secrets/keystore.jks")
-            storePassword = getSigningProperties()["STORE_PASSWORD"]
+            storePassword = signingProps["STORE_PASSWORD"]
         }
     }
 
@@ -53,19 +54,6 @@ dependencies {
     // Lifecycle
     implementation(libs.bundles.lifecycle)
 
+    // Firebase app distribution
     implementation(platform("com.google.firebase:firebase-bom:30.3.1"))
-}
-
-fun getSigningProperties(): Map<String, String> {
-    val items = HashMap<String, String>()
-
-    val fl = rootProject.file("secrets/signing.properties")
-
-    fl.exists().let {
-        fl.forEachLine {
-            val (key, value) = it.split("=")
-            items[key] = value
-        }
-    }
-    return items
 }

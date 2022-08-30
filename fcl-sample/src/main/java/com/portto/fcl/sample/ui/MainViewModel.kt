@@ -5,11 +5,9 @@ import com.nftco.flow.sdk.FlowAddress
 import com.nftco.flow.sdk.FlowArgument
 import com.nftco.flow.sdk.cadence.JsonCadenceBuilder
 import com.portto.fcl.Fcl
-import com.portto.fcl.config.Config
 import com.portto.fcl.model.CompositeSignature
 import com.portto.fcl.model.Result
 import com.portto.fcl.model.authn.AccountProofResolvedData
-import com.portto.fcl.provider.Provider
 import com.portto.fcl.sample.util.FLOW_APP_IDENTIFIER
 import com.portto.fcl.sample.util.FLOW_NONCE
 import com.portto.fcl.sample.util.getMutateSampleScript

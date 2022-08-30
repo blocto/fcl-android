@@ -14,7 +14,7 @@ dependencies {
     api(libs.flow.sdk)
     implementation(libs.androidx.core)
     implementation(libs.androidx.recyclerview)
-    implementation(libs.bundles.blocto)
+    implementation(libs.blocto.sdk.flow)
     implementation(libs.bundles.network)
     implementation(libs.coil)
     implementation(libs.coroutines.android)
