@@ -4,7 +4,7 @@ plugins {
     kotlin("plugin.serialization")
 }
 
-setupLibraryModule {
+setupLibraryModule(publish = true) {
     buildFeatures {
         viewBinding = true
     }
