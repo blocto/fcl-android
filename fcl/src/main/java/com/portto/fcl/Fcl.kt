@@ -26,11 +26,11 @@ object Fcl {
 
     var currentUser: User? = null
 
-    fun init(env: Network, appDetail: AppDetail, supportedWallets: List<Provider>): Config =
+    fun init(env: Network, supportedWallets: List<Provider>, appDetail: AppDetail? = null): Config =
         config.apply {
             put(Env(env))
-            put(App(appDetail))
             put(WalletProviders(supportedWallets))
+            put(App(appDetail))
         }
 
     /**
