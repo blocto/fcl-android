@@ -34,7 +34,12 @@ object Fcl {
         }
 
     /**
-     * Retrieve the information of a user
+     * Retrieve the account address
+     */
+    suspend fun login(): Result<String> = authenticate()
+
+    /**
+     * Retrieve the account address of a user and account proof if data is provided
      * @param accountProofData data to prove the ownership of a Flow account
      * @return Account address
      */
