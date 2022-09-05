@@ -1,8 +1,8 @@
 package com.portto.fcl
 
-
 import com.nftco.flow.sdk.FlowAddress
 import com.nftco.flow.sdk.FlowArgument
+import com.nftco.flow.sdk.FlowTransactionResult
 import com.nftco.flow.sdk.cadence.Field
 import com.portto.fcl.config.AppDetail
 import com.portto.fcl.config.Config
@@ -26,15 +26,20 @@ object Fcl {
 
     var currentUser: User? = null
 
-    fun init(env: Network, appDetail: AppDetail, supportedWallets: List<Provider>): Config =
+    fun init(env: Network, supportedWallets: List<Provider>, appDetail: AppDetail? = null): Config =
         config.apply {
             put(Env(env))
-            put(App(appDetail))
             put(WalletProviders(supportedWallets))
+            put(App(appDetail))
         }
 
     /**
-     * Retrieve the information of a user
+     * Retrieve the account address
+     */
+    suspend fun login(): Result<String> = authenticate()
+
+    /**
+     * Retrieve the account address of a user and account proof if data is provided
      * @param accountProofData data to prove the ownership of a Flow account
      * @return Account address
      */
@@ -144,4 +149,11 @@ object Fcl {
     } catch (e: Exception) {
         Result.Failure(e)
     }
+
+    /**
+     * Get current transaction status by specified [transactionId]
+     * @param transactionId A hash string represents the transaction
+     */
+    suspend fun getTransactionStatus(transactionId: String): FlowTransactionResult? =
+        AppUtils.getTransactionStatus(transactionId)
 }

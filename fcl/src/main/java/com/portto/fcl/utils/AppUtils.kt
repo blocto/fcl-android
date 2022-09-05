@@ -100,6 +100,9 @@ object AppUtils {
         flowApi.getLatestBlock(true)
     }
 
+    internal suspend fun getTransactionStatus(txId: String): FlowTransactionResult? =
+        withContext(Dispatchers.IO) { flowApi.getTransactionResultById(FlowId(txId)) }
+
     private fun getAccountProofContactAddress(network: Network): String = when (network) {
         Network.TESTNET -> "0x74daa6f9c7ef24b1"
         Network.MAINNET -> "0xb4b82a1c9d21d284"
