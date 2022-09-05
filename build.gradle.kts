@@ -10,7 +10,8 @@ buildscript {
         classpath(libs.gradlePlugin.kotlin)
         classpath(libs.gradlePlugin.mavenPublish)
         classpath(libs.kotlin.serialization)
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10")
+
+        // App distribution
         classpath ("com.google.gms:google-services:4.3.13")
         classpath ("com.google.firebase:firebase-appdistribution-gradle:3.0.3")
     }
