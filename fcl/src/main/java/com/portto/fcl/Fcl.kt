@@ -1,8 +1,8 @@
 package com.portto.fcl
 
-
 import com.nftco.flow.sdk.FlowAddress
 import com.nftco.flow.sdk.FlowArgument
+import com.nftco.flow.sdk.FlowTransactionResult
 import com.nftco.flow.sdk.cadence.Field
 import com.portto.fcl.config.AppDetail
 import com.portto.fcl.config.Config
@@ -149,4 +149,11 @@ object Fcl {
     } catch (e: Exception) {
         Result.Failure(e)
     }
+
+    /**
+     * Get current transaction status by specified [transactionId]
+     * @param transactionId A hash string represents the transaction
+     */
+    suspend fun getTransactionStatus(transactionId: String): FlowTransactionResult? =
+        AppUtils.getTransactionStatus(transactionId)
 }
