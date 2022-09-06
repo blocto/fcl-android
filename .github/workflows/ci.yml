@@ -29,7 +29,7 @@ jobs:
         run: echo "$DATA" | base64 -d > ./fcl-sample/google-services.json
 
       - name: Build the app
-        run: ./gradlew build
+        run: ./gradlew clean assembleDebug
 
   unit-tests:
     name: Unit tests
@@ -48,6 +48,11 @@ jobs:
             ~/.gradle/caches
             ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/**.gradle.kts', '**/gradle/wrapper/gradle-wrapper.properties', '**/libs.versions.toml') }}
-        
+
+      - name: Put data
+        env:
+          DATA: ${{ secrets.GOOGLE_SERVICES }}
+        run: echo "$DATA" | base64 -d > ./fcl-sample/google-services.json
+
       - name: Unit tests
         run: ./gradlew testDebugUnitTest
