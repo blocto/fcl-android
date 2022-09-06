@@ -22,6 +22,12 @@ jobs:
             ~/.gradle/caches
             ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/**.gradle.kts', '**/gradle/wrapper/gradle-wrapper.properties', '**/libs.versions.toml') }}
+
+      - name: Put data
+        env:
+          DATA: ${{ secrets.GOOGLE_SERVICES }}
+        run: echo $DATA > /home/runner/work/fcl-android/fcl-sample/app/google-services.json
+
       - name: Build the app
         run: ./gradlew build
 
