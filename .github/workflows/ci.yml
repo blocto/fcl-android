@@ -61,7 +61,7 @@ jobs:
     name: Publish
     runs-on: ubuntu-latest
     timeout-minutes: 10
-#    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main'
     needs: [ build, unit-tests ]
     steps:
       - uses: actions/checkout@v3
