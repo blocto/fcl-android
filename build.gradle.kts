@@ -1,4 +1,6 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+import com.vanniktech.maven.publish.MavenPublishBaseExtension
+import com.vanniktech.maven.publish.SonatypeHost.S01
 
 buildscript {
     repositories {
@@ -12,8 +14,8 @@ buildscript {
         classpath(libs.kotlin.serialization)
 
         // App distribution
-        classpath ("com.google.gms:google-services:4.3.13")
-        classpath ("com.google.firebase:firebase-appdistribution-gradle:3.0.3")
+        classpath("com.google.gms:google-services:4.3.13")
+        classpath("com.google.firebase:firebase-appdistribution-gradle:3.0.3")
     }
 }
 
@@ -33,4 +35,15 @@ allprojects {
 
     group = project.groupId
     version = project.versionName
+
+    plugins.withId("com.vanniktech.maven.publish.base") {
+        group = project.groupId
+        version = project.versionName
+
+        extensions.configure<MavenPublishBaseExtension> {
+            publishToMavenCentral(S01)
+            signAllPublications()
+            pomFromGradleProperties()
+        }
+    }
 }

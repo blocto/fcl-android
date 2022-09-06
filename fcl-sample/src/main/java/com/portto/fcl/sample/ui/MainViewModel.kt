@@ -139,7 +139,11 @@ class MainViewModel : ViewModel() {
 
     fun sendTransaction(script: String, userAddress: String) {
         viewModelScope.launch {
-            val value = txInputValue.value ?: return@launch
+            val value = txInputValue.value?.toDoubleOrNull()
+            if (value == null) {
+                _message.value = "Invalid input"
+                return@launch
+            }
             val args = listOf(FlowArgument(JsonCadenceBuilder().ufix64(value)))
             when (val result = Fcl.mutate(
                 cadence = script, arguments = args, limit = 300u,
