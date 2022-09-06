@@ -184,6 +184,24 @@ Blockchain Interactions
 
 [Learn more about on-chain interactions][4]
 
+### Utilities
+- Get account details from any Flow address
+```kotlin
+// suspending function
+val account: FlowAccount = AppUtils.getAccount(address)
+```
+- Get the latest block
+```kotlin
+// suspending function
+val latestBlock: FlowBlock = AppUtils.getLatestBlock()
+```
+- Get transaction status
+```kotlin
+// suspending function
+val result = Fcl.getTransactionStatus(transactionId)
+```
+
+
 Support
 -------
 Discuss FCL with the community on the [forum][5].

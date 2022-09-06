@@ -91,12 +91,12 @@ object AppUtils {
         }
     }
 
-    internal suspend fun getAccount(address: String): FlowAccount = withContext(Dispatchers.IO) {
+    suspend fun getAccount(address: String): FlowAccount = withContext(Dispatchers.IO) {
         flowApi.getAccountAtLatestBlock(FlowAddress(address))
             ?: throw  FclError.AccountNotFoundException()
     }
 
-    internal suspend fun getLatestBlock(): FlowBlock = withContext(Dispatchers.IO) {
+    suspend fun getLatestBlock(): FlowBlock = withContext(Dispatchers.IO) {
         flowApi.getLatestBlock(true)
     }
 
