@@ -26,7 +26,7 @@ jobs:
       - name: Put data
         env:
           DATA: ${{ secrets.GOOGLE_SERVICES }}
-        run: echo $DATA | base64 -d > /fcl-android/fcl-sample/app/google-services.json
+        run: echo "$DATA" | base64 -d > ./fcl-sample/app/google-services.json
 
       - name: Build the app
         run: ./gradlew build
