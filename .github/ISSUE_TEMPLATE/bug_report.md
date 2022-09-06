@@ -2,7 +2,7 @@
 name: Bug report
 about: A reproducible problem.
 title: ''
-labels: ''
+labels: bug
 assignees: Doge-is-Dope
 ---
 
