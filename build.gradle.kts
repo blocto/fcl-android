@@ -19,10 +19,21 @@ buildscript {
     }
 }
 
+@Suppress("DSL_SCOPE_VIOLATION", "UnstableApiUsage")
+plugins {
+    alias(libs.plugins.ktlint)
+}
+
 tasks {
     register("clean", Delete::class) {
         delete(rootProject.buildDir)
     }
+}
+
+tasks.register<org.jmailen.gradle.kotlinter.tasks.FormatTask>("ktFormat") {
+    group = "formatting"
+    source(files("src"))
+    report.set(file("build/format-report.txt"))
 }
 
 allprojects {
@@ -35,6 +46,21 @@ allprojects {
 
     group = project.groupId
     version = project.versionName
+
+    apply(plugin = "org.jmailen.kotlinter")
+
+    kotlinter {
+        disabledRules = arrayOf(
+            "annotation",
+            "argument-list-wrapping",
+            "filename",
+            "indent",
+            "max-line-length",
+            "parameter-list-wrapping",
+            "spacing-between-declarations-with-annotations",
+            "wrapping",
+        )
+    }
 
     plugins.withId("com.vanniktech.maven.publish.base") {
         group = project.groupId

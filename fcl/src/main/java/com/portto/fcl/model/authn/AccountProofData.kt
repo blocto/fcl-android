@@ -2,7 +2,6 @@ package com.portto.fcl.model.authn
 
 import com.portto.fcl.model.CompositeSignature
 
-
 /**
  * The data to prove the ownership of a Flow account
  *

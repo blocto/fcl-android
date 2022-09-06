@@ -1,6 +1,13 @@
 package com.portto.fcl.model.signable
 
-import com.nftco.flow.sdk.*
+import com.nftco.flow.sdk.FlowAddress
+import com.nftco.flow.sdk.FlowArgument
+import com.nftco.flow.sdk.FlowId
+import com.nftco.flow.sdk.FlowScript
+import com.nftco.flow.sdk.FlowSignature
+import com.nftco.flow.sdk.FlowTransaction
+import com.nftco.flow.sdk.FlowTransactionProposalKey
+import com.nftco.flow.sdk.flowTransaction
 import com.portto.fcl.utils.AppUtils.flowApi
 import com.portto.fcl.utils.sansPrefix
 import kotlinx.serialization.SerialName
@@ -90,11 +97,9 @@ data class Interaction(
     }
 }
 
-
 fun Interaction.toFlowTransaction(): FlowTransaction {
     val ix = this
     val propKey = createFlowProposalKey()
-
 
     val payerAccount = payer
 
@@ -103,7 +108,6 @@ fun Interaction.toFlowTransaction(): FlowTransaction {
     val insideSigners = findInsideSigners()
 
     val outsideSigners = findOutsideSigners()
-
 
     return flowTransaction {
         script(FlowScript(message.cadence.orEmpty()))
@@ -119,8 +123,6 @@ fun Interaction.toFlowTransaction(): FlowTransaction {
         payerAddress = FlowAddress(payer)
         authorizers = authorizations.mapNotNull { accounts[it]?.address }
             .distinct().map { FlowAddress(it) }
-
-
 
         addPayloadSignatures {
             insideSigners.forEach { tempID ->

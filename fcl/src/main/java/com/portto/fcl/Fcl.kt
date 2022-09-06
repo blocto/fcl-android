@@ -6,7 +6,9 @@ import com.nftco.flow.sdk.FlowTransactionResult
 import com.nftco.flow.sdk.cadence.Field
 import com.portto.fcl.config.AppDetail
 import com.portto.fcl.config.Config
-import com.portto.fcl.config.Config.Option.*
+import com.portto.fcl.config.Config.Option.App
+import com.portto.fcl.config.Config.Option.Env
+import com.portto.fcl.config.Config.Option.WalletProviders
 import com.portto.fcl.config.Network
 import com.portto.fcl.model.CompositeSignature
 import com.portto.fcl.model.Result

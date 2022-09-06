@@ -38,8 +38,9 @@ internal object BloctoWebMethod : BloctoMethod {
 
         val signatures = accountProofService?.data?.signatures
 
-        if (accountProofData != null && signatures.isNullOrEmpty())
+        if (accountProofData != null && signatures.isNullOrEmpty()) {
             throw FclError.SignaturesNotFoundException()
+        }
 
         Fcl.currentUser = User(
             address = authData.address ?: throw FclError.AccountNotFoundException(),

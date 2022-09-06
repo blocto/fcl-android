@@ -14,7 +14,15 @@ import com.portto.fcl.provider.blocto.Blocto
 import com.portto.fcl.provider.dapper.Dapper
 import com.portto.fcl.sample.R
 import com.portto.fcl.sample.databinding.ActivityMainBinding
-import com.portto.fcl.sample.util.*
+import com.portto.fcl.sample.util.BLOCTO_MAINNET_APP_ID
+import com.portto.fcl.sample.util.BLOCTO_TESTNET_APP_ID
+import com.portto.fcl.sample.util.copyToClipboard
+import com.portto.fcl.sample.util.hideKeyboard
+import com.portto.fcl.sample.util.mapToString
+import com.portto.fcl.sample.util.openInExplorer
+import com.portto.fcl.sample.util.showDialog
+import com.portto.fcl.sample.util.showMenu
+import com.portto.fcl.sample.util.showSnackbar
 import com.portto.fcl.ui.discovery.showConnectWalletDialog
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel

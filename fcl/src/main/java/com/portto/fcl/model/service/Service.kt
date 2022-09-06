@@ -1,6 +1,5 @@
 package com.portto.fcl.model.service
 
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
