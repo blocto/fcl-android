@@ -222,7 +222,8 @@ val result = Fcl.getTransactionStatus(transactionId)
 
 Support
 -------
-Discuss FCL with the community on the [forum][5].
+To report a specific problem or feature request, [open a new issue on Github][8]. For questions,
+suggestions, or anything else, feel free to join FCL-Android's [Discussion][9].
 
 License
 -------
@@ -241,3 +242,7 @@ See the [LICENSE][6] file for details.
 [6]: https://github.com/portto/fcl-android/blob/main/LICENSE
 
 [7]: https://docs.blocto.app/blocto-sdk/android-sdk/flow
+
+[8]: https://github.com/portto/fcl-android/issues/new/choose
+
+[9]: https://github.com/portto/fcl-android/discussions
