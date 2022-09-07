@@ -9,6 +9,7 @@ on Flow and their users without any custom integrations or changes needed to the
 
 Requirements
 -------
+
 - Min SDK 21+
 
 Download
@@ -21,6 +22,16 @@ implementation("com.portto.fcl:fcl:x.y.z")
 
 Initialization
 -------
+Add FCL content provider to `AndroidManifest.xml`.
+
+```xml
+
+<application>
+    <provider android:authorities="com.portto.fcl.context"
+        android:name="com.portto.fcl.lifecycle.FCLContentProvider" android:exported="false" />
+</application>
+```
+
 To initialize FCL, use the following function:
 
 ```kotlin
@@ -165,6 +176,7 @@ when (val result = Fcl.signUserMessage(message)) {
 
 Verify user signatures
 -------
+
 ```kotlin
 when (val result = Fcl.verifyUserSignatures(userMessage, userSignatures)) {
     is Result.Success -> {
@@ -178,6 +190,7 @@ when (val result = Fcl.verifyUserSignatures(userMessage, userSignatures)) {
 
 Blockchain Interactions
 -------
+
 - `Fcl.query()`: Send arbitrary Cadence scripts to the chain and receive back decoded values
 - `Fcl.mutate()`: Send arbitrary transactions with your own signatures or via a user's wallet to
   perform state changes on chain
@@ -185,22 +198,27 @@ Blockchain Interactions
 [Learn more about on-chain interactions][4]
 
 ### Utilities
+
 - Get account details from any Flow address
+
 ```kotlin
 // suspending function
 val account: FlowAccount = AppUtils.getAccount(address)
 ```
+
 - Get the latest block
+
 ```kotlin
 // suspending function
 val latestBlock: FlowBlock = AppUtils.getLatestBlock()
 ```
+
 - Get transaction status
+
 ```kotlin
 // suspending function
 val result = Fcl.getTransactionStatus(transactionId)
 ```
-
 
 Support
 -------
@@ -209,10 +227,15 @@ Discuss FCL with the community on the [forum][5].
 License
 -------
 See the [LICENSE][6] file for details.
-    
+
 [1]: https://portto.com
+
 [2]: https://www.meetdapper.com
+
 [3]: https://developers.flow.com/tools/fcl-js/reference/proving-authentication#authenticating-a-user-using-account-proof
+
 [4]: https://docs.onflow.org/fcl/reference/api/#on-chain-interactions
+
 [5]: https://forum.onflow.org/c/developer-tools/flow-fcl/22
+
 [6]: https://github.com/portto/fcl-android/blob/main/LICENSE
