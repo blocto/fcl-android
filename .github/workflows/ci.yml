@@ -90,4 +90,4 @@ jobs:
           DATA: ${{ secrets.GOOGLE_SERVICES }}
         run: echo "$DATA" | base64 -d > ./fcl-sample/google-services.json
       - name: Build debug
-        run: ./gradlew clean assembleDebug
+        run: ./gradlew clean assembleDebug --stacktrace
