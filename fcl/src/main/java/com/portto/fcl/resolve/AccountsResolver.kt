@@ -5,7 +5,11 @@ import com.portto.fcl.model.AuthData
 import com.portto.fcl.model.PollingResponse
 import com.portto.fcl.model.service.Service
 import com.portto.fcl.model.service.ServiceType
-import com.portto.fcl.model.signable.*
+import com.portto.fcl.model.signable.Interaction
+import com.portto.fcl.model.signable.Roles
+import com.portto.fcl.model.signable.SignableUser
+import com.portto.fcl.model.signable.buildPreSignable
+import com.portto.fcl.model.signable.isTransaction
 import com.portto.fcl.network.execHttpPost
 import com.portto.fcl.utils.FclError
 import com.portto.fcl.utils.toDataClass

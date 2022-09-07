@@ -4,9 +4,13 @@ on:
     branches: [ "main" ]
   pull_request:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  build:
-    name: Build
+  checks:
+    name: Run checks
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -28,11 +32,17 @@ jobs:
           DATA: ${{ secrets.GOOGLE_SERVICES }}
         run: echo "$DATA" | base64 -d > ./fcl-sample/google-services.json
 
-      - name: Build the app
-        run: ./gradlew clean assembleDebug
+      - name: Check Gradle wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Check style
+        run: ./gradlew lintKotlin
+
+      - name: Check lint
+        run: ./gradlew lint
 
   unit-tests:
-    name: Unit tests
+    name: Run unit tests
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -54,5 +64,30 @@ jobs:
           DATA: ${{ secrets.GOOGLE_SERVICES }}
         run: echo "$DATA" | base64 -d > ./fcl-sample/google-services.json
 
-      - name: Unit tests
+      - name: Run unit tests
         run: ./gradlew testDebugUnitTest
+
+  build:
+    name: Build Debug
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [ checks, unit-tests ]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: 17
+      - run: ./ci_clear_gradle_cache.sh
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/**.gradle.kts', '**/gradle/wrapper/gradle-wrapper.properties', '**/libs.versions.toml') }}
+      - name: Put data
+        env:
+          DATA: ${{ secrets.GOOGLE_SERVICES }}
+        run: echo "$DATA" | base64 -d > ./fcl-sample/google-services.json
+      - name: Build debug
+        run: ./gradlew clean assembleDebug --stacktrace

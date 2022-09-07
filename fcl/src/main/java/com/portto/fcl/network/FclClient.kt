@@ -41,7 +41,6 @@ internal object FclClient {
         .baseUrl(url ?: "https://localhost")
         .build()
 
-
     val authService: AuthService by lazy {
         retrofit().create(AuthService::class.java)
     }

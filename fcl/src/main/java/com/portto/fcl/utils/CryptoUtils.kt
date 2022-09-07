@@ -1,6 +1,5 @@
 package com.portto.fcl.utils
 
-
 /**
  * Remove prefix from the address
  */

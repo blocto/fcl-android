@@ -19,11 +19,9 @@ internal suspend fun execHttpPost(
     params: Map<String, String>? = mapOf(),
     data: JsonObject? = null
 ): PollingResponse {
-
     val response = if (data == null) {
         authService.executePost(url, params)
     } else authService.executePost(url, params, data)
-
 
     when (response.status) {
         ResponseStatus.APPROVED -> WebViewActivity.close()

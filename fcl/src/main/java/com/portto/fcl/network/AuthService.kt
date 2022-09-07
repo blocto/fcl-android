@@ -2,7 +2,11 @@ package com.portto.fcl.network
 
 import com.portto.fcl.model.PollingResponse
 import kotlinx.serialization.json.JsonObject
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.QueryMap
+import retrofit2.http.Url
 
 internal interface AuthService {
 

@@ -1,14 +1,24 @@
 package com.portto.fcl.utils
 
-import com.nftco.flow.sdk.*
-import com.nftco.flow.sdk.cadence.*
+import com.nftco.flow.sdk.Flow
+import com.nftco.flow.sdk.FlowAccount
+import com.nftco.flow.sdk.FlowAddress
+import com.nftco.flow.sdk.FlowBlock
+import com.nftco.flow.sdk.FlowId
+import com.nftco.flow.sdk.FlowTransactionResult
+import com.nftco.flow.sdk.bytesToHex
+import com.nftco.flow.sdk.cadence.AddressField
+import com.nftco.flow.sdk.cadence.ArrayField
+import com.nftco.flow.sdk.cadence.Field
+import com.nftco.flow.sdk.cadence.IntNumberField
+import com.nftco.flow.sdk.cadence.StringField
+import com.nftco.flow.sdk.simpleFlowScript
 import com.portto.fcl.Fcl
 import com.portto.fcl.config.Network
 import com.portto.fcl.model.CompositeSignature
 import com.portto.fcl.model.authn.AccountProofData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-
 
 object AppUtils {
     private const val FLOW_MAINNET_ENDPOINT = "access.mainnet.nodes.onflow.org"
@@ -91,12 +101,12 @@ object AppUtils {
         }
     }
 
-    internal suspend fun getAccount(address: String): FlowAccount = withContext(Dispatchers.IO) {
+    suspend fun getAccount(address: String): FlowAccount = withContext(Dispatchers.IO) {
         flowApi.getAccountAtLatestBlock(FlowAddress(address))
-            ?: throw  FclError.AccountNotFoundException()
+            ?: throw FclError.AccountNotFoundException()
     }
 
-    internal suspend fun getLatestBlock(): FlowBlock = withContext(Dispatchers.IO) {
+    suspend fun getLatestBlock(): FlowBlock = withContext(Dispatchers.IO) {
         flowApi.getLatestBlock(true)
     }
 

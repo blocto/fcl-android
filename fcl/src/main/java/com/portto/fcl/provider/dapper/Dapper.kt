@@ -8,7 +8,11 @@ import com.portto.fcl.model.CompositeSignature
 import com.portto.fcl.model.User
 import com.portto.fcl.model.authn.AccountProofResolvedData
 import com.portto.fcl.network.execHttpPost
-import com.portto.fcl.provider.*
+import com.portto.fcl.provider.PROVIDER_DAPPER_DESC
+import com.portto.fcl.provider.PROVIDER_DAPPER_ICON
+import com.portto.fcl.provider.PROVIDER_DAPPER_ID
+import com.portto.fcl.provider.PROVIDER_DAPPER_TITLE
+import com.portto.fcl.provider.Provider
 import com.portto.fcl.provider.Provider.ProviderInfo
 import com.portto.fcl.utils.FclError
 import com.portto.fcl.utils.toDataClass

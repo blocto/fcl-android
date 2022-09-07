@@ -8,7 +8,11 @@ import com.portto.fcl.Fcl
 import com.portto.fcl.lifecycle.LifecycleObserver.Companion.requireContext
 import com.portto.fcl.model.User
 import com.portto.fcl.model.authn.AccountProofResolvedData
-import com.portto.fcl.provider.*
+import com.portto.fcl.provider.PROVIDER_BLOCTO_DESC
+import com.portto.fcl.provider.PROVIDER_BLOCTO_ICON
+import com.portto.fcl.provider.PROVIDER_BLOCTO_ID
+import com.portto.fcl.provider.PROVIDER_BLOCTO_TITLE
+import com.portto.fcl.provider.Provider
 import com.portto.fcl.provider.Provider.ProviderInfo
 import com.portto.fcl.provider.blocto.native.BloctoNativeMethod
 import com.portto.fcl.provider.blocto.web.BloctoWebMethod

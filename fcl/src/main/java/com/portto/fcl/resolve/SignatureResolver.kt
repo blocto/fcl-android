@@ -3,14 +3,19 @@ package com.portto.fcl.resolve
 import com.nftco.flow.sdk.DomainTag
 import com.nftco.flow.sdk.bytesToHex
 import com.portto.fcl.model.AuthData
-import com.portto.fcl.model.signable.*
+import com.portto.fcl.model.signable.Interaction
+import com.portto.fcl.model.signable.Signable
+import com.portto.fcl.model.signable.SignableUser
+import com.portto.fcl.model.signable.findInsideSigners
+import com.portto.fcl.model.signable.findOutsideSigners
+import com.portto.fcl.model.signable.generateVoucher
+import com.portto.fcl.model.signable.toFlowTransaction
 import com.portto.fcl.utils.toDataClass
 import com.portto.fcl.utils.toJsonObject
 
 internal class SignatureResolver : Resolver {
 
     override suspend fun resolve(ix: Interaction) {
-
         if (ix.tag != Interaction.Tag.TRANSACTION) throw Error("Interaction tag error")
 
         val insideSigners = ix.findInsideSigners()
