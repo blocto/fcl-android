@@ -59,6 +59,7 @@ jobs:
     name: Distribute sample app
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    needs: [ publish ]
     if: ${{ github.event.inputs.releaseAppDistribution }}
     steps:
       - uses: actions/checkout@v3
