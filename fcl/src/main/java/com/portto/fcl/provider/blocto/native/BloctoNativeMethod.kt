@@ -71,7 +71,7 @@ internal object BloctoNativeMethod : BloctoMethod {
             BloctoSDK.flow.signUserMessage(
                 context = context,
                 address = userAddress,
-                message = message.trim(),
+                message = message,
                 onSuccess = successCallback,
                 onError = failureCallback,
             )
