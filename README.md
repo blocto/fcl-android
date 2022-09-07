@@ -62,7 +62,7 @@ listOf(Blocto.getInstance(BLOCTO_TESTNET_APP_ID), Dapper)
 
 ### Current Wallet Providers
 
-- [Blocto][1] (Fully supported)
+- [Blocto][1] (Fully supported) [Doc][7]
 - [Dapper Wallet][2] (Support only authn for now)
 
 Once you've initialized FCL, you may use Discovery directly from `Discovery UI` or `Config`.
@@ -239,3 +239,5 @@ See the [LICENSE][6] file for details.
 [5]: https://forum.onflow.org/c/developer-tools/flow-fcl/22
 
 [6]: https://github.com/portto/fcl-android/blob/main/LICENSE
+
+[7]: https://docs.blocto.app/blocto-sdk/android-sdk/flow
