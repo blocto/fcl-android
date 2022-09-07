@@ -84,8 +84,9 @@ jobs:
           KEY_ALIAS: ${{ secrets.SAMPLE_APP_KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.SAMPLE_APP_KEY_PASSWORD }}
           APP_DISTRIBUTION: ${{ secrets.SAMPLE_APP_DISTRIBUTION }}
+          GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
         run: |
-          echo "Adding files ✍️"
+          echo "Adding files"
           TMP_SECRETS_PATH=secrets
           mkdir ${TMP_SECRETS_PATH}
           echo $KEYSTORE | base64 -d > "${TMP_SECRETS_PATH}"/keystore.jks
@@ -93,6 +94,7 @@ jobs:
           echo "KEY_ALIAS=${KEY_ALIAS}" >>  "${TMP_SECRETS_PATH}"/signing.properties
           echo "KEY_PASSWORD=${KEY_PASSWORD}" >>  "${TMP_SECRETS_PATH}"/signing.properties
           echo $APP_DISTRIBUTION >  "${TMP_SECRETS_PATH}"/app-distribution.json
+          echo "GOOGLE_SERVICES" | base64 -d > ./fcl-sample/google-services.json
           echo "All files Added ✅"
 
       - name: Release app
