@@ -94,7 +94,7 @@ jobs:
           echo "KEY_ALIAS=${KEY_ALIAS}" >>  "${TMP_SECRETS_PATH}"/signing.properties
           echo "KEY_PASSWORD=${KEY_PASSWORD}" >>  "${TMP_SECRETS_PATH}"/signing.properties
           echo $APP_DISTRIBUTION >  "${TMP_SECRETS_PATH}"/app-distribution.json
-          echo "GOOGLE_SERVICES" | base64 -d > ./fcl-sample/google-services.json
+          echo "$GOOGLE_SERVICES" | base64 -d > ./fcl-sample/google-services.json
           echo "All files Added ✅"
 
       - name: Release app
