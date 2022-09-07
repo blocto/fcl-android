@@ -1,6 +1,6 @@
 # FCL
 
-![Maven Central](https://img.shields.io/maven-central/v/com.portto.fcl/fcl)
+![Maven Central](https://img.shields.io/maven-central/v/com.portto.fcl/fcl?color=%230075FF&label=maven%20central)
 ![Github Action](https://github.com/portto/fcl-android/actions/workflows/ci.yml/badge.svg)
 
 The Flow Client Library (FCL) is a package used to interact with user wallets and the Flow
