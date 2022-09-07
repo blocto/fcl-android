@@ -1,6 +1,6 @@
 # FCL
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.portto.fcl/fcl/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/com.portto.fcl/fcl)
+![Maven Central](https://img.shields.io/maven-central/v/com.portto.fcl/fcl?color=%230075FF&label=maven%20central)
 ![Github Action](https://github.com/portto/fcl-android/actions/workflows/ci.yml/badge.svg)
 
 The Flow Client Library (FCL) is a package used to interact with user wallets and the Flow
@@ -62,7 +62,7 @@ listOf(Blocto.getInstance(BLOCTO_TESTNET_APP_ID), Dapper)
 
 ### Current Wallet Providers
 
-- [Blocto][1] (Fully supported)
+- [Blocto][1] (Fully supported) [Doc][7]
 - [Dapper Wallet][2] (Support only authn for now)
 
 Once you've initialized FCL, you may use Discovery directly from `Discovery UI` or `Config`.
@@ -239,3 +239,5 @@ See the [LICENSE][6] file for details.
 [5]: https://forum.onflow.org/c/developer-tools/flow-fcl/22
 
 [6]: https://github.com/portto/fcl-android/blob/main/LICENSE
+
+[7]: https://docs.blocto.app/blocto-sdk/android-sdk/flow
