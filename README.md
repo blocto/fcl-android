@@ -20,6 +20,9 @@ In `build.gradle` of app module, include this dependency
 implementation("com.portto.fcl:fcl:x.y.z")
 ```
 
+> Add `maven("https://jitpack.io")` or `maven { url 'https://jitpack.io' }` to your
+> project's `build.gradle` if you haven't. This is required by [flow-jvm-sdk][10].
+
 Initialization
 -------
 Add FCL content provider to `AndroidManifest.xml`.
@@ -246,3 +249,5 @@ See the [LICENSE][6] file for details.
 [8]: https://github.com/portto/fcl-android/issues/new/choose
 
 [9]: https://github.com/portto/fcl-android/discussions
+
+[10]: https://github.com/onflow/flow-jvm-sdk#gradle
