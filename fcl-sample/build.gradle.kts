@@ -56,5 +56,5 @@ dependencies {
     implementation(libs.bundles.lifecycle)
 
     // Firebase app distribution
-    implementation(platform("com.google.firebase:firebase-bom:30.3.1"))
+    implementation(platform("com.google.firebase:firebase-bom:30.5.0"))
 }
