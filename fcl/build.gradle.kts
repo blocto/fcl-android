@@ -4,7 +4,7 @@ plugins {
     kotlin("plugin.serialization")
 }
 
-setupLibraryModule(publish = true, document = false) {
+setupLibraryModule(name = "com.portto.fcl", publish = true, document = false) {
     buildFeatures {
         viewBinding = true
     }
