@@ -6,7 +6,7 @@ plugins {
     kotlin("kapt")
 }
 
-setupAppModule {
+setupAppModule(name = "com.portto.fcl.sample") {
     defaultConfig {
         applicationId = "com.portto.fcl.sample"
     }
