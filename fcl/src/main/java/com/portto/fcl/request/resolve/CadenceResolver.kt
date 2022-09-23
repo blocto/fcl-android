@@ -4,7 +4,6 @@ import com.portto.fcl.Fcl
 import com.portto.fcl.model.signable.Interaction
 import com.portto.fcl.model.signable.isScript
 import com.portto.fcl.model.signable.isTransaction
-import com.portto.fcl.utils.FclError
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
