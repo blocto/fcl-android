@@ -1,5 +1,6 @@
 package com.portto.fcl.config
 
+import com.portto.fcl.model.Replacement
 import com.portto.fcl.provider.Provider
 
 /**
@@ -19,11 +20,7 @@ object Config {
     var selectedWalletProvider: Provider? = null
         private set
 
-    /**
-     * key: substitute used to replace address
-     * value: the address
-     */
-    var addressReplacement: Map<String, String> = emptyMap()
+    var addressReplacement: List<Replacement> = emptyList()
         private set
 
     fun put(option: Option): Config = apply {
@@ -46,7 +43,7 @@ object Config {
         appDetail = null
         supportedWallets = emptyList()
         selectedWalletProvider = null
-        addressReplacement = emptyMap()
+        addressReplacement = emptyList()
     }
 
     sealed class Option {
@@ -54,6 +51,6 @@ object Config {
         class App(val value: AppDetail?) : Option()
         class WalletProviders(val value: List<Provider>) : Option()
         class SelectedWalletProvider(val value: Provider) : Option()
-        class AddressReplacement(val value: Map<String, String>) : Option()
+        class AddressReplacement(val value: List<Replacement>) : Option()
     }
 }
