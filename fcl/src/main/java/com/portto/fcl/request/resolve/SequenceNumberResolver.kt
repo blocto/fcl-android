@@ -1,4 +1,4 @@
-package com.portto.fcl.resolve
+package com.portto.fcl.request.resolve
 
 import com.nftco.flow.sdk.FlowAddress
 import com.portto.fcl.model.signable.Interaction
