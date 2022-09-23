@@ -22,8 +22,9 @@ internal class CadenceResolver : Resolver {
         suspend fun String.replaceAddress(): String = withContext(Dispatchers.Default) {
             var cadence = this@replaceAddress
             Fcl.config.addressReplacement.forEach { replacement ->
-                if (!replacement.address.startsWith("0x"))
+                if (!replacement.address.startsWith("0x")) {
                     throw Exception("Invalid address format: ${replacement.address}")
+                }
                 cadence = cadence.replace(replacement.placeholder, replacement.address)
             }
             return@withContext cadence
