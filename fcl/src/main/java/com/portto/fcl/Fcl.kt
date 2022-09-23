@@ -16,6 +16,7 @@ import com.portto.fcl.model.User
 import com.portto.fcl.model.authn.AccountProofData
 import com.portto.fcl.model.authn.AccountProofResolvedData
 import com.portto.fcl.provider.Provider
+import com.portto.fcl.request.resolve.CadenceResolver.Companion.replaceAddress
 import com.portto.fcl.utils.AppUtils
 import com.portto.fcl.utils.FclError
 
@@ -119,7 +120,7 @@ object Fcl {
      * @return Cadence response Value from Flow contract
      */
     suspend fun query(cadence: String, arguments: List<Field<*>>? = null): Result<Any?> = try {
-        Result.Success(AppUtils.query(cadence, arguments).value)
+        Result.Success(AppUtils.query(cadence.replaceAddress(), arguments).value)
     } catch (e: Exception) {
         Result.Failure(e)
     }
@@ -142,7 +143,7 @@ object Fcl {
             ?: throw FclError.UnspecifiedWalletProviderException()
         Result.Success(
             selectedProvider.mutate(
-                cadence = cadence,
+                cadence = cadence.replaceAddress(),
                 args = arguments ?: emptyList(),
                 limit = limit,
                 authorizers = authorizers

@@ -19,6 +19,13 @@ object Config {
     var selectedWalletProvider: Provider? = null
         private set
 
+    /**
+     * key: substitute used to replace address
+     * value: the address
+     */
+    var addressReplacement: Map<String, String> = emptyMap()
+        private set
+
     fun put(option: Option): Config = apply {
         when (option) {
             is Option.Env -> env = option.value
@@ -30,6 +37,7 @@ object Config {
                 }
             }
             is Option.SelectedWalletProvider -> selectedWalletProvider = option.value
+            is Option.AddressReplacement -> addressReplacement = option.value
         }
     }
 
@@ -38,6 +46,7 @@ object Config {
         appDetail = null
         supportedWallets = emptyList()
         selectedWalletProvider = null
+        addressReplacement = emptyMap()
     }
 
     sealed class Option {
@@ -45,5 +54,6 @@ object Config {
         class App(val value: AppDetail?) : Option()
         class WalletProviders(val value: List<Provider>) : Option()
         class SelectedWalletProvider(val value: Provider) : Option()
+        class AddressReplacement(val value: Map<String, String>) : Option()
     }
 }

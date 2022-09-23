@@ -16,6 +16,8 @@ class ConfigTest {
             env = Network.TESTNET,
             supportedWallets = listOf(Dapper)
         )
+
+        Fcl.config.put(Config.Option.AddressReplacement(mapOf("0x123" to "abc", "0x456" to "def")))
     }
 
     @Test
@@ -23,5 +25,6 @@ class ConfigTest {
         assertEquals("test-title", Fcl.config.appDetail?.title)
         assertEquals(Network.TESTNET, Fcl.config.env)
         assertEquals(false, Fcl.isMainnet)
+        assertEquals("def", Fcl.config.addressReplacement["0x456"])
     }
 }
