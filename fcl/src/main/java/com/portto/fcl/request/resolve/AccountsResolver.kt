@@ -1,4 +1,4 @@
-package com.portto.fcl.resolve
+package com.portto.fcl.request.resolve
 
 import com.portto.fcl.Fcl
 import com.portto.fcl.model.AuthData
