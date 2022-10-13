@@ -2,6 +2,7 @@ package com.portto.fcl.provider.blocto
 
 import android.content.Context
 import android.content.pm.PackageManager
+import android.os.Build
 import com.nftco.flow.sdk.FlowAddress
 import com.nftco.flow.sdk.FlowArgument
 import com.portto.fcl.Fcl
@@ -18,6 +19,7 @@ import com.portto.fcl.provider.blocto.native.BloctoNativeMethod
 import com.portto.fcl.provider.blocto.web.BloctoWebMethod
 import com.portto.fcl.utils.FclError
 import com.portto.sdk.core.BloctoSDK
+import com.portto.sdk.wallet.BloctoEnv
 import com.portto.fcl.model.CompositeSignature as FclCompositeSignature
 
 /**
@@ -43,7 +45,13 @@ class Blocto private constructor(bloctoAppId: String) : Provider {
 
     override suspend fun authn(accountProofResolvedData: AccountProofResolvedData?) {
         val context = requireContext()
-        BloctoSDK.init(appId = bloctoAppIdentifier, debug = !Fcl.isMainnet)
+        BloctoSDK.init(
+            appId = bloctoAppIdentifier,
+            env = when (Fcl.isMainnet) {
+                true -> BloctoEnv.PROD
+                false -> BloctoEnv.DEV
+            }
+        )
         val user: User? = isAppInstalled(context = context, isMainnet = Fcl.isMainnet)
             .getCaller()
             .authenticate(context, accountProofResolvedData)
@@ -82,7 +90,7 @@ class Blocto private constructor(bloctoAppId: String) : Provider {
 
     companion object {
         private const val BLOCTO_PRODUCTION_APP_ID = "com.portto.blocto"
-        private const val BLOCTO_STAGING_APP_ID = "com.portto.blocto.staging"
+        private const val BLOCTO_DEV_APP_ID = "com.portto.blocto.dev"
 
         @Volatile
         lateinit var bloctoAppIdentifier: String
@@ -100,11 +108,19 @@ class Blocto private constructor(bloctoAppId: String) : Provider {
          * Check if blocto app is installed
          * @return true if its installed; Otherwise false
          */
+        @Suppress("DEPRECATION")
         private fun isAppInstalled(context: Context, isMainnet: Boolean) =
             try {
-                context.packageManager.getPackageInfo(
-                    if (isMainnet) BLOCTO_PRODUCTION_APP_ID else BLOCTO_STAGING_APP_ID, 0
-                )
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    context.packageManager.getPackageInfo(
+                        if (isMainnet) BLOCTO_PRODUCTION_APP_ID else BLOCTO_DEV_APP_ID,
+                        PackageManager.PackageInfoFlags.of(0)
+                    )
+                } else {
+                    context.packageManager.getPackageInfo(
+                        if (isMainnet) BLOCTO_PRODUCTION_APP_ID else BLOCTO_DEV_APP_ID, 0
+                    )
+                }
                 true
             } catch (e: PackageManager.NameNotFoundException) {
                 false
