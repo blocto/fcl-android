@@ -34,7 +34,6 @@ internal inline fun <reified T> T.toJsonObject(): JsonObject =
 internal inline fun <reified T> JsonElement.toDataClass() =
     json.decodeFromJsonElement<T>(this)
 
-
 @ExperimentalSerializationApi
 internal object NullableAnySerializer : KSerializer<Any?> {
 
@@ -82,4 +81,3 @@ internal object NullableAnySerializer : KSerializer<Any?> {
         is JsonArray -> item.map { fromJson(it) }
     }
 }
-

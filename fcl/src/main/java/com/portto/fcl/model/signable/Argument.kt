@@ -25,7 +25,7 @@ data class Argument(
 }
 
 fun Map<String, Any?>.toFclArgument(): Argument {
-    val type:String = get("type") as String
+    val type: String = get("type") as String
     val value = get("value")
     return Argument(
         arg = Arg(type, value),
