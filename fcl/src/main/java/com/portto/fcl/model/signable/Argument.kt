@@ -1,17 +1,21 @@
 package com.portto.fcl.model.signable
 
-import com.nftco.flow.sdk.cadence.Field
+import com.portto.fcl.utils.NullableAnySerializer
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 
 /**
  * @see [Interaction]
  */
+@OptIn(ExperimentalSerializationApi::class)
 @Serializable
 data class Argument(
     val arg: Arg,
     val kind: String,
     val tempId: String,
-    val value: String,
+    @Serializable(with = NullableAnySerializer::class)
+    val value: @Contextual Any?,
     val xform: Xform
 ) {
     @Serializable
@@ -20,11 +24,13 @@ data class Argument(
     )
 }
 
-fun <T> Field<T>.toFclArgument(): Argument {
+fun Map<String, Any?>.toFclArgument(): Argument {
+    val type:String = get("type") as String
+    val value = get("value")
     return Argument(
-        arg = Arg(type, value.toString()),
+        arg = Arg(type, value),
         kind = "ARGUMENT",
-        value = value.toString(),
+        value = value,
         xform = Argument.Xform(type),
         tempId = randomId(10),
     )
