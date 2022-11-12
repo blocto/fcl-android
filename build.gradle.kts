@@ -14,14 +14,16 @@ buildscript {
         classpath(libs.kotlin.serialization)
 
         // App distribution
-        classpath("com.google.gms:google-services:4.3.13")
-        classpath("com.google.firebase:firebase-appdistribution-gradle:3.0.3")
+        classpath("com.google.gms:google-services:4.3.14")
+        classpath("com.google.firebase:firebase-appdistribution-gradle:3.1.0")
     }
 }
 
 @Suppress("DSL_SCOPE_VIOLATION", "UnstableApiUsage")
 plugins {
     alias(libs.plugins.ktlint)
+    alias(libs.plugins.version.check)
+    alias(libs.plugins.version.update)
 }
 
 tasks {
