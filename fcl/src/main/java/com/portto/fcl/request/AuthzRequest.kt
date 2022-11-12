@@ -40,14 +40,14 @@ internal class AuthzRequest {
                 message.cadence = it
             }
 
-            val decodeArgs = builder.arguments.map { arg ->
+            val decodedArgs = builder.arguments.map { arg ->
                 Json.decodeFromString(
                     MapSerializer(String.serializer(), NullableAnySerializer),
                     arg.stringValue
                 )
             }
 
-            decodeArgs.map { it.toFclArgument() }.apply {
+            decodedArgs.map { it.toFclArgument() }.apply {
                 message.arguments = map { it.tempId }
                 arguments = associate { it.tempId to it }
             }

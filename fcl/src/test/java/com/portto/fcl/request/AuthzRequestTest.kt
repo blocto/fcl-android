@@ -52,14 +52,14 @@ internal class AuthzRequestTest {
             arguments(args)
         }
 
-        val decodeArgs = builder.arguments.map { arg ->
+        val decodedArgs = builder.arguments.map { arg ->
             Json.decodeFromString(
                 MapSerializer(String.serializer(), NullableAnySerializer),
                 arg.stringValue
             )
         }
 
-        val fclArgs = decodeArgs.map { it.toFclArgument() }
+        val fclArgs = decodedArgs.map { it.toFclArgument() }
         Assert.assertEquals(8, fclArgs.size)
 
         with(fclArgs[0].arg) {
