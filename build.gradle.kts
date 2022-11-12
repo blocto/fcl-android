@@ -61,6 +61,7 @@ allprojects {
             "parameter-list-wrapping",
             "spacing-between-declarations-with-annotations",
             "wrapping",
+            "multiline-if-else"
         )
     }
 
