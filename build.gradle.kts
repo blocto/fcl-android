@@ -22,6 +22,8 @@ buildscript {
 @Suppress("DSL_SCOPE_VIOLATION", "UnstableApiUsage")
 plugins {
     alias(libs.plugins.ktlint)
+    alias(libs.plugins.version.check)
+    alias(libs.plugins.version.update)
 }
 
 tasks {
