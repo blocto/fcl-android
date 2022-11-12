@@ -14,8 +14,8 @@ buildscript {
         classpath(libs.kotlin.serialization)
 
         // App distribution
-        classpath("com.google.gms:google-services:4.3.13")
-        classpath("com.google.firebase:firebase-appdistribution-gradle:3.0.3")
+        classpath("com.google.gms:google-services:4.3.14")
+        classpath("com.google.firebase:firebase-appdistribution-gradle:3.1.0")
     }
 }
 
