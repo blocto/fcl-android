@@ -4,6 +4,8 @@
 ## Changes
 <!-- Please list the main changes within the PR -->
 
+## Screenshots
+<!-- Please attach the screenshots if applicable -->
 
 ## Checklist
 <!-- Following checklist maybe skipped in some cases -->
@@ -11,7 +13,3 @@
 - [ ] `./gradlew lintKotlin` checked
 - [ ] tests added
 - [ ] documentation updated
-
-
-## Screenshots
-<!-- Please attach the screenshots if applicable -->
