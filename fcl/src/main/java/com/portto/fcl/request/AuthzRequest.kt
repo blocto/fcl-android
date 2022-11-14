@@ -9,6 +9,11 @@ import com.portto.fcl.request.resolve.RefBlockResolver
 import com.portto.fcl.request.resolve.SequenceNumberResolver
 import com.portto.fcl.request.resolve.SignatureResolver
 import com.portto.fcl.utils.AppUtils.flowApi
+import com.portto.fcl.utils.NullableAnySerializer
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.builtins.MapSerializer
+import kotlinx.serialization.builtins.serializer
+import kotlinx.serialization.json.Json
 
 internal class AuthzRequest {
 
@@ -27,13 +32,22 @@ internal class AuthzRequest {
         return id.base16Value
     }
 
+    @OptIn(ExperimentalSerializationApi::class)
     private fun prepare(builder: TxBuilder): Interaction {
         return Interaction().apply {
             builder.cadence?.let {
                 tag = Interaction.Tag.TRANSACTION
                 message.cadence = it
             }
-            builder.arguments.map { it.toFclArgument() }.apply {
+
+            val decodedArgs = builder.arguments.map { arg ->
+                Json.decodeFromString(
+                    MapSerializer(String.serializer(), NullableAnySerializer),
+                    arg.stringValue
+                )
+            }
+
+            decodedArgs.map { it.toFclArgument() }.apply {
                 message.arguments = map { it.tempId }
                 arguments = associate { it.tempId to it }
             }

@@ -12,8 +12,8 @@ import com.portto.fcl.utils.AppUtils.flowApi
 import com.portto.fcl.utils.sansPrefix
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.encodeToJsonElement
 
 @Serializable
 data class Interaction(
@@ -111,10 +111,9 @@ fun Interaction.toFlowTransaction(): FlowTransaction {
 
     return flowTransaction {
         script(FlowScript(message.cadence.orEmpty()))
-        arguments = ix.message.arguments.mapNotNull { ix.arguments[it]?.arg }.map {
-            JsonObject(
-                mapOf("type" to JsonPrimitive(it.type), "value" to JsonPrimitive(it.value))
-            ).toString().toByteArray()
+
+        arguments = ix.message.arguments.mapNotNull { id -> ix.arguments[id]?.arg }.map {
+            Json.encodeToJsonElement(it).toString().toByteArray()
         }.map { FlowArgument(it) }.toMutableList()
 
         referenceBlockId = FlowId(message.refBlock.orEmpty())

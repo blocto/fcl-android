@@ -1,13 +1,15 @@
-# Ticket
+## Ticket
 <!-- Please provide the link associated with the PR -->
 
-# Changes
+## Changes
 <!-- Please list the main changes within the PR -->
-<!-- ### feat -->
-<!-- ### style -->
-<!-- ### docs -->
-<!-- ### chore -->
-<!-- ### build -->
 
-# Screenshots
+## Screenshots
 <!-- Please attach the screenshots if applicable -->
+
+## Checklist
+<!-- Following checklist maybe skipped in some cases -->
+- [ ] PR Ticket & Changes added
+- [ ] `./gradlew lintKotlin` checked
+- [ ] tests added
+- [ ] documentation updated

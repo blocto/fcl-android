@@ -1,32 +1,31 @@
 package com.portto.fcl.request
 
-import com.nftco.flow.sdk.cadence.Field
+import com.nftco.flow.sdk.FlowArgument
 import com.nftco.flow.sdk.cadence.JsonCadenceBuilder
 
 class TxBuilder {
 
     internal var cadence: String? = null
+        private set
 
-    internal var arguments: MutableList<Field<*>> = mutableListOf()
+    internal var arguments: List<FlowArgument> = mutableListOf()
+        private set
 
     internal var limit: Int? = null
+        private set
 
     fun cadence(cadence: String) {
         this.cadence = cadence
     }
 
-    fun arguments(arguments: MutableList<Field<*>>) {
+    fun arguments(arguments: List<FlowArgument>) {
         this.arguments = arguments
     }
 
-    fun arguments(arguments: JsonCadenceBuilder.() -> Iterable<Field<*>>) {
+    fun arguments(arguments: JsonCadenceBuilder.() -> Iterable<FlowArgument>) {
         val builder = JsonCadenceBuilder()
-        this.arguments = arguments(builder).toMutableList()
+        this.arguments = arguments(builder).toList()
     }
-
-    fun arg(argument: Field<*>) = arguments.add(argument)
-
-    fun arg(argument: JsonCadenceBuilder.() -> Field<*>) = arg(argument(JsonCadenceBuilder()))
 
     fun gasLimit(limit: Int) {
         this.limit = limit

@@ -90,7 +90,7 @@ internal object BloctoWebMethod : BloctoMethod {
     ): String {
         val result = AuthzRequest().send {
             cadence(script)
-            args.forEach { arg(it.jsonCadence) }
+            arguments(args)
             gasLimit(limit.toInt())
         }
         return result
