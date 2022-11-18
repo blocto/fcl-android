@@ -1,6 +1,7 @@
 package com.portto.fcl.ui.discovery
 
 import android.app.Dialog
+import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -17,7 +18,9 @@ internal class ProviderViewHolder(private val binding: ListItemWalletProviderBin
         binding.apply {
             tvTitle.text = provider.info.title
             tvDescription.text = provider.info.description
-            imgIcon.load(provider.info.icon)
+            imgIcon.load(provider.info.icon) {
+                bitmapConfig(Bitmap.Config.ARGB_8888)
+            }
             root.setOnClickListener {
                 // Set the selected provider
                 Fcl.config.put(Config.Option.SelectedWalletProvider(provider))
