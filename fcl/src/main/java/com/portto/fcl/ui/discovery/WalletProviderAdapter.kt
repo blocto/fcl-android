@@ -3,6 +3,8 @@ package com.portto.fcl.ui.discovery
 import android.app.Activity
 import android.app.Dialog
 import android.view.ViewGroup
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -10,8 +12,18 @@ import com.portto.fcl.Fcl
 import com.portto.fcl.databinding.WalletDiscoveryDialogBinding
 import com.portto.fcl.provider.Provider
 
-fun Activity.showConnectWalletDialog(onWalletSelected: (Provider) -> Unit) {
+fun Activity.showConnectWalletDialog(
+    lifecycleOwner: LifecycleOwner,
+    onWalletSelected: (Provider) -> Unit
+) {
     val dialog = MaterialAlertDialogBuilder(this).create()
+
+    class DialogObserver : DefaultLifecycleObserver {
+        override fun onPause(owner: LifecycleOwner) {
+            dialog.dismiss()
+        }
+    }
+    lifecycleOwner.lifecycle.addObserver(DialogObserver())
     val providerAdapter = WalletProviderAdapter(dialog, onWalletSelected)
     val binding: WalletDiscoveryDialogBinding =
         WalletDiscoveryDialogBinding.inflate(layoutInflater).apply {

@@ -75,7 +75,8 @@ Once you've initialized FCL, you may use Discovery directly from `Discovery UI` 
 The simplest way to integrate Wallet Discovery is to utilize Discovery UI.
 
 ```kotlin
-showConnectWalletDialog {
+// MainActivity.kt
+showConnectWalletDialog(this) {
     // authentication
 }
 ```
