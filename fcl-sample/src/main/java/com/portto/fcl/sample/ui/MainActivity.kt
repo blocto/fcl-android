@@ -107,7 +107,7 @@ class MainActivity : AppCompatActivity() {
         address.observe(this@MainActivity) { address ->
             binding.authCard.btnConnectWallet.setOnClickListener {
                 if (address == null) it.showMenu(R.menu.menu_connect) { item ->
-                    showConnectWalletDialog {
+                    showConnectWalletDialog(this@MainActivity) {
                         mainViewModel.connect(
                             withAccountPoof = item.itemId == R.id.menu_item_authn_with_account_proof
                         )
