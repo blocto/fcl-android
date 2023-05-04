@@ -23,4 +23,6 @@ data class AuthData(
     val payer: List<Service>?, // pre-authz (blocto only)
     @SerialName("authorization")
     val authorization: List<Service>?, // pre-authz (blocto only)
+    @SerialName("code")
+    val sessionId: String?, // used for web sdk (blocto only)
 )

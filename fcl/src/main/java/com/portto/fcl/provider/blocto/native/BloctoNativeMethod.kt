@@ -30,14 +30,13 @@ internal object BloctoNativeMethod : BloctoMethod {
 
     override suspend fun authenticate(
         context: Context,
-        accountProofData:
-        AccountProofResolvedData?
+        accountProofData: AccountProofResolvedData?
     ): User? = suspendCancellableCoroutine { cont ->
         val successCallback: (AccountProofData) -> Unit = {
             val user = User(
                 address = it.address,
                 accountProofData =
-                if (accountProofData != null) it.mapToFclAccountProofData()
+                if (accountProofData?.nonce != null) it.mapToFclAccountProofData()
                 else null
             )
             cont.resume(user)

@@ -55,4 +55,9 @@ internal object FclError {
      * Exception thrown when the user has rejected the operation
      */
     class UserRejectedException : Exception("User rejected.")
+
+    /**
+     * Exception thrown when the session id is not found for web sdk
+     */
+    class SessionIdNotFoundException : Exception("Session id is not found.")
 }

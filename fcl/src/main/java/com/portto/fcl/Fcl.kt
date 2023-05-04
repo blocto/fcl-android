@@ -29,6 +29,8 @@ object Fcl {
 
     var currentUser: User? = null
 
+    internal var sessionId: String? = null
+
     fun init(env: Network, supportedWallets: List<Provider>, appDetail: AppDetail? = null): Config =
         config.apply {
             put(Env(env))

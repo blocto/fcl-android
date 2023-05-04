@@ -12,6 +12,10 @@ import com.portto.fcl.Fcl
 import com.portto.fcl.model.CompositeSignature
 import com.portto.fcl.model.Result
 import com.portto.fcl.model.authn.AccountProofResolvedData
+import com.portto.fcl.model.authn.AppConfig
+import com.portto.fcl.model.authn.Config
+import com.portto.fcl.sample.util.BLOCTO_MAINNET_APP_ID
+import com.portto.fcl.sample.util.BLOCTO_TESTNET_APP_ID
 import com.portto.fcl.sample.util.FLOW_APP_IDENTIFIER
 import com.portto.fcl.sample.util.FLOW_NONCE
 import com.portto.fcl.sample.util.getMutateSampleScript
@@ -64,9 +68,17 @@ class MainViewModel : ViewModel() {
     val message get() = _message.asStateFlow()
 
     fun connect(withAccountPoof: Boolean) = viewModelScope.launch {
+        val config = Config(
+            app = AppConfig(
+                id = if (isCurrentMainnet.value == true)
+                    BLOCTO_MAINNET_APP_ID
+                else
+                    BLOCTO_TESTNET_APP_ID
+            )
+        )
         val accountProofResolvedData =
-            if (withAccountPoof) AccountProofResolvedData(FLOW_APP_IDENTIFIER, FLOW_NONCE)
-            else null
+            if (withAccountPoof) AccountProofResolvedData(FLOW_APP_IDENTIFIER, FLOW_NONCE, config)
+            else AccountProofResolvedData(config = config)
         when (val result = Fcl.authenticate(accountProofResolvedData)) {
             is Result.Success -> {
                 _address.value = result.value
