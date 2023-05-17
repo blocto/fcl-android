@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.webkit.WebView
-import androidx.viewbinding.BuildConfig
+import com.portto.fcl.BuildConfig
 
 @SuppressLint("SetJavaScriptEnabled")
 internal class FclWebView : WebView {
