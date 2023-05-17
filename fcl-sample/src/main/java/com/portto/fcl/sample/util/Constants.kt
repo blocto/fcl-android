@@ -2,10 +2,9 @@ package com.portto.fcl.sample.util
 
 /**
  * Visit developer dashboard to acquire your blocto App ID
- *  testnet: https://developers-staging.blocto.app/
- *  mainnet: https://developers.blocto.app/
- *  */
-const val BLOCTO_TESTNET_APP_ID = "f10a3ec7-bfee-47aa-8c96-90024dffc9ec"
+ * https://developers.blocto.app/
+ */
+const val BLOCTO_TESTNET_APP_ID = "d9fed043-5942-496e-8595-57ffe45b759c"
 const val BLOCTO_MAINNET_APP_ID = "d9fed043-5942-496e-8595-57ffe45b759c"
 
 const val FLOW_APP_IDENTIFIER = "Awesome App (v0.0)"

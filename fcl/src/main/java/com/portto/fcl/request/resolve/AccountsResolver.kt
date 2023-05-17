@@ -12,6 +12,7 @@ import com.portto.fcl.model.signable.buildPreSignable
 import com.portto.fcl.model.signable.isTransaction
 import com.portto.fcl.network.execHttpPost
 import com.portto.fcl.utils.FclError
+import com.portto.fcl.utils.HEADER_SESSION_ID
 import com.portto.fcl.utils.toDataClass
 import com.portto.fcl.utils.toJsonObject
 
@@ -37,7 +38,14 @@ internal class AccountsResolver : Resolver {
 
         val preSignable = ix.buildPreSignable(Roles())
 
-        val response = execHttpPost(endpoint, service.params, data = preSignable.toJsonObject())
+        val sessionId = Fcl.sessionId ?: throw FclError.SessionIdNotFoundException()
+
+        val response = execHttpPost(
+            url = endpoint,
+            headers = mapOf(HEADER_SESSION_ID to sessionId),
+            params = service.params,
+            data = preSignable.toJsonObject()
+        )
 
         val signableUsers = response.getAccounts()
 
@@ -105,7 +113,14 @@ internal class AccountsResolver : Resolver {
                         ?: throw FclError.GeneralException("Endpoint is null.")
                     val params = service.params
                         ?: throw FclError.GeneralException("Params is null.")
-                    execHttpPost(endpoint, params = params, data = data.toJsonObject())
+                    val sessionId = Fcl.sessionId
+                        ?: throw throw FclError.SessionIdNotFoundException()
+                    execHttpPost(
+                        url = endpoint,
+                        headers = mapOf(HEADER_SESSION_ID to sessionId),
+                        params = params,
+                        data = data.toJsonObject()
+                    )
                 }
             }
         }

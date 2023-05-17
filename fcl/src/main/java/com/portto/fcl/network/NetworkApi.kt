@@ -16,12 +16,15 @@ import kotlinx.serialization.json.JsonObject
 @WorkerThread
 internal suspend fun execHttpPost(
     url: String,
+    headers: Map<String, String>? = mapOf(),
     params: Map<String, String>? = mapOf(),
     data: JsonObject? = null
 ): PollingResponse {
     val response = if (data == null) {
-        authService.executePost(url, params)
-    } else authService.executePost(url, params, data)
+        authService.executePost(url, headers, params)
+    } else {
+        authService.executePost(url, headers, params, data)
+    }
 
     when (response.status) {
         ResponseStatus.APPROVED -> WebViewActivity.close()

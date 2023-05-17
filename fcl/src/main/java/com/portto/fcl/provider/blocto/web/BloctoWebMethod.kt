@@ -16,6 +16,7 @@ import com.portto.fcl.provider.blocto.BloctoMethod
 import com.portto.fcl.provider.blocto.web.BloctoWebUtils.getAuthnUrl
 import com.portto.fcl.request.AuthzRequest
 import com.portto.fcl.utils.FclError
+import com.portto.fcl.utils.HEADER_SESSION_ID
 import com.portto.fcl.utils.toDataClass
 import com.portto.fcl.utils.toJsonObject
 
@@ -38,7 +39,7 @@ internal object BloctoWebMethod : BloctoMethod {
 
         val signatures = accountProofService?.data?.signatures
 
-        if (accountProofData != null && signatures.isNullOrEmpty()) {
+        if (accountProofData?.nonce != null && signatures.isNullOrEmpty()) {
             throw FclError.SignaturesNotFoundException()
         }
 
@@ -59,6 +60,8 @@ internal object BloctoWebMethod : BloctoMethod {
             services = authData.services
         )
 
+        Fcl.sessionId = authData.sessionId
+
         return Fcl.currentUser
     }
 
@@ -67,13 +70,19 @@ internal object BloctoWebMethod : BloctoMethod {
         userAddress: String,
         message: String
     ): List<CompositeSignature> {
+        val sessionId = Fcl.sessionId ?: throw FclError.SessionIdNotFoundException()
+
         val service = Fcl.currentUser?.services?.find { it.type == ServiceType.USER_SIGNATURE }
             ?: throw FclError.ServiceNotFoundException()
 
         val response = execHttpPost(
             url = service.endpoint!!,
+            headers = mapOf(HEADER_SESSION_ID to sessionId),
             params = service.params,
-            data = mapOf("message" to message.trim().toByteArray().bytesToHex()).toJsonObject()
+            data = mapOf(
+                "from" to userAddress,
+                "message" to message.trim().toByteArray().bytesToHex()
+            ).toJsonObject()
         )
 
         return response.data?.toDataClass<List<CompositeSignature>>()
