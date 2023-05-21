@@ -2,8 +2,8 @@ package com.portto.fcl.sample.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.nftco.flow.sdk.FlowAddress
 import com.nftco.flow.sdk.FlowArgument
@@ -29,11 +29,11 @@ class MainViewModel : ViewModel() {
     private val _isCurrentMainnet = MutableLiveData(false)
     val isCurrentMainnet: LiveData<Boolean> get() = _isCurrentMainnet
 
-    val queryScript: LiveData<String> = Transformations.map(isCurrentMainnet) {
+    val queryScript: LiveData<String> = isCurrentMainnet.map {
         getQuerySampleScript(isMainnet = it)
     }
 
-    val mutateScript: LiveData<String> = Transformations.map(isCurrentMainnet) {
+    val mutateScript: LiveData<String> = isCurrentMainnet.map {
         getMutateSampleScript(isMainnet = it)
     }
 
