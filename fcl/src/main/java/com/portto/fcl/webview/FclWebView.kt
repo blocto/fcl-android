@@ -1,14 +1,17 @@
 package com.portto.fcl.webview
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.graphics.Rect
+import android.os.Message
 import android.util.AttributeSet
+import android.webkit.WebSettings
 import android.webkit.WebView
 import com.portto.fcl.BuildConfig
 
 @SuppressLint("SetJavaScriptEnabled")
 internal class FclWebView : WebView {
-    private var callback: WebViewCallback? = null
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
@@ -16,50 +19,55 @@ internal class FclWebView : WebView {
             super(context, attrs, defStyleAttr)
 
     init {
-        with(settings) {
-            loadsImagesAutomatically = true
-            javaScriptEnabled = true
-            webViewClient = WebViewClient()
-            webChromeClient = WebChromeClient()
-            domStorageEnabled = true
-        }
+        settings.setup()
+        webChromeClient = WebChromeClient()
         setWebContentsDebuggingEnabled(BuildConfig.DEBUG)
     }
 
-    fun setWebViewCallback(callback: WebViewCallback?) {
-        this.callback = callback
+    private inner class WebChromeClient : android.webkit.WebChromeClient() {
+        override fun onCreateWindow(
+            view: WebView?,
+            isDialog: Boolean,
+            isUserGesture: Boolean,
+            resultMsg: Message?
+        ): Boolean = onCreateWebWindow(resultMsg)
     }
 
-    private inner class WebChromeClient : android.webkit.WebChromeClient() {
-        override fun onProgressChanged(view: WebView, newProgress: Int) {
-            super.onProgressChanged(view, newProgress)
-            if (view.progress == newProgress) {
-                callback?.onProgressChange(view.progress / 100f)
+    private fun onCreateWebWindow(resultMsg: Message?): Boolean {
+        val webView = WebView(context)
+        webView.settings.setup()
+
+        webView.webViewClient = object : android.webkit.WebViewClient() {
+            override fun onPageFinished(view: WebView?, url: String?) {
+                super.onPageFinished(view, url)
+                // Make WebView height match parent
+                val displayRectangle = Rect()
+                (context as? Activity)?.window?.decorView?.getWindowVisibleDisplayFrame(displayRectangle)
+                view?.layoutParams = view?.layoutParams?.apply {
+                    height = displayRectangle.height()
+                }
             }
         }
 
-        override fun onReceivedTitle(view: WebView?, title: String?) {
-            super.onReceivedTitle(view, title)
-            callback?.onTitleChange(title.orEmpty())
+        webView.webChromeClient = object : android.webkit.WebChromeClient() {
+            override fun onCloseWindow(window: WebView?) {
+                super.onCloseWindow(window)
+                this@FclWebView.removeView(window)
+            }
         }
+
+        this@FclWebView.addView(webView)
+        val transport = resultMsg?.obj as WebView.WebViewTransport
+        transport.webView = webView
+        resultMsg.sendToTarget()
+        return true
     }
 
-    private inner class WebViewClient : android.webkit.WebViewClient() {
-
-        override fun onPageFinished(view: WebView?, url: String?) {
-            super.onPageFinished(view, url)
-        }
-
-        override fun doUpdateVisitedHistory(view: WebView?, url: String?, isReload: Boolean) {
-            super.doUpdateVisitedHistory(view, url, isReload)
-            callback?.onPageUrlChange(url.orEmpty(), isReload)
-        }
-    }
-
-    interface WebViewCallback {
-        fun onScrollChange(scrollY: Int, offset: Int)
-        fun onProgressChange(progress: Float)
-        fun onTitleChange(title: String)
-        fun onPageUrlChange(url: String, isReload: Boolean)
+    private fun WebSettings.setup() {
+        javaScriptEnabled = true
+        domStorageEnabled = true
+        setSupportMultipleWindows(true)
+        // Remove "wv" from user agent to make Google login work
+        userAgentString = userAgentString.replace(oldValue = "; wv", newValue = "")
     }
 }

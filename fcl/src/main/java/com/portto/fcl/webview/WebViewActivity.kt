@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.webkit.WebSettings
 import androidx.appcompat.app.AppCompatActivity
 
 internal class WebViewActivity : AppCompatActivity() {
@@ -17,12 +16,9 @@ internal class WebViewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         instance = this
         setContentView(webView)
+        supportActionBar?.hide()
         webView.loadUrl(url)
         FclWebViewLifecycle.onWebViewOpen(url)
-        webView.settings.userAgentString = WebSettings.getDefaultUserAgent(this).replace("; wv", "")
-
-        actionBar?.hide()
-        supportActionBar?.hide()
     }
 
     override fun onDestroy() {
